@@ -24,6 +24,10 @@ class EvaDisconnectionError(EvaError, Exception):
     """Error thrown when Eva websocket connection is closed"""
 
 
+class EvaLockError(EvaError, Exception):
+    """Error thrown when Eva has robot lock issues"""
+
+
 def eva_error(label, r=None):
     if r is not None:
         __handle_http_error(label, r)
