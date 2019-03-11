@@ -65,6 +65,12 @@ Please refer to the examples directory for more SDK usage examples.
 
 These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the automata.Eva object.
 
+## Installation
+
+### Using pipenv
+
+    pipenv install git+https://github.com/automata-tech/eva_python_sdk.git@master#egg=automata
+
 ## Logging
 
 The SDK uses Debug and Error level logging exclusively. Each Eva instance will log using the name `automata.Eva:<host_name_here>`. If you wish to enable the debug logging:
