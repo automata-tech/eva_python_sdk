@@ -81,7 +81,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 ## Bugs and feature requests
 
-Please raise any bugs or feature requests as a Github issues. We also greatfully accept pull requests for features and bug fixes.
+Please raise any bugs or feature requests as a Github issues. We also gratefully accept pull requests for features and bug fixes.
 
 ## License
 
