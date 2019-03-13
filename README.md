@@ -4,11 +4,25 @@ The eva_python_sdk provides convenient access to the Automata Eva API from appli
 
 __* This SDK is currently in beta, any breaking changes during development will be comunicated via changelog__
 
-## automata.Eva
+- [Installation](#installation)
+- [Examples](#examples)
+- [Logging](#logging)
+- [Bugs and feature requests](#bugs-and-feature-requests)
+- [License](#license)
+
+
+## Installation
+
+### Using pipenv
+
+    $ pipenv install git+https://github.com/automata-tech/eva_python_sdk.git@master#egg=automata
+
+
+## Examples
 
 The Eva object allows you to directly control an Eva robot. It provides lots of useful helper function for interacting with the robot.
 
-### Usage
+### Eva
 
 **Connecting**
 ```python
@@ -61,15 +75,10 @@ with eva.lock():
 Please refer to the examples directory for more SDK usage examples.
 
 
-## automata.eva_http and automata.eva_ws
+### automata.eva_http and automata.eva_ws
 
 These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the automata.Eva object.
 
-## Installation
-
-### Using pipenv
-
-    pipenv install git+https://github.com/automata-tech/eva_python_sdk.git@master#egg=automata
 
 ## Logging
 
@@ -82,6 +91,7 @@ logging.basicConfig(level=logging.DEBUG)
 ## Bugs and feature requests
 
 Please raise any bugs or feature requests as a Github issues. We also gratefully accept pull requests for features and bug fixes.
+
 
 ## License
 
