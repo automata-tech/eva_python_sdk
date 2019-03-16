@@ -84,7 +84,7 @@ class EvaHTTPClient:
 
 
     def gpio_get(self, pin, pin_type):
-        if (pin not in ['a0', 'a1', 'd0', 'd1', 'd2', 'd3']):
+        if (pin not in ['a0', 'a1', 'd0', 'd1', 'd2', 'd3', 'ee_d0', 'ee_d1', 'ee_a0', 'ee_a1']):
             eva_error('gpio_get error, no such pin ' + pin)
         if (pin_type not in ['input', 'output']):
             eva_error('gpio_get error, pin_type must be "input" or "output"')
