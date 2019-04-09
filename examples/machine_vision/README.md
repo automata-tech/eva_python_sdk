@@ -1,4 +1,4 @@
-# sdk_example_vision
+# sdk machine vision example code
 
 This example shows how you may interface a machine vision camera with the Eva Python SDK for dynamically moving Eva to a object detected by the camera.
 
@@ -9,4 +9,3 @@ This example assumes you have a working machine vison camera. The camera should 
 The example also requires you to measure the x, y, z axis offset of the camera's position relative to Eva's base and the distance between the camera and the 2D plane where the objects will be detected. This example assumes that the camera's axis are aligned with Eva's.
 
 ![Positional picture should be here!](camera_example.png)
-
