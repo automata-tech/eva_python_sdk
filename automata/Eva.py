@@ -162,9 +162,9 @@ class Eva:
         return self.__http_client.control_run(loop=1, wait_for_ready=True)
 
 
-    def control_go_to(self, joints, wait_for_ready=True):
+    def control_go_to(self, joints, wait_for_ready=True, velocity=None, time=None):
         self.__logger.debug('Eva.control_go_to called')
-        return self.__http_client.control_go_to(joints, wait_for_ready=True)
+        return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, velocity=velocity, time=time)
 
 
     def control_pause(self, wait_for_paused=True):

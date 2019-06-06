@@ -251,8 +251,15 @@ class EvaHTTPClient:
             self.control_wait_for(RobotState.READY)
 
 
-    def control_go_to(self, joints, wait_for_ready=True):
-        r = self.api_call('POST', 'controls/go_to', json.dumps({'joints': joints}))
+    def control_go_to(self, joints, wait_for_ready=True, velocity=None, time=None):
+        if velocity is not None:
+            body = json.dumps({'joints': joints, 'velocity': velocity})
+        elif time is not None:
+            body = json.dumps({'joints': joints, 'time': time})
+        else:
+            body = json.dumps({'joints': joints})
+
+        r = self.api_call('POST', 'controls/go_to', body)
         if r.status_code != 200:
             eva_error('control_go_to error', r)
         elif wait_for_ready:
