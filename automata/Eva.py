@@ -154,12 +154,12 @@ class Eva:
 
     def control_home(self, wait_for_ready=True):
         self.__logger.debug('Eva.control_home called')
-        return self.__http_client.control_home(wait_for_ready=True)
+        return self.__http_client.control_home(wait_for_ready=wait_for_ready)
 
 
     def control_run(self, loop=1, wait_for_ready=True):
         self.__logger.debug('Eva.control_run called')
-        return self.__http_client.control_run(loop=loop, wait_for_ready=True)
+        return self.__http_client.control_run(loop=loop, wait_for_ready=wait_for_ready)
 
 
     def control_go_to(self, joints, wait_for_ready=True, velocity=None, duration=None):
@@ -169,33 +169,33 @@ class Eva:
 
     def control_pause(self, wait_for_paused=True):
         self.__logger.debug('Eva.control_pause called')
-        return self.__http_client.control_pause(wait_for_paused=True)
+        return self.__http_client.control_pause(wait_for_paused=wait_for_paused)
 
 
     def control_resume(self, wait_for_ready=True):
         self.__logger.debug('Eva.control_resume called')
-        return self.__http_client.control_resume(wait_for_ready=True)
+        return self.__http_client.control_resume(wait_for_ready=wait_for_ready)
 
 
     def control_cancel(self, wait_for_ready=True):
         self.__logger.debug('Eva.control_cancel called')
-        return self.__http_client.control_cancel(wait_for_ready=True)
+        return self.__http_client.control_cancel(wait_for_ready=wait_for_ready)
 
 
     def control_stop_loop(self, wait_for_ready=True):
         self.__logger.debug('Eva.control_stop_loop called')
-        return self.__http_client.control_stop_loop(wait_for_ready=True)
+        return self.__http_client.control_stop_loop(wait_for_ready=wait_for_ready)
 
 
     def control_reset_errors(self, wait_for_ready=True):
         self.__logger.debug('Eva.control_reset_errors called')
-        return self.__http_client.control_reset_errors(wait_for_ready=True)
+        return self.__http_client.control_reset_errors(wait_for_ready=wait_for_ready)
 
 
     # Calc
     def calc_forward_kinematics(self, joints, fk_type='both'):
         self.__logger.debug('Eva.calc_forward_kinematics called')
-        return self.__http_client.calc_forward_kinematics(joints, fk_type='both')
+        return self.__http_client.calc_forward_kinematics(joints, fk_type=fk_type)
 
 
     def calc_inverse_kinematics(self, guess, target_position, target_orientation):
