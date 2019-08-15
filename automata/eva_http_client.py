@@ -251,11 +251,11 @@ class EvaHTTPClient:
             self.control_wait_for(RobotState.READY)
 
 
-    def control_go_to(self, joints, wait_for_ready=True, velocity=None, time=None):
+    def control_go_to(self, joints, wait_for_ready=True, velocity=None, duration=None):
         if velocity is not None:
             body = json.dumps({'joints': joints, 'velocity': velocity})
-        elif time is not None:
-            body = json.dumps({'joints': joints, 'time': time})
+        elif duration is not None:
+            body = json.dumps({'joints': joints, 'time': duration})
         else:
             body = json.dumps({'joints': joints})
 
