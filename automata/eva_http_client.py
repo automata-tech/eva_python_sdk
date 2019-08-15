@@ -118,7 +118,7 @@ class EvaHTTPClient:
         return r.json()['toolpath']
 
 
-    def toolpaths_save(self, name, toolpath):
+    def toolpaths_save(self, name, toolpathRepr):
         toolpaths = self.toolpaths_list()
 
         toolpathId = None
@@ -127,8 +127,8 @@ class EvaHTTPClient:
                 toolpathId = toolpath['id']
                 break
 
-        toolpath = json.dumps({'name': name, 'toolpath': toolpath})
-        if toolpathId == None:
+        toolpath = json.dumps({'name': name, 'toolpath': toolpathRepr})
+        if toolpathId is None:
             action = 'save'
             r = self.api_call('POST', 'toolpaths', toolpath)
         else:
