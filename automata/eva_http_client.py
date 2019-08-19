@@ -10,6 +10,67 @@ from .eva_errors import eva_error, EvaError
 # TODO lots of sleeps in control_* de to the robot state being updated slowly after starting an action, can this be improved?
 
 
+class EvaAuth(requests.auth.AuthBase):
+    def __init__(self, token):
+        self.token = token
+        self.session_token = None
+
+
+    def __call__(self, r):
+        r.headers['Authorization'] = 'Bearer {}'.format(self.session_token)
+        r.register_hook('response', self.handle_401)
+        return r
+
+
+    def handle_401(self, r, **kwargs):
+        if r.status_code == 401:
+            if self.session_token == None:
+                self.create_session_token(r, **kwargs)
+
+            else:
+                self.renew_session_token(r, **kwargs)
+
+            # Retry original request with latest session token, in case it has changed
+            retry_req = r.request.copy()
+            retry_req.headers['Authorization'] = 'Bearer {}'.format(self.session_token)
+            return r.connection.send(retry_req, **kwargs)
+
+
+    def renew_session_token(self, r, **kwargs):
+        prep = requests.Request(
+            method='POST', url=r.request.url.split('api/v1')[0] + 'api/v1/auth/renew',
+            headers={'Authorization': 'Bearer {}'.format(self.session_token)},
+        ).prepare()
+
+        _r = r.connection.send(prep, **kwargs)
+
+        # May not be able to renew session token any more, so try getting a new one
+        if _r.status_code == 401:
+            self.session_token = None
+            self.create_session_token(r, **kwargs)
+
+        elif _r.status_code != 204:
+            self.session_token = None
+            eva_error('renew auth request error', _r)
+
+        return _r
+
+
+    def create_session_token(self, r, **kwargs):
+        prep = requests.Request(
+            method='POST', url=r.request.url.split('api/v1')[0] + 'api/v1/auth',
+            data=json.dumps({'token': self.token}),
+        ).prepare()
+
+        _r = r.connection.send(prep, **kwargs)
+
+        if _r.status_code != 200:
+            eva_error('auth request error', _r)
+
+        self.session_token = _r.json()['token']
+        return _r
+
+
 class EvaHTTPClient:
     """
     Eva HTTP client
@@ -21,7 +82,7 @@ class EvaHTTPClient:
     """
     def __init__(self, host_ip, token, custom_logger=None, request_timeout=5):
         self.host_ip = host_ip
-        self.token = token
+        self.auth = EvaAuth(token)
         self.request_timeout = request_timeout
 
         if custom_logger is not None:
@@ -31,12 +92,9 @@ class EvaHTTPClient:
 
 
     def api_call(self, method, path, payload=None):
-        headers = {
-            'Authorization': 'API {}'.format(self.token),
-        }
         return requests.request(
             method, 'http://{}/api/v1/{}'.format(self.host_ip, path),
-            data=payload, headers=headers,
+            data=payload, auth=self.auth,
             timeout=self.request_timeout,
         )
 
