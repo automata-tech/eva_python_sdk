@@ -2,6 +2,7 @@ import json
 import time
 import logging
 import requests
+import threading
 
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError
@@ -11,64 +12,58 @@ from .eva_errors import eva_error, EvaError
 
 
 class EvaAuth(requests.auth.AuthBase):
-    def __init__(self, token):
-        self.token = token
+    def __init__(self, eva, renew_period_mins=25):
         self.session_token = None
+        self.__eva = eva
+        self.__renew_period_mins = renew_period_mins
+        self.__cond = threading.Condition()
+        self.__thread = threading.Thread(target=self.__renew_loop, daemon=True)
+        self.__thread.start()
 
 
     def __call__(self, r):
-        r.headers['Authorization'] = 'Bearer {}'.format(self.session_token)
-        r.register_hook('response', self.handle_401)
+        self.__add_session_token(r)
+        r.register_hook('response', self.__handle_401)
         return r
 
 
-    def handle_401(self, r, **kwargs):
+    def __add_session_token(self, r):
+        r.headers['Authorization'] = 'Bearer {}'.format(self.session_token)
+
+
+    def __handle_401(self, r, **kwargs):
         if r.status_code == 401:
-            if self.session_token == None:
-                self.create_session_token(r, **kwargs)
+            self.__create_session_token(r, **kwargs)
 
-            else:
-                self.renew_session_token(r, **kwargs)
-
-            # Retry original request with latest session token, in case it has changed
+            # Retry original request with new session token
             retry_req = r.request.copy()
-            retry_req.headers['Authorization'] = 'Bearer {}'.format(self.session_token)
+            self.__add_session_token(retry_req)
+
+            # Return the response from the retried request so caller gets this response, instead of the original
+            # one that got a 401 authentication error
             return r.connection.send(retry_req, **kwargs)
 
 
-    def renew_session_token(self, r, **kwargs):
+    def __create_session_token(self, r, **kwargs):
         prep = requests.Request(
-            method='POST', url=r.request.url.split('api/v1')[0] + 'api/v1/auth/renew',
-            headers={'Authorization': 'Bearer {}'.format(self.session_token)},
+            method='POST', url='http://{}/api/v1/auth'.format(self.__eva.host_ip),
+            data=json.dumps({'token': self.__eva.api_token}),
         ).prepare()
 
-        _r = r.connection.send(prep, **kwargs)
+        create_r = r.connection.send(prep, **kwargs)
 
-        # May not be able to renew session token any more, so try getting a new one
-        if _r.status_code == 401:
-            self.session_token = None
-            self.create_session_token(r, **kwargs)
+        if create_r.status_code != 200:
+            eva_error('auth request error', create_r)
 
-        elif _r.status_code != 204:
-            self.session_token = None
-            eva_error('renew auth request error', _r)
-
-        return _r
+        self.session_token = create_r.json()['token']
 
 
-    def create_session_token(self, r, **kwargs):
-        prep = requests.Request(
-            method='POST', url=r.request.url.split('api/v1')[0] + 'api/v1/auth',
-            data=json.dumps({'token': self.token}),
-        ).prepare()
+    def __renew_loop(self):
+        while True:
+            with self.__cond:
+                self.__cond.wait(timeout=self.__renew_period_mins * 60)
 
-        _r = r.connection.send(prep, **kwargs)
-
-        if _r.status_code != 200:
-            eva_error('auth request error', _r)
-
-        self.session_token = _r.json()['token']
-        return _r
+            self.__eva._auth_renew_session()
 
 
 class EvaHTTPClient:
@@ -76,13 +71,13 @@ class EvaHTTPClient:
     Eva HTTP client
 
      - host_ip (string):                The IP address of an Eva, i.e. 192.168.1.245
-     - token (string):                  A valid token for accessing Eva, retrievable from the Choreograph config page
+     - api_token (string):              A valid API token for accessing Eva, retrievable from the Choreograph config page
      - custom_logger (logging.Logger):  An *optional* logger, if not supplied the client will instantiate its own
      - request_timeout (float):         An *optional* time in seconds to wait for a request to resolve, defaults to 5
     """
-    def __init__(self, host_ip, token, custom_logger=None, request_timeout=5):
+    def __init__(self, host_ip, api_token, custom_logger=None, request_timeout=5):
         self.host_ip = host_ip
-        self.auth = EvaAuth(token)
+        self.api_token = api_token
         self.request_timeout = request_timeout
 
         if custom_logger is not None:
@@ -90,13 +85,25 @@ class EvaHTTPClient:
         else:
             self.__logger = logging.getLogger('automata.EvaHTTPClient:{}'.format(host_ip))
 
+        self.__auth = EvaAuth(self)
+
 
     def api_call(self, method, path, payload=None):
         return requests.request(
             method, 'http://{}/api/v1/{}'.format(self.host_ip, path),
-            data=payload, auth=self.auth,
+            data=payload, auth=self.__auth,
             timeout=self.request_timeout,
         )
+
+
+    # AUTH
+    def _auth_renew_session(self):
+        r = self.api_call('POST', 'auth/renew')
+        if r.status_code == 401:
+            self.__auth.session_token = None
+
+        elif r.status_code != 204:
+            eva_error('renew auth request error', r)
 
 
     # DATA
