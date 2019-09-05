@@ -2,68 +2,12 @@ import json
 import time
 import logging
 import requests
-import threading
 
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError
 
 # TODO add more granular logs using __logger
 # TODO lots of sleeps in control_* de to the robot state being updated slowly after starting an action, can this be improved?
-
-
-class EvaAuth(requests.auth.AuthBase):
-    def __init__(self, eva, renew_period_mins=25):
-        self.session_token = None
-        self.__eva = eva
-        self.__renew_period_mins = renew_period_mins
-        self.__cond = threading.Condition()
-        self.__thread = threading.Thread(target=self.__renew_loop, daemon=True)
-        self.__thread.start()
-
-
-    def __call__(self, r):
-        self.__add_session_token(r)
-        r.register_hook('response', self.__handle_401)
-        return r
-
-
-    def __add_session_token(self, r):
-        r.headers['Authorization'] = 'Bearer {}'.format(self.session_token)
-
-
-    def __handle_401(self, r, **kwargs):
-        if r.status_code == 401:
-            self.__create_session_token(r, **kwargs)
-
-            # Retry original request with new session token
-            retry_req = r.request.copy()
-            self.__add_session_token(retry_req)
-
-            # Return the response from the retried request so caller gets this response, instead of the original
-            # one that got a 401 authentication error
-            return r.connection.send(retry_req, **kwargs)
-
-
-    def __create_session_token(self, r, **kwargs):
-        prep = requests.Request(
-            method='POST', url='http://{}/api/v1/auth'.format(self.__eva.host_ip),
-            data=json.dumps({'token': self.__eva.api_token}),
-        ).prepare()
-
-        create_r = r.connection.send(prep, **kwargs)
-
-        if create_r.status_code != 200:
-            eva_error('auth request error', create_r)
-
-        self.session_token = create_r.json()['token']
-
-
-    def __renew_loop(self):
-        while True:
-            with self.__cond:
-                self.__cond.wait(timeout=self.__renew_period_mins * 60)
-
-            self.__eva._auth_renew_session()
 
 
 class EvaHTTPClient:
@@ -74,8 +18,9 @@ class EvaHTTPClient:
      - api_token (string):              A valid API token for accessing Eva, retrievable from the Choreograph config page
      - custom_logger (logging.Logger):  An *optional* logger, if not supplied the client will instantiate its own
      - request_timeout (float):         An *optional* time in seconds to wait for a request to resolve, defaults to 5
+     - renew_period (int):              An *optional* time in seconds between renew session requests, defaults to 20 minutes
     """
-    def __init__(self, host_ip, api_token, custom_logger=None, request_timeout=5):
+    def __init__(self, host_ip, api_token, custom_logger=None, request_timeout=5, renew_period=60*20):
         self.host_ip = host_ip
         self.api_token = api_token
         self.request_timeout = request_timeout
@@ -85,25 +30,88 @@ class EvaHTTPClient:
         else:
             self.__logger = logging.getLogger('automata.EvaHTTPClient:{}'.format(host_ip))
 
-        self.__auth = EvaAuth(self)
+        self.session_token = None
+        self.renew_period = renew_period
+        self.__last_renew = time.time()
+
+        if renew_period > 30*60:
+            raise ValueError('Session must be renewed before expiring (30 minutes)')
 
 
-    def api_call(self, method, path, payload=None):
+    def api_call(self, method, path, payload=None, creating_session=False):
+        r = self.api_request(method, path, payload)
+
+        # Only try creating a session once if we get an auth error, otherwise may get stuck in 401 loop
+        if r.status_code == 401 and not creating_session:
+            self.__logger.debug('Creating a new session and retrying failed request')
+            self.auth_create_session()
+            return self.api_request(method, path, payload)
+
+        if time.time() - self.__last_renew > self.renew_period:
+            self.__logger.debug('Automatically renewing session')
+            self.auth_renew_session()
+
+        return r
+
+
+    def api_request(self, method, path, payload, headers={}):
+        headers['Authorization'] = 'Bearer {}'.format(self.session_token)
         return requests.request(
             method, 'http://{}/api/v1/{}'.format(self.host_ip, path),
-            data=payload, auth=self.__auth,
+            data=payload, headers=headers,
             timeout=self.request_timeout,
         )
 
 
     # AUTH
-    def _auth_renew_session(self):
-        r = self.api_call('POST', 'auth/renew')
-        if r.status_code == 401:
-            self.__auth.session_token = None
+    def auth_renew_session(self, token=None):
+        if token:
+            auth_session_token = self.session_token
+            self.session_token = token
 
-        elif r.status_code != 204:
-            eva_error('renew auth request error', r)
+        self.__logger.debug('Renewing session token {}'.format(self.session_token))
+        r = self.api_call('POST', 'auth/renew')
+
+        if token:
+            self.session_token = auth_session_token
+
+        if r.status_code != 204:
+            if r.status_code == 401:
+                self.session_token = None
+            raise eva_error('auth_renew_session request error', r)
+        elif not token:
+            self.__last_renew = time.time()
+
+
+    def auth_create_session(self, managed_session=True):
+        r = self.api_call('POST', 'auth', json.dumps({'token': self.api_token}), creating_session=True)
+
+        if r.status_code != 200:
+            raise eva_error('auth_create_session request error', r)
+
+        if managed_session:
+            self.session_token = r.json()['token']
+            self.__last_renew = time.time()
+
+        self.__logger.debug('Created session token {}'.format(r.json()['token']))
+        return r.json()['token']
+
+
+    def auth_invalidate_session(self, token=None):
+        if token:
+            auth_session_token = self.session_token
+            self.session_token = token
+
+        self.__logger.debug('Invalidating session token {}'.format(self.session_token))
+        r = self.api_call('DELETE', 'auth')
+
+        if token:
+            self.session_token = auth_session_token
+
+        if r.status_code != 204:
+            raise eva_error('auth_invalidate_session request error', r)
+        elif not token:
+            self.session_token = None
 
 
     # DATA
