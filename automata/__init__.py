@@ -5,5 +5,5 @@ from .robot_state import RobotState
 from .helpers import strip_ip
 from .eva_errors import (
     EvaError,
-    EvaValidationError, EvaAuthError,
+    EvaValidationError, EvaAuthError, EvaAutoRenewError,
     EvaAdminError, EvaServerError)

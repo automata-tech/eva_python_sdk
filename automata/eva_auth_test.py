@@ -1,12 +1,12 @@
-from automata import Eva
+from automata import Eva, EvaAutoRenewError, EvaError
 import time
 import pytest
 import logging
 
 
 @pytest.fixture(scope="module")
-def eva():
-    e = Eva('172.16.16.2', 'b2a54715-96cf-4248-bc8e-2580bb1a3e37', request_timeout=10)
+def eva(ip, token):
+    e = Eva(ip, token, request_timeout=10, renew_period=2*60)
     e._Eva__logger.setLevel(logging.DEBUG)
     e._Eva__http_client._EvaHTTPClient__logger.setLevel(logging.DEBUG)
     yield e
@@ -37,8 +37,33 @@ class TestAuth:
         assert(token != eva._Eva__http_client.session_token)
 
 
-    def test_lock_with_no_existing_session(self, eva):
+    def test_auto_renew_error(self, eva):
+        api_token = eva._Eva__http_client.api_token
+        eva._Eva__http_client.api_token = ''
+
+        # Ensure it will try to auto-renew
         eva.auth_invalidate_session()
+        time.sleep(3*60)
+
+        got_auto_renew_error = False
+
+        try:
+            # Won't get a 401, as no session required for this endpoint
+            eva.api_call_with_auth('GET', '_/init')
+        except EvaAutoRenewError:
+            got_auto_renew_error = True
+        finally:
+            eva._Eva__http_client.api_token = api_token
+            assert(got_auto_renew_error)
+
+
+    def test_lock_with_no_existing_session(self, eva):
+        try:
+            eva.auth_invalidate_session()
+        except EvaError:
+            # could fail if session is already invalidated, so ignore!
+            pass
+
         with eva.lock():
             eva.gpio_set('d1', not eva.gpio_get('d1', 'output'))
 
@@ -47,22 +72,3 @@ class TestAuth:
         for _ in range(7):
             locked_eva.gpio_set('d1', not locked_eva.gpio_get('d1', 'output'))
             time.sleep(5*60)
-
-
-    def test_user_session_management(self, eva):
-        # when passing in a session token, the instances session should not be changed/broken
-        user_session = eva.auth_create_session(managed_session=False)
-        sdk_session = eva.auth_create_session()
-        assert(user_session != sdk_session)
-        assert(sdk_session == eva._Eva__http_client.session_token)
-
-        time.sleep(25*60)
-        eva.auth_renew_session(token=user_session)
-        eva.auth_renew_session()
-        time.sleep(10*60)
-
-        assert(sdk_session == eva._Eva__http_client.session_token)
-
-        eva.auth_invalidate_session(token=user_session)
-        eva.auth_renew_session()
-        assert(sdk_session == eva._Eva__http_client.session_token)

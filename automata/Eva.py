@@ -42,25 +42,25 @@ class Eva:
 
 
     # --------------------------------------------- HTTP HANDLERS ---------------------------------------------
-    def api_call(self, method, path, payload=None, creating_session=False):
-        self.__logger.debug('Eva.api_call {} {}'.format(method, path))
-        return self.__http_client.api_call(method, path, payload=payload, creating_session=creating_session)
+    def api_call_with_auth(self, method, path, payload=None):
+        self.__logger.debug('Eva.api_call_with_auth {} {}'.format(method, path))
+        return self.__http_client.api_call_with_auth(method, path, payload=payload)
 
 
     # Auth
-    def auth_renew_session(self, token=None):
+    def auth_renew_session(self):
         self.__logger.debug('Eva.auth_renew_session called')
-        return self.__http_client.auth_renew_session(token=token)
+        return self.__http_client.auth_renew_session()
 
 
-    def auth_create_session(self, managed_session=True):
+    def auth_create_session(self):
         self.__logger.debug('Eva.auth_create_session called')
-        return self.__http_client.auth_create_session(managed_session=managed_session)
+        return self.__http_client.auth_create_session()
 
 
-    def auth_invalidate_session(self, token=None):
+    def auth_invalidate_session(self):
         self.__logger.debug('Eva.auth_invalidate_session called')
-        return self.__http_client.auth_invalidate_session(token=token)
+        return self.__http_client.auth_invalidate_session()
 
 
     # Data
