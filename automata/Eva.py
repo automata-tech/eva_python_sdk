@@ -18,10 +18,10 @@ class Eva:
     Once initialised Eva connects to Eva via a websocket and keeps the current
     state of the robot using the websocket update messages.
     """
-    def __init__(self, host_ip, token, request_timeout=5):
+    def __init__(self, host_ip, token, request_timeout=5, renew_period=60*20):
         parsed_host_ip = strip_ip(host_ip)
 
-        self.__http_client = EvaHTTPClient(parsed_host_ip, token, request_timeout=request_timeout)
+        self.__http_client = EvaHTTPClient(parsed_host_ip, token, request_timeout=request_timeout, renew_period=renew_period)
         self.__logger = logging.getLogger('automata.Eva:{}'.format(host_ip))
 
         self.__eva_locker = EvaWithLocker(self)
@@ -42,9 +42,25 @@ class Eva:
 
 
     # --------------------------------------------- HTTP HANDLERS ---------------------------------------------
-    def api_call(self, method, path, payload=None):
-        self.__logger.debug('Eva.api_call {} {}'.format(method, path))
-        return self.__http_client.api_call(method, path, payload=payload)
+    def api_call_with_auth(self, method, path, payload=None):
+        self.__logger.debug('Eva.api_call_with_auth {} {}'.format(method, path))
+        return self.__http_client.api_call_with_auth(method, path, payload=payload)
+
+
+    # Auth
+    def auth_renew_session(self):
+        self.__logger.debug('Eva.auth_renew_session called')
+        return self.__http_client.auth_renew_session()
+
+
+    def auth_create_session(self):
+        self.__logger.debug('Eva.auth_create_session called')
+        return self.__http_client.auth_create_session()
+
+
+    def auth_invalidate_session(self):
+        self.__logger.debug('Eva.auth_invalidate_session called')
+        return self.__http_client.auth_invalidate_session()
 
 
     # Data

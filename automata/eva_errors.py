@@ -28,6 +28,10 @@ class EvaLockError(EvaError, Exception):
     """Error thrown when Eva has robot lock issues"""
 
 
+class EvaAutoRenewError(EvaError, Exception):
+    """Error thrown when automatic session renewal fails but not the original request"""
+
+
 def eva_error(label, r=None):
     if r is not None:
         __handle_http_error(label, r)
