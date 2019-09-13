@@ -54,3 +54,5 @@ def __handle_http_error(label, r):
         raise EvaError(error_string)
     elif 500 <= r.status_code < 600:
         raise EvaServerError(error_string)
+    else:
+        raise EvaError(error_string)
