@@ -1,6 +1,6 @@
 import unittest
 
-from helpers import (strip_ip)
+from .helpers import (strip_ip)
 
 class Test_strip_ip(unittest.TestCase):
 

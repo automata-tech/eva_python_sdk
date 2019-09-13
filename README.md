@@ -10,13 +10,11 @@ __* This SDK is currently in beta, any breaking changes during development will 
 - [Bugs and feature requests](#bugs-and-feature-requests)
 - [License](#license)
 
-
 ## Installation
 
 ### Using pipenv
 
     $ pipenv install git+https://github.com/automata-tech/eva_python_sdk.git@master#egg=automata
-
 
 ## Examples
 
@@ -74,11 +72,9 @@ with eva.lock():
 
 Please refer to the examples directory for more SDK usage examples.
 
-
 ### automata.eva_http and automata.eva_ws
 
 These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the automata.Eva object.
-
 
 ## Logging
 
@@ -92,6 +88,13 @@ logging.basicConfig(level=logging.DEBUG)
 
 Please raise any bugs or feature requests as a Github issues. We also gratefully accept pull requests for features and bug fixes.
 
+## Testing
+
+    $ pipenv shell
+    $ python -m pytest automata/<name-of-file-to-test> 
+
+    # some test require supplying ip and token via the `--ip` and `--token` arguements
+    $ python -m pytest automata/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456
 
 ## License
 
