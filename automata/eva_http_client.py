@@ -38,14 +38,14 @@ class EvaHTTPClient:
             raise ValueError('Session must be renewed before expiring (30 minutes)')
 
 
-    def api_call_with_auth(self, method, path, payload=None):
-        r = self.__api_request(method, path, payload)
+    def api_call_with_auth(self, *args, **kwargs):
+        r = self.__api_request(*args, **kwargs)
 
         # Try creating a new session if we get an auth error and retrying the failed request
         if r.status_code == 401:
             self.__logger.debug('Creating a new session and retrying failed request')
             self.auth_create_session()
-            return self.__api_request(method, path, payload)
+            return self.__api_request(*args, **kwargs)
 
         if self.renew_period < time.time() - self.__last_renew < 30*60:
             self.__logger.debug('Automatically renewing session')
@@ -57,16 +57,22 @@ class EvaHTTPClient:
         return r
 
 
-    def __api_request(self, method, path, payload=None, headers=None):
+    def __api_request(self, method, path, payload=None, headers=None, timeout=None):
         if not headers:
             headers = {'Authorization': 'Bearer {}'.format(self.session_token)}
 
         return requests.request(
             method, 'http://{}/api/v1/{}'.format(self.host_ip, path),
             data=payload, headers=headers,
-            timeout=self.request_timeout,
+            timeout=(timeout or self.request_timeout),
         )
 
+    # API VERSIONS
+    def api_versions(self):
+        r = self.__api_request('GET', 'versions')
+        if r.status_code != 200:
+            eva_error('api_versions request error', r)
+        return r.json()
 
     # AUTH
     def auth_renew_session(self):
@@ -79,8 +85,8 @@ class EvaHTTPClient:
             self.auth_create_session()
 
         elif r.status_code != 204:
-            raise eva_error('auth_renew_session request error', r)
-        
+            eva_error('auth_renew_session request error', r)
+
         else:
             self.__last_renew = time.time()
 
@@ -91,7 +97,7 @@ class EvaHTTPClient:
         r = self.__api_request('POST', 'auth', payload=json.dumps({'token': self.api_token}), headers={})
 
         if r.status_code != 200:
-            raise eva_error('auth_create_session request error', r)
+            eva_error('auth_create_session request error', r)
 
         self.__last_renew = time.time()
         self.session_token = r.json()['token']
@@ -104,8 +110,8 @@ class EvaHTTPClient:
         r = self.__api_request('DELETE', 'auth')
 
         if r.status_code != 204:
-            raise eva_error('auth_invalidate_session request error', r)
-        
+            eva_error('auth_invalidate_session request error', r)
+
         self.session_token = None
 
 
@@ -139,9 +145,14 @@ class EvaHTTPClient:
 
 
     # CONFIG
-    # TODO implement unfinished routes
-    def config_update(self):
-        return NotImplementedError
+    def config_update(self, update):
+        r = self.api_call_with_auth(
+            'POST', 'config/update', update,
+            headers={'Content-Type': 'application/x.automata-update'}, timeout=30
+        )
+        if r.status_code != 200:
+            eva_error('config_update error', r)
+        return r.json()
 
 
     # GPIO
@@ -290,7 +301,7 @@ class EvaHTTPClient:
                 eva_error('Eva is in error control state')
             elif robot_state == parsed_goal:
                 return
-            
+
             time.sleep(interval_sec)
 
 
@@ -386,7 +397,7 @@ class EvaHTTPClient:
 
         if r.status_code != 200:
             eva_error('calc_forward_kinematics error', r)
-        
+
         if (fk_type == 'position') or (fk_type == 'orientation'):
             return r.json()['fk'][fk_type]
         elif (fk_type == 'both'):
