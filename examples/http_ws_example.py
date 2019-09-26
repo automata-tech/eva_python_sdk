@@ -12,10 +12,13 @@ import time
 
 host_ip = input("Please enter a Eva IP: ")
 token = input("Please enter a valid Eva token: ")
+client_id = input("Please enter the token's client ID: ")
 
-print('ip: [{}], token: [{}]\n'.format(host_ip, token))
+print('ip: [{}], token: [{}], client ID: [{}]\n'.format(host_ip, token, client_id))
 
-http_client = automata.EvaHTTPClient(host_ip, token)
+http_client = automata.EvaHTTPClient(host_ip, token, client_id)
+session_token = http_client.auth_create_session()
+# TODO call http_client.auth_renew_session every 10 minutes to renew session token
 
 users = http_client.users_get()
 print('Eva at {} users: {}\n'.format(host_ip, users))
@@ -23,8 +26,8 @@ print('Eva at {} users: {}\n'.format(host_ip, users))
 joint_angles = http_client.data_servo_positions()
 print('Eva current joint angles: {}'.format(joint_angles))
 
-async def eva_ws_example(host_ip, token):
-    websocket = await automata.ws_connect(host_ip, token)
+async def eva_ws_example(host_ip, session_token):
+    websocket = await automata.ws_connect(host_ip, session_token)
 
     msg_count = 0
     time_since_msg = time.time()
@@ -38,4 +41,4 @@ async def eva_ws_example(host_ip, token):
         print(ws_msg)
 
 
-asyncio.get_event_loop().run_until_complete(eva_ws_example(host_ip, token))
+asyncio.get_event_loop().run_until_complete(eva_ws_example(host_ip, session_token))

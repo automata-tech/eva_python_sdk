@@ -11,8 +11,9 @@ import logging
 
 host_ip = input("Please enter a Eva IP: ")
 token = input("Please enter a valid Eva token: ")
+client_id = input("Please enter the token client ID: ")
 
-eva = Eva(host_ip, token)
+eva = Eva(host_ip, token, client_id)
 
 # Send Eva to a waypoint
 with eva.lock():

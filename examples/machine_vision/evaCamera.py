@@ -79,7 +79,7 @@ def read_from_camera() -> XYPosition:
 if __name__ == "__main__":
 
     # initialize EvaCamera with a working Eva and the camera positional information
-    eva = Eva("<IP_here>", "<token_here>")
+    eva = Eva("<IP_here>", "<token_here>", "<tokens_client_ID_here>")
     camera_position = (1.2, 2.3, 3.4)
     camera_to_item_distance = 2.2
     ec = EvaCamera(eva, camera_position, camera_to_item_distance)

@@ -5,8 +5,8 @@ import logging
 
 
 @pytest.fixture(scope="module")
-def eva(ip, token):
-    e = Eva(ip, token, request_timeout=10, renew_period=2*60)
+def eva(ip, token, client_id):
+    e = Eva(ip, token, client_id, request_timeout=10, renew_period=2*60)
     e._Eva__logger.setLevel(logging.DEBUG)
     e._Eva__http_client._EvaHTTPClient__logger.setLevel(logging.DEBUG)
     yield e

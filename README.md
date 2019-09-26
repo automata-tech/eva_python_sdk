@@ -2,13 +2,18 @@
 
 The eva_python_sdk provides convenient access to the Automata Eva API from applications written in Python 3.
 
-__* This SDK is currently in beta, any breaking changes during development will be comunicated via changelog__
+__* This SDK is currently in beta, any breaking changes during development will be communicated via changelog__
 
-- [Installation](#installation)
-- [Examples](#examples)
-- [Logging](#logging)
-- [Bugs and feature requests](#bugs-and-feature-requests)
-- [License](#license)
+- [Eva Python SDK](#eva-python-sdk)
+  - [Installation](#installation)
+    - [Using pipenv](#using-pipenv)
+  - [Examples](#examples)
+    - [Eva](#eva)
+    - [automata.eva_http and automata.eva_ws](#automataevahttp-and-automataevaws)
+  - [Logging](#logging)
+  - [Bugs and feature requests](#bugs-and-feature-requests)
+  - [Testing](#testing)
+  - [License](#license)
 
 ## Installation
 
@@ -24,15 +29,18 @@ The Eva object allows you to directly control an Eva robot. It provides lots of 
 
 **Connecting**
 ```python
+from automata import Eva
+
 host = '<your_eva_IP_here>'
 token = '<your_token_here>'
+client_id = '<your_tokens_client_id_here>'
 
-eva = Eva(host, token)
+eva = Eva(host, token, client_id)
 ```
 
 **GoTo movement**
 ```python
-eva = Eva(host_ip, token)
+eva = Eva(host_ip, token, client_id)
 
 with eva.lock():
     eva.control_wait_for_ready()
@@ -61,7 +69,7 @@ toolpath = {
     ]
 }
 
-eva = Eva(host, token)
+eva = Eva(host, token, client_id)
 
 with eva.lock():
     eva.control_wait_for_ready()
@@ -74,7 +82,7 @@ Please refer to the examples directory for more SDK usage examples.
 
 ### automata.eva_http and automata.eva_ws
 
-These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the automata.Eva object.
+These can be used to interact directly with the HTTP and Websocket APIs.
 
 ## Logging
 
@@ -93,8 +101,8 @@ Please raise any bugs or feature requests as a Github issues. We also gratefully
     $ pipenv shell
     $ python -m pytest automata/<name-of-file-to-test> 
 
-    # some test require supplying ip and token via the `--ip` and `--token` arguements
-    $ python -m pytest automata/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456
+    # some tests require supplying ip, token and the token's client ID via the `--ip`, `--token` and `--id` arguments
+    $ python -m pytest automata/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456 --id abcd0123
 
 ## License
 

@@ -14,15 +14,17 @@ class EvaHTTPClient:
     """
     Eva HTTP client
 
-     - host_ip (string):                The IP address of an Eva, i.e. 192.168.1.245
+     - host_ip (string):                The IP address of an Eva, e.g. 192.168.1.245
      - api_token (string):              A valid API token for accessing Eva, retrievable from the Choreograph config page
+	 - client_id (string):              The client ID of the valid API token, also retrievable from the Choreograph config page
      - custom_logger (logging.Logger):  An *optional* logger, if not supplied the client will instantiate its own
      - request_timeout (float):         An *optional* time in seconds to wait for a request to resolve, defaults to 5
      - renew_period (int):              An *optional* time in seconds between renew session requests, defaults to 20 minutes
     """
-    def __init__(self, host_ip, api_token, custom_logger=None, request_timeout=5, renew_period=60*20):
+    def __init__(self, host_ip, api_token, client_id, custom_logger=None, request_timeout=5, renew_period=60*20):
         self.host_ip = host_ip
         self.api_token = api_token
+        self.client_id = client_id
         self.request_timeout = request_timeout
 
         if custom_logger is not None:
@@ -88,7 +90,7 @@ class EvaHTTPClient:
     def auth_create_session(self):
         self.__logger.debug('Creating session token')
         # Bypass api_call_with_auth to avoid getting in a 401 loop
-        r = self.__api_request('POST', 'auth', payload=json.dumps({'token': self.api_token}), headers={})
+        r = self.__api_request('POST', 'auth', payload=json.dumps({'token': self.api_token, 'client_id': self.client_id}), headers={})
 
         if r.status_code != 200:
             raise eva_error('auth_create_session request error', r)
