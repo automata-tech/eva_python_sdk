@@ -18,10 +18,10 @@ class Eva:
     Once initialised Eva connects to Eva via a websocket and keeps the current
     state of the robot using the websocket update messages.
     """
-    def __init__(self, host_ip, token, client_id, request_timeout=5, renew_period=60*20):
+    def __init__(self, host_ip, token, token_id, request_timeout=5, renew_period=60*20):
         parsed_host_ip = strip_ip(host_ip)
 
-        self.__http_client = EvaHTTPClient(parsed_host_ip, token, client_id, request_timeout=request_timeout, renew_period=renew_period)
+        self.__http_client = EvaHTTPClient(parsed_host_ip, token, token_id, request_timeout=request_timeout, renew_period=renew_period)
         self.__logger = logging.getLogger('automata.Eva:{}'.format(host_ip))
 
         self.__eva_locker = EvaWithLocker(self)

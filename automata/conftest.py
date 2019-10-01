@@ -4,7 +4,7 @@ import pytest
 def pytest_addoption(parser):
     parser.addoption("--ip", default='172.16.16.2', help="IP of the test robot, defaults to 172.16.16.2")
     parser.addoption("--token", default='', help="API token of the test robot")
-    parser.addoption("--id", default='', help="Client ID of the API token of the test robot")
+    parser.addoption("--id", default='', help="ID of the API token of the test robot")
 
 
 @pytest.fixture(scope="session")
@@ -18,5 +18,5 @@ def token(request):
 
 
 @pytest.fixture(scope="session")
-def client_id(request):
+def token_id(request):
     return request.config.getoption("--id")

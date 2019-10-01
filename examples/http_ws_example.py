@@ -12,11 +12,11 @@ import time
 
 host_ip = input("Please enter a Eva IP: ")
 token = input("Please enter a valid Eva token: ")
-client_id = input("Please enter the token's client ID: ")
+token_id = input("Please enter the token ID: ")
 
-print('ip: [{}], token: [{}], client ID: [{}]\n'.format(host_ip, token, client_id))
+print('ip: [{}], token: [{}], token ID: [{}]\n'.format(host_ip, token, token_id))
 
-http_client = automata.EvaHTTPClient(host_ip, token, client_id)
+http_client = automata.EvaHTTPClient(host_ip, token, token_id)
 session_token = http_client.auth_create_session()
 # TODO call http_client.auth_renew_session every 10 minutes to renew session token
 

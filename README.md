@@ -33,14 +33,14 @@ from automata import Eva
 
 host = '<your_eva_IP_here>'
 token = '<your_token_here>'
-client_id = '<your_tokens_client_id_here>'
+token_id = '<your_token_id_here>'
 
-eva = Eva(host, token, client_id)
+eva = Eva(host, token, token_id)
 ```
 
 **GoTo movement**
 ```python
-eva = Eva(host_ip, token, client_id)
+eva = Eva(host_ip, token, token_id)
 
 with eva.lock():
     eva.control_wait_for_ready()
@@ -69,7 +69,7 @@ toolpath = {
     ]
 }
 
-eva = Eva(host, token, client_id)
+eva = Eva(host, token, token_id)
 
 with eva.lock():
     eva.control_wait_for_ready()
@@ -101,7 +101,7 @@ Please raise any bugs or feature requests as a Github issues. We also gratefully
     $ pipenv shell
     $ python -m pytest automata/<name-of-file-to-test> 
 
-    # some tests require supplying ip, token and the token's client ID via the `--ip`, `--token` and `--id` arguments
+    # some tests require supplying IP, token and the token's ID via the `--ip`, `--token` and `--id` arguments
     $ python -m pytest automata/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456 --id abcd0123
 
 ## License
