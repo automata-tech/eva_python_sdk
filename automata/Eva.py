@@ -173,9 +173,9 @@ class Eva:
         return self.__http_client.control_home(wait_for_ready=wait_for_ready)
 
 
-    def control_run(self, loop=1, wait_for_ready=True):
+    def control_run(self, mode='teach', loop=1, wait_for_ready=True):
         self.__logger.debug('Eva.control_run called')
-        return self.__http_client.control_run(loop=loop, wait_for_ready=wait_for_ready)
+        return self.__http_client.control_run(mode=mode, loop=loop, wait_for_ready=wait_for_ready)
 
 
     def control_go_to(self, joints, wait_for_ready=True, velocity=None, duration=None):

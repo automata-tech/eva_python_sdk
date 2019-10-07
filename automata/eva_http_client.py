@@ -310,8 +310,8 @@ class EvaHTTPClient:
             self.control_wait_for(RobotState.READY)
 
 
-    def control_run(self, loop=1, wait_for_ready=True):
-        r = self.api_call_with_auth('POST', 'controls/run', json.dumps({'loop': loop}))
+    def control_run(self, mode='teach', loop=1, wait_for_ready=True):
+        r = self.api_call_with_auth('POST', 'controls/run', json.dumps({'mode': mode, 'loop': loop}))
         if r.status_code != 200:
             time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
             eva_error('control_run error', r)
