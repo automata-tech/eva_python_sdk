@@ -13,6 +13,8 @@ __* This SDK is currently in beta, any breaking changes during development will 
 
 ## Installation
 
+__Requires Python 3, not compatible with Python 2__
+
 ### Using pipenv
 
     $ pipenv install git+https://github.com/automata-tech/eva_python_sdk.git@master#egg=automata
