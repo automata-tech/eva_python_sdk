@@ -12,14 +12,16 @@ __* This SDK is currently in beta, any breaking changes during development will 
 
 ## Installation
 
-This assumes you have Python3 and pipenv set up
+__Requires Python 3, not compatible with Python 2__
+
+Pre-requisite: please make sure you have Python3 and Pipenv installed. Then run the following command:
 
     $ pipenv install git+https://github.com/automata-tech/eva_python_sdk.git@master#egg=automata
 
 For more detailed instructions please refer to our wiki:
 
-- [Windows Installation Instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Windows-Installation)
-- [Mac Installation Instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Mac-Installation)
+- [Windows installation instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Windows-Installation)
+- [Mac installation instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Mac-Installation)
 
 ## Examples
 
