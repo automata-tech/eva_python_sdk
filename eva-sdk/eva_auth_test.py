@@ -1,4 +1,4 @@
-from automata import Eva, EvaAutoRenewError, EvaError
+from eva-sdk import Eva, EvaAutoRenewError, EvaError
 import time
 import pytest
 import logging

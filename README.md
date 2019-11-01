@@ -1,8 +1,8 @@
 # Eva Python SDK
 
-The eva_python_sdk provides convenient access to the Automata Eva API from applications written in Python 3.
+The Eva Python SDK provides convenient access to the Automata Eva API from applications written in Python 3.
 
-__* This SDK is currently in beta, any breaking changes during development will be comunicated via changelog__
+__* This SDK is currently in beta__
 
 - [Installation](#installation)
 - [Examples](#examples)
@@ -14,11 +14,27 @@ __* This SDK is currently in beta, any breaking changes during development will 
 
 __Requires Python 3, not compatible with Python 2__
 
-Pre-requisite: please make sure you have Python3 and Pipenv installed. Then run the following command:
+### Pip
 
-    $ pipenv install git+https://github.com/automata-tech/eva_python_sdk.git@master#egg=automata
+Make sure you have Python3 and pip installed, then run the following command:
 
-For more detailed instructions please refer to our wiki:
+    $ pip install eva-sdk
+    
+    # Or for a specific version, i.e version 1.0.0:
+    $ pip install eva-sdk==1.0.0
+
+### Pipenv
+
+Make sure you have Python3 and Pipenv installed, then run the following command:
+
+    $ pipenv install eva-sdk
+
+    # Or for a specific version, i.e version 1.0.0:
+    $ pipenv install eva-sdk~=1.0
+
+### Detail Instructions
+
+If your not familiar with Python or for more detailed instructions please refer to our wiki:
 
 - [Windows installation instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Windows-Installation)
 - [Mac installation instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Mac-Installation)
@@ -79,13 +95,13 @@ with eva.lock():
 
 Please refer to the examples directory for more SDK usage examples.
 
-### automata.eva_http and automata.eva_ws
+### eva-sdk.eva_http and eva-sdk.eva_ws
 
-These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the automata.Eva object.
+These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the eva-sdk.Eva object.
 
 ## Logging
 
-The SDK uses Debug and Error level logging exclusively. Each Eva instance will log using the name `automata.Eva:<host_name_here>`. If you wish to enable the debug logging:
+The SDK uses Debug and Error level logging exclusively. Each Eva instance will log using the name `eva-sdk.Eva:<host_name_here>`. If you wish to enable the debug logging:
 
 ```python
 logging.basicConfig(level=logging.DEBUG)
@@ -98,10 +114,10 @@ Please raise any bugs or feature requests as a Github issues. We also gratefully
 ## Testing
 
     $ pipenv shell
-    $ python -m pytest automata/<name-of-file-to-test> 
+    $ python -m pytest eva-sdk/<name-of-file-to-test> 
 
     # some test require supplying ip and token via the `--ip` and `--token` arguements
-    $ python -m pytest automata/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456
+    $ python -m pytest eva-sdk/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456
 
 ## License
 
