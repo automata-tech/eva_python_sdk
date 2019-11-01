@@ -1,11 +1,25 @@
-from setuptools import setup
+import setuptools
 
-setup(
-   name='automata',
-   version='0.3',
-   description='SDK for interacting with the Eva robot',
+with open("README.md", "r") as fh:
+   long_description = fh.read()
+
+setuptools.setup(
+   name='eva_python_sdk',
+   version='1.1.0',
+   description='SDK for the Automata Eva robotic arm',
    author='Automata',
-   author_email='ch.c@automata.tech',
-   packages=['automata'],
+   license='Apache License 2.0',
+   author_email='charlie@automata.tech',
+   url="https://github.com/automata-tech/eva_python_sdk",
+   packages=setuptools.find_packages(),
+   long_description=long_description,
+   long_description_content_type="text/markdown",
    install_requires=['requests', 'websockets'],
+   classifiers=[
+      "Programming Language :: Python :: 3",
+      "Development Status :: 4 - Beta",
+      "Operating System :: OS Independent",
+      "License :: OSI Approved :: Apache Software License",
+   ],
+   python_requires='>=3.0',
 )
