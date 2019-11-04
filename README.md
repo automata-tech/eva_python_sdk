@@ -6,6 +6,7 @@ __* This SDK is currently in beta__
 
 - [Installation](#installation)
 - [Examples](#examples)
+- [Versioning](#versioning)
 - [Logging](#logging)
 - [Bugs and feature requests](#bugs-and-feature-requests)
 - [License](#license)
@@ -18,19 +19,23 @@ __Requires Python 3, not compatible with Python 2__
 
 Make sure you have Python3 and pip installed, then run the following command:
 
-    $ pip install eva-sdk
-    
-    # Or for a specific version, i.e version 1.0.0:
-    $ pip install eva-sdk==1.0.0
+```bash
+$ pip install eva-sdk
+
+# Or for a specific version, i.e the lastest compatible version 2.x.x:
+$ pip install eva-sdk~=2.0.0
+```
 
 ### Pipenv
 
 Make sure you have Python3 and Pipenv installed, then run the following command:
 
-    $ pipenv install eva-sdk
+```bash
+$ pipenv install eva-sdk
 
-    # Or for a specific version, i.e version 1.0.0:
-    $ pipenv install eva-sdk~=1.0
+# Or for a specific version, i.e the lastest compatible version 2.x.x:
+$ pipenv install eva-sdk~=2.0.0
+```
 
 ### Detail Instructions
 
@@ -46,6 +51,7 @@ The Eva object allows you to directly control an Eva robot. It provides lots of 
 ### Eva
 
 **Connecting**
+
 ```python
 host = '<your_eva_IP_here>'
 token = '<your_token_here>'
@@ -54,6 +60,7 @@ eva = Eva(host, token)
 ```
 
 **GoTo movement**
+
 ```python
 eva = Eva(host_ip, token)
 
@@ -63,6 +70,7 @@ with eva.lock():
 ```
 
 **Toolpath create and run**
+
 ```python
 toolpath = {
     "metadata":{
@@ -99,6 +107,17 @@ Please refer to the examples directory for more SDK usage examples.
 
 These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the eva-sdk.Eva object.
 
+## Versioning
+
+To determine which version of the SDK works with your Eva's software version number (found on the Choreograph config page), please use the following chart:
+
+| SDK Version | Supported Eva Version |
+| ----------- | --------------------- |
+| 1.x.x       | 2.0.0 - 2.1.2         |
+| 2.x.x       | 3.x.x                 |
+
+For more information on how to install a particular version of the SDK, please refer to the [Installation](#Installation) section. We use the [Semver](https://semver.org/) version numbering stratergy.
+
 ## Logging
 
 The SDK uses Debug and Error level logging exclusively. Each Eva instance will log using the name `eva-sdk.Eva:<host_name_here>`. If you wish to enable the debug logging:
@@ -113,11 +132,13 @@ Please raise any bugs or feature requests as a Github issues. We also gratefully
 
 ## Testing
 
-    $ pipenv shell
-    $ python -m pytest eva-sdk/<name-of-file-to-test> 
+```bash
+$ pipenv shell
+$ python -m pytest eva-sdk/<name-of-file-to-test> 
 
-    # some test require supplying ip and token via the `--ip` and `--token` arguements
-    $ python -m pytest eva-sdk/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456
+# some test require supplying ip and token via the `--ip` and `--token` arguements
+$ python -m pytest eva-sdk/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456
+```
 
 ## License
 
