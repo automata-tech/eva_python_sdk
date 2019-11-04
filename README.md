@@ -1,5 +1,7 @@
 # Eva Python SDK
 
+[![PyPI version](https://badge.fury.io/py/eva-sdk.svg)](https://badge.fury.io/py/eva-sdk)
+
 The Eva Python SDK provides convenient access to the Automata Eva API from applications written in Python 3.
 
 __* This SDK is currently in beta__
