@@ -392,8 +392,12 @@ class EvaHTTPClient:
 
 
     # CALCULATIONS
-    def calc_forward_kinematics(self, joints, fk_type='both'):
-        r = self.api_call_with_auth('PUT', 'calc/forward_kinematics', json.dumps({'joints': joints}))
+    def calc_forward_kinematics(self, joints, fk_type='both', tcp_config=None):
+        body = {'joints': joints}
+        if tcp_config is not None:
+            body['tcp_config'] = tcp_config
+
+        r = self.api_call_with_auth('PUT', 'calc/forward_kinematics', json.dumps(body))
 
         if r.status_code != 200:
             eva_error('calc_forward_kinematics error', r)
@@ -406,36 +410,48 @@ class EvaHTTPClient:
             eva_error('calc_forward_kinematics invalid fk_type {}'.format(fk_type), r)
 
 
-    def calc_inverse_kinematics(self, guess, target_position, target_orientation):
-        payload = json.dumps({'guess': guess, 'position': target_position, 'orientation': target_orientation})
-        r = self.api_call_with_auth('PUT', 'calc/inverse_kinematics', payload)
+    def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None):
+        body = {'guess': guess, 'position': target_position, 'orientation': target_orientation}
+        if tcp_config is not None:
+            body['tcp_config'] = tcp_config
+
+        r = self.api_call_with_auth('PUT', 'calc/inverse_kinematics', json.dumps(body))
 
         if r.status_code != 200:
             eva_error('inverse_kinematics error', r)
         return r.json()
 
 
-    def calc_nudge(self, joints, direction, offset):
-        payload = json.dumps({'joints': joints, 'direction': direction, 'offset': offset})
-        r = self.api_call_with_auth('PUT', 'calc/nudge', payload)
+    def calc_nudge(self, joints, direction, offset, tcp_config=None):
+        body = {'joints': joints, 'direction': direction, 'offset': offset}
+        if tcp_config is not None:
+            body['tcp_config'] = tcp_config
+
+        r = self.api_call_with_auth('PUT', 'calc/nudge', json.dumps(body))
 
         if r.status_code != 200:
             eva_error('calc_nudge error', r)
         return r.json()['nudge']['joints']
 
 
-    def calc_pose_valid(self, joints):
-        payload = json.dumps({'joints': joints})
-        r = self.api_call_with_auth('PUT', 'calc/pose_valid', payload)
+    def calc_pose_valid(self, joints, tcp_config=None):
+        body = {'joints': joints}
+        if tcp_config is not None:
+            body['tcp_config'] = tcp_config
+
+        r = self.api_call_with_auth('PUT', 'calc/pose_valid', json.dumps(body))
 
         if r.status_code != 200:
             eva_error('calc_pose_valid error', r)
         return r.json()['pose']['valid']
 
 
-    def calc_rotate(self, joints, axis, offset):
-        payload = json.dumps({'joints': joints, 'axis': axis, 'offset': offset})
-        r = self.api_call_with_auth('PUT', 'calc/rotate', payload)
+    def calc_rotate(self, joints, axis, offset, tcp_config=None):
+        body = {'joints': joints, 'axis': axis, 'offset': offset}
+        if tcp_config is not None:
+            body['tcp_config'] = tcp_config
+
+        r = self.api_call_with_auth('PUT', 'calc/rotate', json.dumps(body))
 
         if r.status_code != 200:
             eva_error('calc_rotate error', r)

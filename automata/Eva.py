@@ -209,26 +209,26 @@ class Eva:
 
 
     # Calc
-    def calc_forward_kinematics(self, joints, fk_type='both'):
+    def calc_forward_kinematics(self, joints, fk_type='both', tcp_config=None):
         self.__logger.debug('Eva.calc_forward_kinematics called')
-        return self.__http_client.calc_forward_kinematics(joints, fk_type=fk_type)
+        return self.__http_client.calc_forward_kinematics(joints, fk_type=fk_type, tcp_config=tcp_config)
 
 
-    def calc_inverse_kinematics(self, guess, target_position, target_orientation):
+    def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None):
         self.__logger.debug('Eva.calc_inverse_kinematics called')
-        return self.__http_client.calc_inverse_kinematics(guess, target_position, target_orientation)
+        return self.__http_client.calc_inverse_kinematics(guess, target_position, target_orientation, tcp_config=tcp_config)
 
 
-    def calc_nudge(self, joints, direction, offset):
+    def calc_nudge(self, joints, direction, offset, tcp_config=None):
         self.__logger.debug('Eva.calc_nudge called')
-        return self.__http_client.calc_nudge(joints, direction, offset)
+        return self.__http_client.calc_nudge(joints, direction, offset, tcp_config=tcp_config)
 
 
-    def calc_pose_valid(self, joints):
+    def calc_pose_valid(self, joints, tcp_config=None):
         self.__logger.debug('Eva.calc_pose_valid called')
-        return self.__http_client.calc_pose_valid(joints)
+        return self.__http_client.calc_pose_valid(joints, tcp_config=tcp_config)
 
 
-    def calc_rotate(self, joints, axis, offset):
+    def calc_rotate(self, joints, axis, offset, tcp_config=None):
         self.__logger.debug('Eva.calc_rotate called')
-        return self.__http_client.calc_rotate(joints, axis, offset)
+        return self.__http_client.calc_rotate(joints, axis, offset, tcp_config=tcp_config)
