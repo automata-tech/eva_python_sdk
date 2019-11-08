@@ -1,4 +1,4 @@
-from automata import Eva
+from eva-sdk import Eva
 
 
 XYPosition = (float, float)

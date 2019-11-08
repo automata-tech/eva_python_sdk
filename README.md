@@ -1,11 +1,14 @@
 # Eva Python SDK
 
-The eva_python_sdk provides convenient access to the Automata Eva API from applications written in Python 3.
+[![PyPI version](https://badge.fury.io/py/eva-sdk.svg)](https://badge.fury.io/py/eva-sdk)
 
-__* This SDK is currently in beta, any breaking changes during development will be comunicated via changelog__
+The Eva Python SDK provides convenient access to the Automata Eva API from applications written in Python 3.
+
+__* This SDK is currently in beta__
 
 - [Installation](#installation)
 - [Examples](#examples)
+- [Versioning](#versioning)
 - [Logging](#logging)
 - [Bugs and feature requests](#bugs-and-feature-requests)
 - [License](#license)
@@ -14,11 +17,31 @@ __* This SDK is currently in beta, any breaking changes during development will 
 
 __Requires Python 3, not compatible with Python 2__
 
-Pre-requisite: please make sure you have Python3 and Pipenv installed. Then run the following command:
+### Pip
 
-    $ pipenv install git+https://github.com/automata-tech/eva_python_sdk.git@master#egg=automata
+Make sure you have Python3 and pip installed, then run the following command:
 
-For more detailed instructions please refer to our wiki:
+```bash
+$ pip install eva-sdk
+
+# Or for a specific version, i.e the lastest compatible version 2.x.x:
+$ pip install eva-sdk~=2.0.0
+```
+
+### Pipenv
+
+Make sure you have Python3 and Pipenv installed, then run the following command:
+
+```bash
+$ pipenv install eva-sdk
+
+# Or for a specific version, i.e the lastest compatible version 2.x.x:
+$ pipenv install eva-sdk~=2.0.0
+```
+
+### Detail Instructions
+
+If your not familiar with Python or for more detailed instructions please refer to our wiki:
 
 - [Windows installation instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Windows-Installation)
 - [Mac installation instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Mac-Installation)
@@ -30,6 +53,7 @@ The Eva object allows you to directly control an Eva robot. It provides lots of 
 ### Eva
 
 **Connecting**
+
 ```python
 host = '<your_eva_IP_here>'
 token = '<your_token_here>'
@@ -38,6 +62,7 @@ eva = Eva(host, token)
 ```
 
 **GoTo movement**
+
 ```python
 eva = Eva(host_ip, token)
 
@@ -47,6 +72,7 @@ with eva.lock():
 ```
 
 **Toolpath create and run**
+
 ```python
 toolpath = {
     "metadata":{
@@ -79,13 +105,24 @@ with eva.lock():
 
 Please refer to the examples directory for more SDK usage examples.
 
-### automata.eva_http and automata.eva_ws
+### eva-sdk.eva_http and eva-sdk.eva_ws
 
-These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the automata.Eva object.
+These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the eva-sdk.Eva object.
+
+## Versioning
+
+To determine which version of the SDK works with your Eva's software version number (found on the Choreograph config page), please use the following chart:
+
+| SDK Version | Supported Eva Version |
+| ----------- | --------------------- |
+| 1.x.x       | 2.0.0 - 2.1.2         |
+| 2.x.x       | 3.x.x                 |
+
+For more information on how to install a particular version of the SDK, please refer to the [Installation](#Installation) section. We use the [Semver](https://semver.org/) version numbering stratergy.
 
 ## Logging
 
-The SDK uses Debug and Error level logging exclusively. Each Eva instance will log using the name `automata.Eva:<host_name_here>`. If you wish to enable the debug logging:
+The SDK uses Debug and Error level logging exclusively. Each Eva instance will log using the name `eva-sdk.Eva:<host_name_here>`. If you wish to enable the debug logging:
 
 ```python
 logging.basicConfig(level=logging.DEBUG)
@@ -97,11 +134,13 @@ Please raise any bugs or feature requests as a Github issues. We also gratefully
 
 ## Testing
 
-    $ pipenv shell
-    $ python -m pytest automata/<name-of-file-to-test> 
+```bash
+$ pipenv shell
+$ python -m pytest eva-sdk/<name-of-file-to-test> 
 
-    # some test require supplying ip and token via the `--ip` and `--token` arguements
-    $ python -m pytest automata/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456
+# some test require supplying ip and token via the `--ip` and `--token` arguements
+$ python -m pytest eva-sdk/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456
+```
 
 ## License
 
