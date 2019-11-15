@@ -3,7 +3,7 @@ from unittest.mock import Mock
 import time
 
 
-from .eva_locker import EvaWithLocker
+from evasdk.eva_locker import EvaWithLocker
 
 
 class MockEva():
@@ -20,7 +20,7 @@ class MockEva():
 
 
 class TestEvaWithLocker(unittest.TestCase):
- 
+
 
     def setUp(self):
         self.mock = Mock(spec=MockEva)
@@ -33,7 +33,7 @@ class TestEvaWithLocker(unittest.TestCase):
                 pass
         except Exception:
             self.fail("should not raise an exception")
-        
+
         self.mock.lock.assert_not_called()
         self.mock.unlock.assert_called_once()
         self.mock.lock_renew.assert_called_once()
@@ -45,7 +45,7 @@ class TestEvaWithLocker(unittest.TestCase):
                 time.sleep(0.02)
         except Exception:
             self.fail("should not raise an exception")
-        
+
         self.mock.lock.assert_not_called()
         self.mock.unlock.assert_called_once()
         assert self.mock.lock_renew.call_count == 2

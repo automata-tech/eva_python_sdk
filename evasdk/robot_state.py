@@ -1,5 +1,6 @@
 import enum
 
+
 # TODO add static method for init that gives a nice exception on ValueException
 class RobotState(enum.Enum):
     READY = 'ready'
