@@ -86,9 +86,9 @@ class Eva:
 
 
     # Config
-    def config_update(self):
+    def config_update(self, update):
         self.__logger.debug('Eva.config_update called')
-        return self.__http_client.config_update()
+        return self.__http_client.config_update(update)
 
 
     # GPIO
@@ -173,14 +173,14 @@ class Eva:
         return self.__http_client.control_home(wait_for_ready=wait_for_ready)
 
 
-    def control_run(self, mode='teach', loop=1, wait_for_ready=True):
+    def control_run(self, loop=1, wait_for_ready=True, mode='teach'):
         self.__logger.debug('Eva.control_run called')
-        return self.__http_client.control_run(mode=mode, loop=loop, wait_for_ready=wait_for_ready)
+        return self.__http_client.control_run(loop=loop, wait_for_ready=wait_for_ready, mode=mode)
 
 
-    def control_go_to(self, joints, wait_for_ready=True, velocity=None, duration=None):
+    def control_go_to(self, joints, wait_for_ready=True, velocity=None, duration=None, mode='teach'):
         self.__logger.debug('Eva.control_go_to called')
-        return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, velocity=velocity, duration=duration)
+        return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, velocity=velocity, duration=duration, mode=mode)
 
 
     def control_pause(self, wait_for_paused=True):
