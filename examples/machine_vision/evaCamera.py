@@ -1,4 +1,4 @@
-from eva-sdk import Eva
+from evasdk import Eva
 
 
 XYPosition = (float, float)

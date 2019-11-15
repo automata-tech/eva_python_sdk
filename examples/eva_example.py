@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from eva-sdk import Eva
+from evasdk import Eva
 import time
 import json
 import logging

@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
    long_description = fh.read()
 
 setuptools.setup(
-   name='eva-sdk',
+   name='evasdk',
    version='0.0.1',
    description='SDK for the Automata Eva robotic arm',
    author='Automata',

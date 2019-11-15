@@ -1,4 +1,4 @@
-from eva-sdk import Eva, EvaAutoRenewError, EvaError
+from evasdk import Eva, EvaAutoRenewError, EvaError
 import time
 import pytest
 import logging
