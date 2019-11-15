@@ -28,7 +28,7 @@ class EvaHTTPClient:
         if custom_logger is not None:
             self.__logger = custom_logger
         else:
-            self.__logger = logging.getLogger('eva-sdk.EvaHTTPClient:{}'.format(host_ip))
+            self.__logger = logging.getLogger('evasdk.EvaHTTPClient:{}'.format(host_ip))
 
         self.session_token = None
         self.renew_period = renew_period

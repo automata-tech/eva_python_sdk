@@ -1,6 +1,6 @@
 # Eva Python SDK
 
-[![PyPI version](https://badge.fury.io/py/eva-sdk.svg)](https://badge.fury.io/py/eva-sdk)
+[![PyPI version](https://badge.fury.io/py/evasdk.svg)](https://badge.fury.io/py/evasdk)
 
 The Eva Python SDK provides convenient access to the Automata Eva API from applications written in Python 3.
 
@@ -22,10 +22,10 @@ __Requires Python 3, not compatible with Python 2__
 Make sure you have Python3 and pip installed, then run the following command:
 
 ```bash
-$ pip install eva-sdk
+$ pip install evasdk
 
 # Or for a specific version, i.e the lastest compatible version 2.x.x:
-$ pip install eva-sdk~=2.0.0
+$ pip install evasdk~=2.0.0
 ```
 
 ### Pipenv
@@ -33,10 +33,10 @@ $ pip install eva-sdk~=2.0.0
 Make sure you have Python3 and Pipenv installed, then run the following command:
 
 ```bash
-$ pipenv install eva-sdk
+$ pipenv install evasdk
 
 # Or for a specific version, i.e the lastest compatible version 2.x.x:
-$ pipenv install eva-sdk~=2.0.0
+$ pipenv install evasdk~=2.0.0
 ```
 
 ### Detail Instructions
@@ -105,9 +105,9 @@ with eva.lock():
 
 Please refer to the examples directory for more SDK usage examples.
 
-### eva-sdk.eva_http and eva-sdk.eva_ws
+### evasdk.eva_http and evasdk.eva_ws
 
-These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the eva-sdk.Eva object.
+These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the evasdk.Eva object.
 
 ## Versioning
 
@@ -122,7 +122,7 @@ For more information on how to install a particular version of the SDK, please r
 
 ## Logging
 
-The SDK uses Debug and Error level logging exclusively. Each Eva instance will log using the name `eva-sdk.Eva:<host_name_here>`. If you wish to enable the debug logging:
+The SDK uses Debug and Error level logging exclusively. Each Eva instance will log using the name `evasdk.Eva:<host_name_here>`. If you wish to enable the debug logging:
 
 ```python
 logging.basicConfig(level=logging.DEBUG)
@@ -136,10 +136,10 @@ Please raise any bugs or feature requests as a Github issues. We also gratefully
 
 ```bash
 $ pipenv shell
-$ python -m pytest eva-sdk/<name-of-file-to-test> 
+$ python -m pytest evasdk/<name-of-file-to-test> 
 
 # some test require supplying ip and token via the `--ip` and `--token` arguements
-$ python -m pytest eva-sdk/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456
+$ python -m pytest evasdk/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456
 ```
 
 ## License

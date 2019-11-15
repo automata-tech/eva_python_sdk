@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import eva-sdk
+import evasdk
 import json
 import asyncio
 import websockets
@@ -15,7 +15,7 @@ token = input("Please enter a valid Eva token: ")
 
 print('ip: [{}], token: [{}]\n'.format(host_ip, token))
 
-http_client = eva-sdk.EvaHTTPClient(host_ip, token)
+http_client = evasdk.EvaHTTPClient(host_ip, token)
 
 users = http_client.users_get()
 print('Eva at {} users: {}\n'.format(host_ip, users))
@@ -24,7 +24,7 @@ joint_angles = http_client.data_servo_positions()
 print('Eva current joint angles: {}'.format(joint_angles))
 
 async def eva_ws_example(host_ip, token):
-    websocket = await eva-sdk.ws_connect(host_ip, token)
+    websocket = await evasdk.ws_connect(host_ip, token)
 
     msg_count = 0
     time_since_msg = time.time()
