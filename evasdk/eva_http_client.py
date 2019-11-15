@@ -336,7 +336,7 @@ class EvaHTTPClient:
         elif duration is not None:
             body['time'] = duration
 
-        r = self.api_call_with_auth('POST', 'controls/go_to', body)
+        r = self.api_call_with_auth('POST', 'controls/go_to', json.dumps(body))
         if r.status_code != 200:
             eva_error('control_go_to error', r)
         elif wait_for_ready:
