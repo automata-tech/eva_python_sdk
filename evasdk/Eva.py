@@ -1,13 +1,6 @@
-import json
-import asyncio
-import time
 import logging
-import threading
-
 
 from .helpers import (strip_ip)
-from .eva_ws import ws_connect
-from .eva_errors import EvaDisconnectionError
 from .eva_http_client import EvaHTTPClient
 from .eva_locker import EvaWithLocker
 
@@ -18,7 +11,7 @@ class Eva:
     Once initialised Eva connects to Eva via a websocket and keeps the current
     state of the robot using the websocket update messages.
     """
-    def __init__(self, host_ip, token, request_timeout=5, renew_period=60*20):
+    def __init__(self, host_ip, token, request_timeout=5, renew_period=60 * 20):
         parsed_host_ip = strip_ip(host_ip)
 
         self.__http_client = EvaHTTPClient(parsed_host_ip, token, request_timeout=request_timeout, renew_period=renew_period)

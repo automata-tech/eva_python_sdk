@@ -3,7 +3,6 @@
 import evasdk
 import json
 import asyncio
-import websockets
 import time
 
 # This example shows usage of the eva_ws and eva_http modules, used for direct control
@@ -26,6 +25,7 @@ print('Eva at {} users: {}\n'.format(host_ip, users))
 
 joint_angles = http_client.data_servo_positions()
 print('Eva current joint angles: {}'.format(joint_angles))
+
 
 async def eva_ws_example(host_ip, session_token):
     websocket = await evasdk.ws_connect(host_ip, session_token)

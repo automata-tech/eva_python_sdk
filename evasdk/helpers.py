@@ -1,6 +1,7 @@
 import threading
 import re
 
+
 class threadsafe_object:
     """
     threadsafe_object is an object wrapped in a mutex for threadsafe getting and setting.
@@ -12,16 +13,16 @@ class threadsafe_object:
 
 
     def update(self, obj):
-            self.object_lock.acquire()
-            self.object = obj
-            self.object_lock.release()
+        self.object_lock.acquire()
+        self.object = obj
+        self.object_lock.release()
 
 
     def get(self):
-            self.object_lock.acquire()
-            obj = self.object
-            self.object_lock.release()
-            return obj 
+        self.object_lock.acquire()
+        obj = self.object
+        self.object_lock.release()
+        return obj
 
 
 def strip_ip(host_address):

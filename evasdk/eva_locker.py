@@ -1,5 +1,4 @@
 import threading
-import time
 
 from .eva_errors import EvaLockError
 
@@ -11,7 +10,7 @@ class EvaWithLocker:
     with scope it will renew the lock every <renew_period> seconds. At the end of the scope
     it will release the lock.
     """
-    def __init__(self, eva, renew_period = 30):
+    def __init__(self, eva, renew_period=30):
         self.__eva = eva
         self.__renew_period = renew_period
         self.__locked = False
@@ -45,7 +44,7 @@ class EvaWithLocker:
         while True:
             with self.__cond:
                 self.__cond.wait(timeout=self.__renew_period)
-            if self.__locked: 
+            if self.__locked:
                 self.__eva.lock_renew()
             else:
                 self.__eva.unlock()

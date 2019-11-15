@@ -18,11 +18,11 @@ class EvaCamera:
     """
     def __init__(self, eva: Eva, camera_relative_position: XYZPosition, camera_to_object_distance: float):
         self.__eva = eva
-        self.__eva_offset_position_x = camera_relative_position[0] 
+        self.__eva_offset_position_x = camera_relative_position[0]
         self.__eva_offset_position_y = camera_relative_position[1]
         self.__eva_offset_position_z = camera_relative_position[2] - camera_to_object_distance
 
-    
+
     def move_to_camera_item(self, camera_item_postion: XYPosition):
         """
         Move Eva's end effector to the item position. Using the offset between
@@ -37,14 +37,14 @@ class EvaCamera:
         eva_relative_x = self.__eva_offset_position_x + camera_item_x
         eva_relative_y = self.__eva_offset_position_y + camera_item_y
         eva_relative_z = self.__eva_offset_position_z
-        item_position    =   {'x': eva_relative_x, 'y': eva_relative_y, 'z': eva_relative_z}
+        item_position = {'x': eva_relative_x, 'y': eva_relative_y, 'z': eva_relative_z}
 
         print(f'moving to item position {item_position}')
         with self.__eva.lock():
             to_item_joint_angles = self.__eva.calc_inverse_kinematics(POSE_GUESS, item_position, DEFAULT_END_EFFECTOR_ORIENTATION)
             self.__eva.control_go_to(to_item_joint_angles['ik']['joints'])
-        
-        print("in item position")        
+
+        print("in item position")
 
 
     def in_position_action(self):
@@ -62,9 +62,9 @@ class EvaCamera:
         """
         print("moving home")
         with self.__eva.lock():
-            self.__eva.control_go_to(POSE_HOME)      
+            self.__eva.control_go_to(POSE_HOME)
 
-        print("in home position")          
+        print("in home position")
 
 
 def read_from_camera() -> XYPosition:

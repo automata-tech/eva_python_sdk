@@ -1,6 +1,4 @@
-# Eva Python SDK
-
-[![PyPI version](https://badge.fury.io/py/evasdk.svg)](https://badge.fury.io/py/evasdk)
+# Eva Python SDK [![PyPI version](https://badge.fury.io/py/evasdk.svg)](https://badge.fury.io/py/evasdk) ![Build status](https://github.com/automata_tech/eva_python_sdk/workflows/build/badge.svg) [![codecov](https://codecov.io/gh/automata-tech/eva_python_sdk/branch/development/graph/badge.svg)](https://codecov.io/gh/automata-tech/eva_python_sdk)
 
 The Eva Python SDK provides convenient access to the Automata Eva API from applications written in Python 3.
 
@@ -143,7 +141,7 @@ Please raise any bugs or feature requests as a Github issues. We also gratefully
 
 ```bash
 $ pipenv shell
-$ python -m pytest evasdk/<name-of-file-to-test> 
+$ python -m pytest evasdk/<name-of-file-to-test>
 
 # some test require supplying ip and token via the `--ip` and `--token` arguements
 $ python -m pytest evasdk/<name-of-file-to-test> --ip 172.16.16.2 --token abc-123-def-456

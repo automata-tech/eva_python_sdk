@@ -3,10 +3,12 @@ import time
 import pytest
 import logging
 
+# TODO: this rely on having an actual robot, should be rewritten to be mockable
+
 
 @pytest.fixture(scope="module")
 def eva(ip, token):
-    e = Eva(ip, token, request_timeout=10, renew_period=2*60)
+    e = Eva(ip, token, request_timeout=10, renew_period=2 * 60)
     e._Eva__logger.setLevel(logging.DEBUG)
     e._Eva__http_client._EvaHTTPClient__logger.setLevel(logging.DEBUG)
     yield e
@@ -43,7 +45,7 @@ class TestAuth:
 
         # Ensure it will try to auto-renew
         eva.auth_invalidate_session()
-        time.sleep(3*60)
+        time.sleep(3 * 60)
 
         got_auto_renew_error = False
 
@@ -71,4 +73,4 @@ class TestAuth:
     def test_auto_renew(self, locked_eva):
         for _ in range(7):
             locked_eva.gpio_set('d1', not locked_eva.gpio_get('d1', 'output'))
-            time.sleep(5*60)
+            time.sleep(5 * 60)

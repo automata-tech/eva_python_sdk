@@ -1,5 +1,3 @@
-import requests
-
 class EvaError(Exception):
     """Base class for all Eva errors"""
 

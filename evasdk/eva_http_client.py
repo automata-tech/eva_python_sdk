@@ -20,7 +20,7 @@ class EvaHTTPClient:
      - request_timeout (float):         An *optional* time in seconds to wait for a request to resolve, defaults to 5
      - renew_period (int):              An *optional* time in seconds between renew session requests, defaults to 20 minutes
     """
-    def __init__(self, host_ip, api_token, custom_logger=None, request_timeout=5, renew_period=60*20):
+    def __init__(self, host_ip, api_token, custom_logger=None, request_timeout=5, renew_period=60 * 20):
         self.host_ip = host_ip
         self.api_token = api_token
         self.request_timeout = request_timeout
@@ -34,7 +34,7 @@ class EvaHTTPClient:
         self.renew_period = renew_period
         self.__last_renew = time.time()
 
-        if not 0 < renew_period < 30*60:
+        if not 0 < renew_period < 30 * 60:
             raise ValueError('Session must be renewed before expiring (30 minutes)')
 
 
@@ -47,7 +47,7 @@ class EvaHTTPClient:
             self.auth_create_session()
             return self.__api_request(*args, **kwargs)
 
-        if self.renew_period < time.time() - self.__last_renew < 30*60:
+        if self.renew_period < time.time() - self.__last_renew < 30 * 60:
             self.__logger.debug('Automatically renewing session')
             try:
                 self.auth_renew_session()
@@ -228,7 +228,7 @@ class EvaHTTPClient:
             eva_error('toolpaths_use_saved error', r)
 
 
-    def toolpaths_use(self,  toolpathRepr):
+    def toolpaths_use(self, toolpathRepr):
         r = self.api_call_with_auth('POST', 'toolpath/use', json.dumps({'toolpath': toolpathRepr}))
         if r.status_code != 200:
             eva_error('toolpaths_use error', r)

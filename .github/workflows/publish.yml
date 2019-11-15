@@ -1,0 +1,21 @@
+name: Publish on release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    - name: Pipenv for Github Actions
+      uses: VaultVulp/action-pipenv@v1.0.0
+    - name: Build and publish
+      run: |
+        echo TODO
