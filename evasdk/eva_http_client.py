@@ -321,22 +321,20 @@ class EvaHTTPClient:
             self.control_wait_for(RobotState.READY)
 
 
-    def control_run(self, mode='teach', loop=1, wait_for_ready=True):
+    def control_run(self, loop=1, wait_for_ready=True, mode='teach'):
         r = self.api_call_with_auth('POST', 'controls/run', json.dumps({'mode': mode, 'loop': loop}))
         if r.status_code != 200:
-            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
             eva_error('control_run error', r)
         elif wait_for_ready:
+            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
             self.control_wait_for(RobotState.READY)
 
-
-    def control_go_to(self, joints, wait_for_ready=True, velocity=None, duration=None):
+    def control_go_to(self, joints, wait_for_ready=True, velocity=None, duration=None, mode='teach'):
+        body = {'joints': joints, 'mode': mode}
         if velocity is not None:
-            body = json.dumps({'joints': joints, 'velocity': velocity})
+            body['velocity'] = velocity
         elif duration is not None:
-            body = json.dumps({'joints': joints, 'time': duration})
-        else:
-            body = json.dumps({'joints': joints})
+            body['time'] = duration
 
         r = self.api_call_with_auth('POST', 'controls/go_to', body)
         if r.status_code != 200:
