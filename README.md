@@ -6,12 +6,19 @@ The Eva Python SDK provides convenient access to the Automata Eva API from appli
 
 __* This SDK is currently in beta__
 
-- [Installation](#installation)
-- [Examples](#examples)
-- [Versioning](#versioning)
-- [Logging](#logging)
-- [Bugs and feature requests](#bugs-and-feature-requests)
-- [License](#license)
+- [Eva Python SDK](#eva-python-sdk)
+  - [Installation](#installation)
+    - [Pip](#pip)
+    - [Pipenv](#pipenv)
+    - [Detail Instructions](#detail-instructions)
+  - [Examples](#examples)
+    - [Eva](#eva)
+    - [evasdk.eva_http and evasdk.eva_ws](#evasdkevahttp-and-evasdkevaws)
+  - [Versioning](#versioning)
+  - [Logging](#logging)
+  - [Bugs and feature requests](#bugs-and-feature-requests)
+  - [Testing](#testing)
+  - [License](#license)
 
 ## Installation
 
@@ -68,7 +75,7 @@ eva = Eva(host_ip, token)
 
 with eva.lock():
     eva.control_wait_for_ready()
-    eva.control_go_to([0, 0, 0, 0, 0, 0])
+    eva.control_go_to([0, 0, 0, 0, 0, 0], mode='teach')
 ```
 
 **Toolpath create and run**
@@ -100,7 +107,7 @@ with eva.lock():
     eva.control_wait_for_ready()
     eva.toolpaths_use(toolpath)
     eva.control_home()
-    eva.control_run(loop=1)
+    eva.control_run(loop=1, mode='teach')
 ```
 
 Please refer to the examples directory for more SDK usage examples.
