@@ -9,5 +9,6 @@ websockets = "*"
 
 [dev-packages]
 pylint = "*"
+pytest = "*"
 
 [requires]

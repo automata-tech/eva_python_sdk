@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from automata.Eva import Eva
+from evasdk.Eva import Eva
 import time
 import json
 import logging

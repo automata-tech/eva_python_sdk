@@ -6,15 +6,10 @@ __* This SDK is currently in beta, any breaking changes during development will 
 
 - [Eva Python SDK](#eva-python-sdk)
   - [Installation](#installation)
-    - [Pip](#pip)
-    - [Pipenv](#pipenv)
   - [Examples](#examples)
-    - [Eva](#eva)
-    - [automata.eva_http and automata.eva_ws](#automataevahttp-and-automataevaws)
   - [Logging](#logging)
   - [Bugs and feature requests](#bugs-and-feature-requests)
   - [License](#license)
-
 
 ## Installation
 
@@ -35,7 +30,12 @@ Make sure you have Python3 and Pipenv installed, then run the following command 
 ```bash
 $ pipenv install evasdk~=1.0.0
 ```
+### Detailed Instructions
 
+If your not familiar with Python or for more detailed instructions please refer to our wiki:
+
+- [Windows installation instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Windows-Installation)
+- [Mac installation instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Mac-Installation)
 
 ## Examples
 
@@ -52,6 +52,7 @@ eva = Eva(host, token)
 ```
 
 **GoTo movement**
+
 ```python
 eva = Eva(host_ip, token)
 
@@ -61,6 +62,7 @@ with eva.lock():
 ```
 
 **Toolpath create and run**
+
 ```python
 toolpath = {
     "metadata":{
@@ -93,15 +95,13 @@ with eva.lock():
 
 Please refer to the examples directory for more SDK usage examples.
 
+### evasdk.eva_http and evasdk.eva_ws
 
-### automata.eva_http and automata.eva_ws
-
-These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the automata.Eva object.
-
+These can be used to interact directly with the HTTP and Websocket APIs. Useful when you don't want the managed websocket connection provided by the evasdk.Eva object.
 
 ## Logging
 
-The SDK uses Debug and Error level logging exclusively. Each Eva instance will log using the name `automata.Eva:<host_name_here>`. If you wish to enable the debug logging:
+The SDK uses Debug and Error level logging exclusively. Each Eva instance will log using the name `evasdk.Eva:<host_name_here>`. If you wish to enable the debug logging:
 
 ```python
 logging.basicConfig(level=logging.DEBUG)
@@ -110,7 +110,6 @@ logging.basicConfig(level=logging.DEBUG)
 ## Bugs and feature requests
 
 Please raise any bugs or feature requests as a Github issues. We also gratefully accept pull requests for features and bug fixes.
-
 
 ## License
 

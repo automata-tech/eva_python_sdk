@@ -22,7 +22,7 @@ class Eva:
         parsed_host_ip = strip_ip(host_ip)
 
         self.__http_client = EvaHTTPClient(parsed_host_ip, token, request_timeout=request_timeout)
-        self.__logger = logging.getLogger('automata.Eva:{}'.format(host_ip))
+        self.__logger = logging.getLogger('evasdk.Eva:{}'.format(host_ip))
 
         self.__eva_locker = EvaWithLocker(self)
 

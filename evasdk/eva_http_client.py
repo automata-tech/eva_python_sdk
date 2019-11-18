@@ -27,7 +27,7 @@ class EvaHTTPClient:
         if custom_logger is not None:
             self.__logger = custom_logger
         else:
-            self.__logger = logging.getLogger('automata.EvaHTTPClient:{}'.format(host_ip))
+            self.__logger = logging.getLogger('evasdk.EvaHTTPClient:{}'.format(host_ip))
 
 
     def api_call(self, method, path, payload=None):
