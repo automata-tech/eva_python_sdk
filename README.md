@@ -4,20 +4,37 @@ The eva_python_sdk provides convenient access to the Automata Eva API from appli
 
 __* This SDK is currently in beta, any breaking changes during development will be comunicated via changelog__
 
-- [Installation](#installation)
-- [Examples](#examples)
-- [Logging](#logging)
-- [Bugs and feature requests](#bugs-and-feature-requests)
-- [License](#license)
+- [Eva Python SDK](#eva-python-sdk)
+  - [Installation](#installation)
+    - [Pip](#pip)
+    - [Pipenv](#pipenv)
+  - [Examples](#examples)
+    - [Eva](#eva)
+    - [automata.eva_http and automata.eva_ws](#automataevahttp-and-automataevaws)
+  - [Logging](#logging)
+  - [Bugs and feature requests](#bugs-and-feature-requests)
+  - [License](#license)
 
 
 ## Installation
 
 __Requires Python 3, not compatible with Python 2__
 
-### Using pipenv
+### Pip
 
-    $ pipenv install git+https://github.com/automata-tech/eva_python_sdk.git@master#egg=automata
+Make sure you have Python3 and pip installed, then run the following command to get the latest version 1.x.x:
+
+```bash
+$ pip install evasdk~=1.0.0
+```
+
+### Pipenv
+
+Make sure you have Python3 and Pipenv installed, then run the following command to get the latest version 1.x.x:
+
+```bash
+$ pipenv install evasdk~=1.0.0
+```
 
 
 ## Examples
