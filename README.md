@@ -35,7 +35,7 @@ $ pipenv install evasdk~=1.0.0
 
 ### Detailed Instructions
 
-If your not familiar with Python or for more detailed instructions please refer to our wiki:
+If you're not familiar with Python or for more detailed instructions please refer to our wiki:
 
 - [Windows installation instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Windows-Installation)
 - [Mac installation instructions](https://github.com/automata-tech/eva_python_sdk/wiki/Mac-Installation)
