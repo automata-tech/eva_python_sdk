@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='evasdk',
-    version='0.0.1',
+    version='%VERSION%',
     description='SDK for the Automata Eva robotic arm',
     author='Automata',
     license='Apache License 2.0',
