@@ -6,11 +6,12 @@ from .eva_errors import EvaLockError
 # TODO properly handle exceptions thrown in the renewal thread
 # TODO properly handle unlock on program exit
 
+
 class EvaWithLocker:
     """
     The EvaWithLocker class is used to keep an Eva locked for the entirety of a Python 'with' scope.
     It expects an already locked Eva object to be passed in, and for the duration of the
-    with scope it will renew the lock every <renew_period> seconds. 
+    with scope it will renew the lock every <renew_period> seconds.
 
     'with' scopes can be nested, with the lock being renewed in a particular
     scope for the currently set 'renew_period' of the locker. At the end of the outer-most scope
@@ -28,7 +29,7 @@ class EvaWithLocker:
 
 
     def set_renew_period(self, renew_period=None):
-        if renew_period == None:
+        if renew_period is None:
             self.__renew_period = self.__fallback_renew_period
         else:
             self.__renew_period = renew_period
@@ -58,7 +59,7 @@ class EvaWithLocker:
 
     def __exit__(self, type, value, traceback):
         context_end_size = None
-        
+
         with self.__cond:
             self.__period_stack.pop()
             self.__reset_timer()
