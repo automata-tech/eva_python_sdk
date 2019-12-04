@@ -382,7 +382,7 @@ class EvaHTTPClient:
 
     def control_reset_errors(self, wait_for_ready=True):
         r = self.api_call_with_auth('POST', 'controls/reset_errors')
-        if r.status_code != 200:
+        if r.status_code != 204:
             eva_error('control_reset_errors error', r)
         elif wait_for_ready:
             time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
