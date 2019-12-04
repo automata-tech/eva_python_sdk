@@ -24,6 +24,10 @@ class Eva:
         self.__http_client.request_timeout = request_timeout
 
 
+    # ---------------------------------------------- Constants ----------------------------------------------
+    __TEACH_RENEW_PERIOD = 3
+
+
     # --------------------------------------------- Lock Holder ---------------------------------------------
     def __enter__(self):
         self.__eva_locker.__enter__()
@@ -169,7 +173,7 @@ class Eva:
     def control_run(self, loop=1, wait_for_ready=True, mode='teach'):
         self.__logger.debug('Eva.control_run called')
         if mode == 'teach':
-            with self.__eva_locker.set_renew_period(3):
+            with self.__eva_locker.set_renew_period(Eva.__TEACH_RENEW_PERIOD):
                 return self.__http_client.control_run(loop=loop, wait_for_ready=wait_for_ready, mode=mode)
         else:
             return self.__http_client.control_run(loop=loop, wait_for_ready=wait_for_ready, mode=mode)
@@ -178,7 +182,7 @@ class Eva:
     def control_go_to(self, joints, wait_for_ready=True, velocity=None, duration=None, mode='teach'):
         self.__logger.info('Eva.control_go_to called')
         if mode == 'teach':
-            with self.__eva_locker.set_renew_period(3):
+            with self.__eva_locker.set_renew_period(Eva.__TEACH_RENEW_PERIOD):
                 return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, velocity=velocity, duration=duration, mode=mode)
         else:
             return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, velocity=velocity, duration=duration, mode=mode)
