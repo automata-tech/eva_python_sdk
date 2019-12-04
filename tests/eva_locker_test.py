@@ -4,6 +4,7 @@ import time
 
 
 from evasdk.eva_locker import EvaWithLocker
+from evasdk.eva_errors import EvaLockError
 
 
 class MockEva():
@@ -64,7 +65,7 @@ class TestEvaWithLocker(unittest.TestCase):
 
 
     def test_nested_locker_same_period_should_raise(self):
-        with self.assertRaises(Exception):
+        with self.assertRaises(EvaLockError):
             with self.testEvaWithLocker:
                 with self.testEvaWithLocker:
                     self.fail("did not raise exception when locking an already locked Eva")
