@@ -28,7 +28,9 @@ print(json.dumps(outToolpaths))
 # Create a basic toolpath and execute it
 toolpath = {
     "metadata": {
-        "default_velocity": 0.7,
+        "version": 2,
+        "payload": 0,
+        "default_max_speed": 1.05,
         "next_label_id": 5,
         "analog_modes": {"i0": "voltage", "i1": "voltage", "o0": "voltage", "o1": "voltage"},
     },
