@@ -116,16 +116,15 @@ class EvaHTTPClient:
 
 
     # DATA
-    # TODO consider adding type for switch between flat and object modes
-    def data_snapshot(self, mode='flat'):
-        r = self.api_call_with_auth('GET', 'data/snapshot?mode=' + mode)
+    def data_snapshot(self):
+        r = self.api_call_with_auth('GET', 'data/snapshot')
         if r.status_code != 200:
             eva_error('data_snapshot request error', r)
         return r.json()['snapshot']
 
 
-    def data_snapshot_property(self, prop, mode='object'):
-        snapshot = self.data_snapshot(mode=mode)
+    def data_snapshot_property(self, prop):
+        snapshot = self.data_snapshot()
         if prop in snapshot:
             return snapshot[prop]
         else:
@@ -171,14 +170,14 @@ class EvaHTTPClient:
 
 
     # GPIO helper function
-    def __globals_editing(self, keys, values, mode='flat'):
+    def __globals_editing(self, keys, values):
         data = {'changes': []}
         if (isinstance(keys, list) and isinstance(values, list)):
             [data['changes'].append({'key': c[0], 'value': c[1]}) for c in zip(keys, values)]
         else:
             data['changes'].append({'key': keys, 'value': values})
         data = json.dumps(data)
-        r = self.api_call_with_auth('POST', 'data/globals?mode=' + mode, data)
+        r = self.api_call_with_auth('POST', 'data/globals', data)
         return r
 
 

@@ -61,14 +61,14 @@ class Eva:
 
 
     # Data
-    def data_snapshot(self, mode='flat'):
+    def data_snapshot(self):
         self.__logger.debug('Eva.data_snapshot called')
-        return self.__http_client.data_snapshot(mode=mode)
+        return self.__http_client.data_snapshot()
 
 
-    def data_snapshot_property(self, prop, mode='object'):
+    def data_snapshot_property(self, prop):
         self.__logger.debug('Eva.data_snapshot_property called')
-        return self.__http_client.data_snapshot_property(prop, mode=mode)
+        return self.__http_client.data_snapshot_property(prop)
 
 
     def data_servo_positions(self):
