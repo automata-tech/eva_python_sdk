@@ -82,23 +82,37 @@ with eva.lock():
 
 ```python
 toolpath = {
-    "metadata":{
-        "default_velocity":0.7,
-        "next_label_id":5,
-        "analog_modes":{ "i0":"voltage", "i1":"voltage", "o0":"voltage", "o1":"voltage" }
+    "metadata": {
+        "version": 2,
+        "default_max_speed": 0.25,
+        "payload": 0,
+        "analog_modes": {
+            "i0": "voltage",
+            "i1": "voltage",
+            "o0": "voltage",
+            "o1": "voltage"
+        },
+        "next_label_id": 3
     },
-    "waypoints":[
-        { "joints":[-0.68147224, 0.3648368, -1.0703622, 9.354615e-05, -2.4358354, -0.6813218], "label_id":3 },
-        { "joints":[-0.6350288, 0.25192022, -1.0664424, 0.030407501, -2.2955494, -0.615318], "label_id":2 },
-        { "joints":[-0.13414459, 0.5361486, -1.280493, -6.992453e-08, -2.3972468, -0.13414553], "label_id":1 },
-        { "joints":[-0.4103904, 0.33332264, -1.5417944, -5.380291e-06, -1.9328799, -0.41031334], "label_id":4 }
-    ],
-    "timeline":[
-        { "type":"home", "waypoint_id":2 },
-        { "type":"trajectory", "trajectory":"joint_space", "waypoint_id":1 },
-        { "type":"trajectory", "trajectory":"joint_space", "waypoint_id":0 },
-        { "type":"trajectory", "trajectory":"joint_space", "waypoint_id":2 }
-    ]
+    "waypoints": [{
+        "label_id": 1,
+        "joints": [0, 0.5235987755982988, -1.7453292519943295, 0, -1.9198621771937625, 0]
+    }, {
+        "label_id": 2,
+        "joints": [0.18392622441053394, 0.8259819316864014, -2.050006151199341, 0.1785774528980255, -1.6037521743774412, -0.549331545829773]
+    }],
+    "timeline": [{
+        "type": "home",
+        "waypoint_id": 0
+    }, {
+        "type": "trajectory",
+        "trajectory": "joint_space",
+        "waypoint_id": 1
+    }, {
+        "type": "trajectory",
+        "trajectory": "joint_space",
+        "waypoint_id": 0
+    }]
 }
 
 eva = Eva(host, token)
