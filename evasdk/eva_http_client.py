@@ -294,7 +294,7 @@ class EvaHTTPClient:
         parsed_goal = RobotState(goal)
 
         while True:
-            robot_state = RobotState(self.data_snapshot()['control.state'])
+            robot_state = RobotState(self.data_snapshot()['control']['state'])
 
             if robot_state == RobotState.ERROR:
                 eva_error('Eva is in error control state')
