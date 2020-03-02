@@ -53,9 +53,11 @@ If your not familiar with Python or for more detailed instructions please refer 
 
 ## Examples
 
-The Eva object allows you to directly control an Eva robot. It provides lots of useful helper function for interacting with the robot.
+The following section provides some getting started example code, for more detailed examples please go to our [eva_examples repository](https://github.com/automata-tech/eva_examples).
 
 ### Eva
+
+The Eva object allows you to directly control an Eva robot. It provides lots of useful helper function for interacting with the robot.
 
 **Connecting**
 
