@@ -167,7 +167,8 @@ class Eva:
 
     def control_home(self, wait_for_ready=True):
         self.__logger.debug('Eva.control_home called')
-        return self.__http_client.control_home(wait_for_ready=wait_for_ready)
+        with self.__eva_locker.set_renew_period(Eva.__TEACH_RENEW_PERIOD):
+            return self.__http_client.control_home(wait_for_ready=wait_for_ready)
 
 
     def control_run(self, loop=1, wait_for_ready=True, mode='teach'):
