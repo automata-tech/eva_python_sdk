@@ -136,8 +136,9 @@ To determine which version of the SDK works with your Eva's software version num
 
 | SDK Version | Supported Eva Version |
 | ----------- | --------------------- |
-| 1.x.x       | 2.0.0 - 2.1.2         |
-| 2.x.x       | 3.x.x                 |
+| 1.0.0       | 2.0.0 - 2.1.2         |
+| 2.0.0       | 3.0.0 - 3.0.1         |
+| 3.0.0       | 3.1.0                 |
 
 For more information on how to install a particular version of the SDK, please refer to the [Installation](#Installation) section. We use the [Semver](https://semver.org/) version numbering stratergy.
 
