@@ -328,12 +328,13 @@ class EvaHTTPClient:
             time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
             self.control_wait_for(RobotState.READY)
 
-    def control_go_to(self, joints, wait_for_ready=True, velocity=None, duration=None, mode='teach'):
+
+    def control_go_to(self, joints, wait_for_ready=True, max_speed=None, time=None, mode='teach'):
         body = {'joints': joints, 'mode': mode}
-        if velocity is not None:
-            body['velocity'] = velocity
-        elif duration is not None:
-            body['time'] = duration
+        if max_speed is not None:
+            body['max_speed'] = max_speed
+        elif time is not None:
+            body['time'] = time
 
         r = self.api_call_with_auth('POST', 'controls/go_to', json.dumps(body))
         if r.status_code != 200:
