@@ -180,13 +180,13 @@ class Eva:
             return self.__http_client.control_run(loop=loop, wait_for_ready=wait_for_ready, mode=mode)
 
 
-    def control_go_to(self, joints, wait_for_ready=True, velocity=None, duration=None, mode='teach'):
+    def control_go_to(self, joints, wait_for_ready=True, max_speed=None, time=None, mode='teach'):
         self.__logger.info('Eva.control_go_to called')
         if mode == 'teach':
             with self.__eva_locker.set_renew_period(Eva.__TEACH_RENEW_PERIOD):
-                return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, velocity=velocity, duration=duration, mode=mode)
+                return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, max_speed=max_speed, time=time, mode=mode)
         else:
-            return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, velocity=velocity, duration=duration, mode=mode)
+            return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, max_speed=max_speed, time=time, mode=mode)
 
 
     def control_pause(self, wait_for_paused=True):
