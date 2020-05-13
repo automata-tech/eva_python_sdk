@@ -329,18 +329,18 @@ class EvaHTTPClient:
             self.control_wait_for(RobotState.READY)
 
 
-    def control_go_to(self, joints, wait_for_ready=True, max_speed=None, time=None, mode='teach'):
+    def control_go_to(self, joints, wait_for_ready=True, max_speed=None, time_sec=None, mode='teach'):
         body = {'joints': joints, 'mode': mode}
         if max_speed is not None:
             body['max_speed'] = max_speed
-        elif time is not None:
-            body['time'] = time
+        if time is not None:
+            body['time'] = time_sec
 
         r = self.api_call_with_auth('POST', 'controls/go_to', json.dumps(body))
         if r.status_code != 200:
             eva_error('control_go_to error', r)
         elif wait_for_ready:
-            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
+            time.sleep(0.1)     # sleep for small period to avoid race condition between cache updating and reading state
             self.control_wait_for(RobotState.READY)
 
 
