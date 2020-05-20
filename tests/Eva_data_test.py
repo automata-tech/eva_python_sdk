@@ -2,6 +2,7 @@ from evasdk import EvaError
 import pytest
 
 
+@pytest.mark.robot_required
 class TestEva_Data:
     # TODO: we may want to check the structure of the snapshot JSON object
     def test_snapshot(self, eva):

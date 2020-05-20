@@ -5,6 +5,7 @@ import pytest
 # TODO: this rely on having an actual robot, should be rewritten to be mockable
 
 
+@pytest.mark.robot_required
 class TestAuth:
     def test_create_new_session(self, eva):
         token = eva.auth_create_session()
