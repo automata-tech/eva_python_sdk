@@ -13,3 +13,6 @@ pytest = "*"
 "pytest-cov" = "*"
 
 [requires]
+
+[scripts]
+test = "python -m pytest tests/"

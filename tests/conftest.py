@@ -22,7 +22,7 @@ def token(request):
 
 def pytest_configure(config):
     config.addinivalue_line("markers", "slow: mark test as slow to run")
-    config.addinivalue_line("markers", "requires_robot: no mocks, needs a connected Eva to run")
+    config.addinivalue_line("markers", "robot_required: no mocks, needs a connected Eva to run")
 
 
 def pytest_collection_modifyitems(config, items):
