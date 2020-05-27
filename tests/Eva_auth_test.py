@@ -1,27 +1,11 @@
-from evasdk import Eva, EvaAutoRenewError, EvaError
+from evasdk import EvaAutoRenewError, EvaError
 import time
 import pytest
-import logging
 
 # TODO: this rely on having an actual robot, should be rewritten to be mockable
 
 
-@pytest.fixture(scope="module")
-def eva(ip, token):
-    e = Eva(ip, token, request_timeout=10, renew_period=2 * 60)
-    e._Eva__logger.setLevel(logging.DEBUG)
-    e._Eva__http_client._EvaHTTPClient__logger.setLevel(logging.DEBUG)
-    yield e
-    if e.lock_status()['status'] != 'unlocked':
-        e.unlock()
-
-
-@pytest.fixture
-def locked_eva(eva):
-    with eva.lock():
-        yield eva
-
-
+@pytest.mark.robot_required
 class TestAuth:
     def test_create_new_session(self, eva):
         token = eva.auth_create_session()
@@ -38,7 +22,7 @@ class TestAuth:
         eva.users_get()
         assert(token != eva._Eva__http_client.session_token)
 
-
+    @pytest.mark.slow
     def test_auto_renew_error(self, eva):
         api_token = eva._Eva__http_client.api_token
         eva._Eva__http_client.api_token = ''
@@ -69,7 +53,7 @@ class TestAuth:
         with eva.lock():
             eva.gpio_set('d1', not eva.gpio_get('d1', 'output'))
 
-
+    @pytest.mark.slow
     def test_auto_renew(self, locked_eva):
         for _ in range(7):
             locked_eva.gpio_set('d1', not locked_eva.gpio_get('d1', 'output'))
