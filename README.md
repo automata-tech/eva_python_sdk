@@ -157,19 +157,19 @@ Please raise any bugs or feature requests as a Github issues. We also gratefully
 ## Testing
 
 ```bash
-# to run all test files in tests directory
+# to run all test files in tests directory:
 $ pipenv run test
 
-# or to run a single test file
+# or to run a single test file:
 $ pipenv shell
 $ python -m pytest tests/<test-name>_test.py
 
-# some test require supplying ip and token via the `--ip` and `--token` arguements
+# some test require supplying ip and token via the `--ip` and `--token` arguements:
 $ pipenv run test --ip 172.16.16.2 --token abc-123-def-456
 
-# long duration tests and tests requiring a connected Eva are disabled by default,
-# to include them add the `--runslow` or --runrobot flags
-$ pipenv run test --runslow --runrobot
+# Tests requiring the robot or long amounts of time will not run by default,
+# these require flags to be enabled, a full list of flags is availble with the help flag:
+$ pipenv run test -h
 ```
 
 ## License
