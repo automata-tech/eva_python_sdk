@@ -22,15 +22,15 @@ jobs:
     - name: Install dependencies
       uses: "VaultVulp/action-pipenv@master"
       with:
-        args: install -d
+        command: install --dev
     - name: Run linter
       uses: "VaultVulp/action-pipenv@master"
       with:
-        args: run flake8
+        command: run flake8
     - name: Run tests
       uses: "VaultVulp/action-pipenv@master"
       with:
-        args: run python -m pytest --cov=evasdk --cov-branch --cov-report=xml
+        command: run test --cov=evasdk --cov-branch --cov-report=xml
     - name: Upload to codecov
       uses: codecov/codecov-action@v1.0.3
       with:
