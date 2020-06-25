@@ -39,6 +39,7 @@ class EvaHTTPClient:
 
 
     def api_call_with_auth(self, *args, **kwargs):
+
         r = self.__api_request(*args, **kwargs)
 
         # Try creating a new session if we get an auth error and retrying the failed request
@@ -57,15 +58,20 @@ class EvaHTTPClient:
         return r
 
     def api_call_no_auth(self, method, path, payload=None, **kwargs):
-        return self.__api_request(method, path, payload=payload, **kwargs)
+        return self.__api_request(method, path, payload=payload, add_auth=False, **kwargs)
 
-    def __api_request(self, method, path, payload=None, headers=None, timeout=None, version='v1'):
-        auth = {'Authorization': 'Bearer {}'.format(self.session_token)}
-
+    def add_auth(self, headers):
         if not headers:
-            headers = auth
-        else:
-            headers.update(auth)
+            headers = {'Authorization': 'Bearer {}'.format(self.session_token)}
+
+        if 'Authorization' not in headers.keys():
+            headers.update({'Authorization': 'Bearer {}'.format(self.session_token)})
+
+        return headers
+
+    def __api_request(self, method, path, payload=None, headers=None, timeout=None, version='v1', add_auth=True):
+        if add_auth:
+            headers = self.add_auth(headers)
 
         api_path = path
         if version is not None:
@@ -79,7 +85,7 @@ class EvaHTTPClient:
 
     # API VERSIONS
     def api_versions(self):
-        r = self.__api_request('GET', 'versions', version=None)
+        r = self.api_call_no_auth('GET', 'versions', version=None)
         if r.status_code != 200:
             eva_error('api_versions request error', r)
         return r.json()
@@ -104,7 +110,7 @@ class EvaHTTPClient:
     def auth_create_session(self):
         self.__logger.debug('Creating session token')
         # Bypass api_call_with_auth to avoid getting in a 401 loop
-        r = self.__api_request('POST', 'auth', payload=json.dumps({'token': self.api_token}), headers={})
+        r = self.api_call_no_auth('POST', 'auth', payload=json.dumps({'token': self.api_token}))
 
         if r.status_code != 200:
             eva_error('auth_create_session request error', r)
