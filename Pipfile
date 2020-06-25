@@ -16,3 +16,4 @@ pytest = "*"
 
 [scripts]
 test = "python -m pytest tests/"
+lint = "flake8"

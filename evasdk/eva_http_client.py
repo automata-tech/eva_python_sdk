@@ -56,20 +56,30 @@ class EvaHTTPClient:
 
         return r
 
+    def api_call_no_auth(self, method, path, payload=None, **kwargs):
+        return self.__api_request(method, path, payload=payload, **kwargs)
 
-    def __api_request(self, method, path, payload=None, headers=None, timeout=None):
+    def __api_request(self, method, path, payload=None, headers=None, timeout=None, version='v1'):
+        auth = {'Authorization': 'Bearer {}'.format(self.session_token)}
+
         if not headers:
-            headers = {'Authorization': 'Bearer {}'.format(self.session_token)}
+            headers = auth
+        else:
+            headers.update(auth)
+
+        api_path = path
+        if version is not None:
+            api_path = f'{version}/{path}'
 
         return requests.request(
-            method, 'http://{}/api/v1/{}'.format(self.host_ip, path),
+            method, 'http://{}/api/{}'.format(self.host_ip, api_path),
             data=payload, headers=headers,
             timeout=(timeout or self.request_timeout),
         )
 
     # API VERSIONS
     def api_versions(self):
-        r = self.__api_request('GET', 'versions')
+        r = self.__api_request('GET', 'versions', version=None)
         if r.status_code != 200:
             eva_error('api_versions request error', r)
         return r.json()
