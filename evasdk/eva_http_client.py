@@ -60,18 +60,12 @@ class EvaHTTPClient:
     def api_call_no_auth(self, method, path, payload=None, **kwargs):
         return self.__api_request(method, path, payload=payload, add_auth=False, **kwargs)
 
-    def add_auth(self, headers):
-        if not headers:
-            headers = {'Authorization': 'Bearer {}'.format(self.session_token)}
+    def __api_request(self, method, path, payload=None, headers={}, timeout=None, version='v1', add_auth=True):
+        if headers:
+            headers = headers.copy()
 
-        if 'Authorization' not in headers.keys():
-            headers.update({'Authorization': 'Bearer {}'.format(self.session_token)})
-
-        return headers
-
-    def __api_request(self, method, path, payload=None, headers=None, timeout=None, version='v1', add_auth=True):
         if add_auth:
-            headers = self.add_auth(headers)
+            headers['Authorization'] = f'Bearer {self.session_token}'
 
         api_path = path
         if version is not None:
@@ -109,7 +103,6 @@ class EvaHTTPClient:
 
     def auth_create_session(self):
         self.__logger.debug('Creating session token')
-        # Bypass api_call_with_auth to avoid getting in a 401 loop
         r = self.api_call_no_auth('POST', 'auth', payload=json.dumps({'token': self.api_token}))
 
         if r.status_code != 200:
@@ -123,6 +116,7 @@ class EvaHTTPClient:
 
     def auth_invalidate_session(self):
         self.__logger.debug('Invalidating session token {}'.format(self.session_token))
+        # Bypass api_call_with_auth to avoid getting in a 401 loop
         r = self.__api_request('DELETE', 'auth')
 
         if r.status_code != 204:
