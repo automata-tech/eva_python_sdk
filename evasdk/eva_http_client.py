@@ -39,6 +39,7 @@ class EvaHTTPClient:
 
 
     def api_call_with_auth(self, *args, **kwargs):
+
         r = self.__api_request(*args, **kwargs)
 
         # Try creating a new session if we get an auth error and retrying the failed request
@@ -56,20 +57,29 @@ class EvaHTTPClient:
 
         return r
 
+    def api_call_no_auth(self, method, path, payload=None, **kwargs):
+        return self.__api_request(method, path, payload=payload, add_auth=False, **kwargs)
 
-    def __api_request(self, method, path, payload=None, headers=None, timeout=None):
-        if not headers:
-            headers = {'Authorization': 'Bearer {}'.format(self.session_token)}
+    def __api_request(self, method, path, payload=None, headers={}, timeout=None, version='v1', add_auth=True):
+        if headers:
+            headers = headers.copy()
+
+        if add_auth:
+            headers['Authorization'] = f'Bearer {self.session_token}'
+
+        api_path = path
+        if version is not None:
+            api_path = f'{version}/{path}'
 
         return requests.request(
-            method, 'http://{}/api/v1/{}'.format(self.host_ip, path),
+            method, 'http://{}/api/{}'.format(self.host_ip, api_path),
             data=payload, headers=headers,
             timeout=(timeout or self.request_timeout),
         )
 
     # API VERSIONS
     def api_versions(self):
-        r = self.__api_request('GET', 'versions')
+        r = self.api_call_no_auth('GET', 'versions', version=None)
         if r.status_code != 200:
             eva_error('api_versions request error', r)
         return r.json()
@@ -93,8 +103,7 @@ class EvaHTTPClient:
 
     def auth_create_session(self):
         self.__logger.debug('Creating session token')
-        # Bypass api_call_with_auth to avoid getting in a 401 loop
-        r = self.__api_request('POST', 'auth', payload=json.dumps({'token': self.api_token}), headers={})
+        r = self.api_call_no_auth('POST', 'auth', payload=json.dumps({'token': self.api_token}))
 
         if r.status_code != 200:
             eva_error('auth_create_session request error', r)
@@ -107,6 +116,7 @@ class EvaHTTPClient:
 
     def auth_invalidate_session(self):
         self.__logger.debug('Invalidating session token {}'.format(self.session_token))
+        # Bypass api_call_with_auth to avoid getting in a 401 loop
         r = self.__api_request('DELETE', 'auth')
 
         if r.status_code != 204:
