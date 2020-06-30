@@ -6,15 +6,21 @@ name = "pypi"
 [packages]
 requests = "*"
 websockets = "*"
+zeroconf = "==0.27.1"
 
 [dev-packages]
 flake8 = "*"
 requests-mock = "*"
 pytest = "*"
 "pytest-cov" = "*"
+"pytest-flake8" = "*"
+"pytest-mypy" = "*"
+mypy = "*"
 
 [requires]
 
 [scripts]
-test = "python -m pytest tests/"
+test = "pipenv run testd tests/"
+testd = "python -m pytest --mypy --flake8"
 lint = "flake8"
+type = "mypy evasdk examples tests"

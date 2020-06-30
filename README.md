@@ -162,7 +162,7 @@ $ pipenv run test
 
 # or to run a single test file:
 $ pipenv shell
-$ python -m pytest tests/<test-name>_test.py
+$ pipenv run testd tests/<test-name>_test.py
 
 # some test require supplying ip and token via the `--ip` and `--token` arguements:
 $ pipenv run test --ip 172.16.16.2 --token abc-123-def-456

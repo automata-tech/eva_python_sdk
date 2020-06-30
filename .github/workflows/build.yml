@@ -12,27 +12,31 @@ jobs:
         python-version: [3.5, 3.6, 3.7]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install pipenv
       uses: dschep/install-pipenv-action@v1
     - name: Install dependencies
-      uses: "VaultVulp/action-pipenv@master"
+      uses: VaultVulp/action-pipenv@v2.0.1
       with:
         command: install --dev
     - name: Run linter
-      uses: "VaultVulp/action-pipenv@master"
+      uses: VaultVulp/action-pipenv@v2.0.1
       with:
-        command: run flake8
+        command: run lint
+    - name: Run type checker
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: run type
     - name: Run tests
-      uses: "VaultVulp/action-pipenv@master"
+      uses: VaultVulp/action-pipenv@v2.0.1
       with:
         command: run test --cov=evasdk --cov-branch --cov-report=xml
     - name: Upload to codecov
-      uses: codecov/codecov-action@v1.0.3
+      uses: codecov/codecov-action@v1.0.7
       with:
         token: ${{secrets.CODECOV_TOKEN}}
         file: ./coverage.xml
