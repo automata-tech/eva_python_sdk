@@ -24,7 +24,7 @@ jobs:
       # Transform refs/tags/v0.0.2a01 to 0.0.2a01 and inject it into setup.py
       run: |
         export VERSION=`echo $VERSION_RAW | sed -E 's;.*/v(.*)$;\1;'`
-        sed -i 's/%VERSION%/'$VERSION'/' setup.py
+        sed -i 's/%VERSION%/'$VERSION'/' evasdk/version.py
         python setup.py sdist bdist_wheel
     - name: Publish a Python distribution to PyPI
       uses: pypa/gh-action-pypi-publish@master

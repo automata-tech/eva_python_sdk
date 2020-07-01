@@ -5,6 +5,7 @@ import requests
 
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
+from .version import __version__
 
 # TODO add more granular logs using __logger
 # TODO lots of sleeps in control_* de to the robot state being updated slowly after starting an action, can this be improved?
@@ -66,6 +67,7 @@ class EvaHTTPClient:
 
         if add_auth:
             headers['Authorization'] = f'Bearer {self.session_token}'
+        headers['User-Agent'] = f'Automata EvaSDK/{__version__} (Python)'
 
         api_path = path
         if version is not None:
