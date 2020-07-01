@@ -8,6 +8,7 @@ from .eva_errors import eva_error, EvaError, EvaAutoRenewError
 
 # TODO add more granular logs using __logger
 # TODO lots of sleeps in control_* de to the robot state being updated slowly after starting an action, can this be improved?
+# TODO technically, the default request timeout of the API is 60s, should we update `request_timeout`?
 
 
 class EvaHTTPClient:
@@ -157,7 +158,7 @@ class EvaHTTPClient:
     def config_update(self, update):
         r = self.api_call_with_auth(
             'POST', 'config/update', update,
-            headers={'Content-Type': 'application/x.automata-update'}, timeout=30
+            headers={'Content-Type': 'application/x.automata-update'}, timeout=120
         )
         if r.status_code != 200:
             eva_error('config_update error', r)
@@ -232,13 +233,13 @@ class EvaHTTPClient:
 
 
     def toolpaths_use_saved(self, toolpathId):
-        r = self.api_call_with_auth('POST', 'toolpaths/{}/use'.format(toolpathId))
+        r = self.api_call_with_auth('POST', 'toolpaths/{}/use'.format(toolpathId), timeout=300)
         if r.status_code != 200:
             eva_error('toolpaths_use_saved error', r)
 
 
     def toolpaths_use(self, toolpathRepr):
-        r = self.api_call_with_auth('POST', 'toolpath/use', json.dumps({'toolpath': toolpathRepr}))
+        r = self.api_call_with_auth('POST', 'toolpath/use', json.dumps({'toolpath': toolpathRepr}), timeout=300)
         if r.status_code != 200:
             eva_error('toolpaths_use error', r)
 
