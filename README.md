@@ -22,6 +22,8 @@ __* This SDK is currently in beta__
 
 __Requires Python 3, not compatible with Python 2__
 
+We support Python `3.6` and later.
+
 ### Pip
 
 Make sure you have Python3 and pip installed, then run the following command:

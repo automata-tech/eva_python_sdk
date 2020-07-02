@@ -19,6 +19,7 @@ setuptools.setup(
         'requests',
         'websockets',
         'zeroconf',
+        'dataclasses',
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
