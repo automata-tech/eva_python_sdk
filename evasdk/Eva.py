@@ -53,6 +53,9 @@ class Eva:
         self.__logger.debug('Eva.versions called')
         return self.__http_client.api_versions()
 
+    def name(self):
+        self.__logger.debug('Eva.name called')
+        return self.__http_client.name()
 
     # Auth
     def auth_renew_session(self):
