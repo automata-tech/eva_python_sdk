@@ -9,6 +9,7 @@ websockets = "*"
 
 [dev-packages]
 flake8 = "*"
+requests-mock = "*"
 pytest = "*"
 "pytest-cov" = "*"
 

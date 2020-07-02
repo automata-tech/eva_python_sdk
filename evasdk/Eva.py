@@ -39,9 +39,19 @@ class Eva:
 
 
     # --------------------------------------------- HTTP HANDLERS ---------------------------------------------
-    def api_call_with_auth(self, method, path, payload=None):
+    def api_call_with_auth(self, method, path, payload=None, headers={}, timeout=None, version='v1'):
         self.__logger.debug('Eva.api_call_with_auth {} {}'.format(method, path))
-        return self.__http_client.api_call_with_auth(method, path, payload=payload)
+        return self.__http_client.api_call_with_auth(method, path, payload=payload, headers=headers, timeout=timeout, version=version)
+
+    def api_call_no_auth(self, method, path, payload=None, headers={}, timeout=None, version='v1'):
+        self.__logger.debug('Eva.api_call_no_auth {} {}'.format(method, path))
+        return self.__http_client.api_call_no_auth(method, path, payload=payload, headers=headers, timeout=timeout, version=version)
+
+
+    # Global
+    def versions(self):
+        self.__logger.debug('Eva.versions called')
+        return self.__http_client.api_versions()
 
 
     # Auth

@@ -76,3 +76,4 @@ from .eva_errors import (
     EvaError,
     EvaValidationError, EvaAuthError, EvaAutoRenewError,
     EvaAdminError, EvaServerError)
+from .version import __version__

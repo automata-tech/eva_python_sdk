@@ -1,11 +1,12 @@
 import setuptools
+from evasdk.version import __version__
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name='evasdk',
-    version='%VERSION%',
+    version=__version__,
     description='SDK for the Automata Eva robotic arm',
     author='Automata',
     license='Apache License 2.0',
