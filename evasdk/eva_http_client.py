@@ -87,6 +87,12 @@ class EvaHTTPClient:
             eva_error('api_versions request error', r)
         return r.json()
 
+    def name(self):
+        r = self.api_call_no_auth('GET', 'name')
+        if r.status_code != 200:
+            eva_error('api_versions request error', r)
+        return r.json()
+
     # AUTH
     def auth_renew_session(self):
         self.__logger.debug('Renewing session token {}'.format(self.session_token))
