@@ -192,7 +192,7 @@ class EvaHTTPClient:
     def __globals_editing(self, keys, values):
         data = {'changes': []}
         if (isinstance(keys, list) and isinstance(values, list)):
-            [data['changes'].append({'key': c[0], 'value': c[1]}) for c in zip(keys, values)]
+            data['changes'] = [{'key': k, 'value': v} for k, v in zip(keys, values)]
         else:
             data['changes'].append({'key': keys, 'value': values})
         data = json.dumps(data)

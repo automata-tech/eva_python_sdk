@@ -15,7 +15,12 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     long_description=long_description,
     long_description_content_type="text/markdown",
-    install_requires=['requests', 'websockets'],
+    install_requires=[
+        'requests',
+        'websockets',
+        'zeroconf',
+        'dataclasses',
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 4 - Beta",

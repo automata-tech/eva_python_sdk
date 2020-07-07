@@ -77,3 +77,7 @@ from .eva_errors import (
     EvaValidationError, EvaAuthError, EvaAutoRenewError,
     EvaAdminError, EvaServerError)
 from .version import __version__
+from .EvaDiscoverer import (
+    DiscoverCallback, DiscoveredEva,
+    find_evas, find_eva, find_first_eva, discover_evas,
+)
