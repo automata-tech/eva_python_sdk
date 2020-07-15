@@ -25,6 +25,7 @@ jobs:
       run: |
         export VERSION=`echo $VERSION_RAW | sed -E 's;.*/v(.*)$;\1;'`
         sed -i 's/%VERSION%/'$VERSION'/' evasdk/version.py
+        sed -i 's/%VERSION%/'$VERSION'/' setup.py
         python setup.py sdist bdist_wheel
     - name: Publish a Python distribution to PyPI
       uses: pypa/gh-action-pypi-publish@v1.3.0

@@ -1,12 +1,13 @@
 import setuptools
-from evasdk.version import __version__
+
+version = '%VERSION%'  # Replaced by the publish.yml workflow
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name='evasdk',
-    version=__version__,
+    version=version,
     description='SDK for the Automata Eva robotic arm',
     author='Automata',
     license='Apache License 2.0',
