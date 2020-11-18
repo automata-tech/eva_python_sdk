@@ -451,7 +451,7 @@ class EvaHTTPClient:
             ypr = [target_orientation['yaw'], target_orientation['pitch'], target_orientation['roll']]
             dcm = matrix_from_euler_zyx(ypr)
             result = quaternion_from_matrix(check_matrix(dcm))
-        elif orientation_type == 'quat' or orientation_type == None:
+        elif orientation_type == 'quat' or orientation_type is None:
             result = check_quaternion(
                 [target_orientation['w'], target_orientation['x'], target_orientation['y'], target_orientation['z']])
         else:
