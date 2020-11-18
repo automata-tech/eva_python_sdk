@@ -2,6 +2,7 @@ import json
 import time
 import logging
 import requests
+from pytransform3d.rotations import *
 
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
@@ -426,9 +427,39 @@ class EvaHTTPClient:
         else:
             eva_error('calc_forward_kinematics invalid fk_type {}'.format(fk_type), r)
 
+    def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None,
+                                orientation_type=None):
+        """
+        End-effector orientation (target_orientation) can be provided in several standard formats,
+        by specifying the orinetation_type (default is None):
+        - 'dcm': rotation matrix -> {'dcm': 3x3 float array}
+        - 'axis_angle': axis angle -> {'angle': float, 'x': float, 'y': float, 'z': float}
+        - 'ypr': yaw, pitch, roll Tait-Bryan angles -> {'yaw': float, 'pitch': float, 'roll': float}
+        - 'quat': quaternion -> {'w': float, 'x': float, 'y': float, 'z': float}
+        - None: defaults to quaternion
+        Conversion relies on pytransform3d library
+        """
 
-    def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None):
-        body = {'guess': guess, 'position': target_position, 'orientation': target_orientation}
+        if orientation_type == 'dcm':
+            dcm = target_orientation['dcm']
+            result = quaternion_from_matrix(check_matrix(dcm))
+        elif orientation_type == 'axis_angle':
+            axis_angle = [target_orientation['x'], target_orientation['y'], target_orientation['z'],
+                          target_orientation['angle']]
+            result = quaternion_from_axis_angle(check_axis_angle(axis_angle))
+        elif orientation_type == 'ypr':
+            ypr = [target_orientation['yaw'], target_orientation['pitch'], target_orientation['roll']]
+            dcm = matrix_from_euler_zyx(ypr)
+            result = quaternion_from_matrix(check_matrix(dcm))
+        elif orientation_type == 'quat' or orientation_type == None:
+            result = check_quaternion(
+                [target_orientation['w'], target_orientation['x'], target_orientation['y'], target_orientation['z']])
+        else:
+            eva_error('calc_inverse_kinematics invalid "{}" orientation_type '.format(orientation_type))
+
+        quaternion = {'w': result[0], 'x': result[1], 'y': result[2], 'z': result[3]}
+
+        body = {'guess': guess, 'position': target_position, 'orientation': quaternion}
         if tcp_config is not None:
             body['tcp_config'] = tcp_config
 
