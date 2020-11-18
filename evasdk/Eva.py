@@ -233,9 +233,9 @@ class Eva:
         return self.__http_client.calc_forward_kinematics(joints, fk_type=fk_type, tcp_config=tcp_config)
 
 
-    def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None):
+    def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None, orientation_type=None):
         self.__logger.debug('Eva.calc_inverse_kinematics called')
-        return self.__http_client.calc_inverse_kinematics(guess, target_position, target_orientation, tcp_config=tcp_config)
+        return self.__http_client.calc_inverse_kinematics(guess, target_position, target_orientation, tcp_config=tcp_config, orientation_type=orientation_type)
 
 
     def calc_nudge(self, joints, direction, offset, tcp_config=None):
