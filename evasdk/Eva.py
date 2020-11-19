@@ -14,7 +14,8 @@ class Eva:
     def __init__(self, host_ip, token, request_timeout=5, renew_period=60 * 20):
         parsed_host_ip = strip_ip(host_ip)
 
-        self.__http_client = EvaHTTPClient(parsed_host_ip, token, request_timeout=request_timeout, renew_period=renew_period)
+        self.__http_client = EvaHTTPClient(parsed_host_ip, token, request_timeout=request_timeout,
+                                           renew_period=renew_period)
         self.__logger = logging.getLogger('evasdk.Eva:{}'.format(host_ip))
 
         self.__eva_locker = EvaWithLocker(self)
@@ -41,11 +42,13 @@ class Eva:
     # --------------------------------------------- HTTP HANDLERS ---------------------------------------------
     def api_call_with_auth(self, method, path, payload=None, headers={}, timeout=None, version='v1'):
         self.__logger.debug('Eva.api_call_with_auth {} {}'.format(method, path))
-        return self.__http_client.api_call_with_auth(method, path, payload=payload, headers=headers, timeout=timeout, version=version)
+        return self.__http_client.api_call_with_auth(method, path, payload=payload, headers=headers, timeout=timeout,
+                                                     version=version)
 
     def api_call_no_auth(self, method, path, payload=None, headers={}, timeout=None, version='v1'):
         self.__logger.debug('Eva.api_call_no_auth {} {}'.format(method, path))
-        return self.__http_client.api_call_no_auth(method, path, payload=payload, headers=headers, timeout=timeout, version=version)
+        return self.__http_client.api_call_no_auth(method, path, payload=payload, headers=headers, timeout=timeout,
+                                                   version=version)
 
 
     # Global
@@ -197,9 +200,11 @@ class Eva:
         self.__logger.info('Eva.control_go_to called')
         if mode == 'teach':
             with self.__eva_locker.set_renew_period(Eva.__TEACH_RENEW_PERIOD):
-                return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, max_speed=max_speed, time_sec=time_sec, mode=mode)
+                return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, max_speed=max_speed,
+                                                        time_sec=time_sec, mode=mode)
         else:
-            return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, max_speed=max_speed, time_sec=time_sec, mode=mode)
+            return self.__http_client.control_go_to(joints, wait_for_ready=wait_for_ready, max_speed=max_speed,
+                                                    time_sec=time_sec, mode=mode)
 
 
     def control_pause(self, wait_for_paused=True):
@@ -233,9 +238,11 @@ class Eva:
         return self.__http_client.calc_forward_kinematics(joints, fk_type=fk_type, tcp_config=tcp_config)
 
 
-    def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None, orientation_type=None):
+    def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None,
+                                orientation_type=None):
         self.__logger.debug('Eva.calc_inverse_kinematics called')
-        return self.__http_client.calc_inverse_kinematics(guess, target_position, target_orientation, tcp_config=tcp_config, orientation_type=orientation_type)
+        return self.__http_client.calc_inverse_kinematics(guess, target_position, target_orientation,
+                                                          tcp_config=tcp_config, orientation_type=orientation_type)
 
 
     def calc_nudge(self, joints, direction, offset, tcp_config=None):
