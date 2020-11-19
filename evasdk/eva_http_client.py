@@ -432,30 +432,32 @@ class EvaHTTPClient:
         """
         End-effector orientation (target_orientation) can be provided in several standard formats,
         by specifying the orinetation_type (default is None):
-        - 'dcm': rotation matrix -> {'dcm': 3x3 float array}
+        - 'matrix': rotation matrix -> {'col_x': 1x3 float array, 'col_y': 1x3 float array, 'col_z': 1x3 float array}
         - 'axis_angle': axis angle -> {'angle': float, 'x': float, 'y': float, 'z': float}
-        - 'ypr': yaw, pitch, roll Tait-Bryan angles -> {'yaw': float, 'pitch': float, 'roll': float}
+        - 'euler_zyx': yaw, pitch, roll Euler (Tait-Bryan) angles -> {'yaw': float, 'pitch': float, 'roll': float}
         - 'quat': quaternion -> {'w': float, 'x': float, 'y': float, 'z': float}
         - None: defaults to quaternion
         Conversion relies on pytransform3d library
         """
+        result = None
 
-        if orientation_type == 'dcm':
-            dcm = target_orientation['dcm']
-            result = pyrot.quaternion_from_matrix(pyrot.check_matrix(dcm))
+        if orientation_type == 'matrix':
+            matrix = [target_orientation['col_x'], target_orientation['col_y'], target_orientation['col_z']]
+            matrix_trans = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
+            result = pyrot.quaternion_from_matrix(pyrot.check_matrix(matrix_trans))
         elif orientation_type == 'axis_angle':
             axis_angle = [target_orientation['x'], target_orientation['y'], target_orientation['z'],
                           target_orientation['angle']]
             result = pyrot.quaternion_from_axis_angle(pyrot.check_axis_angle(axis_angle))
-        elif orientation_type == 'ypr':
+        elif orientation_type == 'euler_zyx':
             ypr = [target_orientation['yaw'], target_orientation['pitch'], target_orientation['roll']]
-            dcm = pyrot.matrix_from_euler_zyx(ypr)
-            result = pyrot.quaternion_from_matrix(pyrot.check_matrix(dcm))
+            matrix = pyrot.matrix_from_euler_zyx(ypr)
+            result = pyrot.quaternion_from_matrix(pyrot.check_matrix(matrix))
         elif orientation_type == 'quat' or orientation_type is None:
             result = pyrot.check_quaternion(
                 [target_orientation['w'], target_orientation['x'], target_orientation['y'], target_orientation['z']])
         else:
-            eva_error('calc_inverse_kinematics invalid "{}" orientation_type '.format(orientation_type))
+            eva_error(f'calc_inverse_kinematics invalid "{orientation_type}" orientation_type')
 
         quaternion = {'w': result[0], 'x': result[1], 'y': result[2], 'z': result[3]}
 
