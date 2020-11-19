@@ -450,8 +450,8 @@ class EvaHTTPClient:
                           target_orientation['angle']]
             result = pyrot.quaternion_from_axis_angle(pyrot.check_axis_angle(axis_angle))
         elif orientation_type == 'euler_zyx':
-            ypr = [target_orientation['yaw'], target_orientation['pitch'], target_orientation['roll']]
-            matrix = pyrot.matrix_from_euler_zyx(ypr)
+            euler_zyx = [target_orientation['yaw'], target_orientation['pitch'], target_orientation['roll']]
+            matrix = pyrot.matrix_from_euler_zyx(euler_zyx)
             result = pyrot.quaternion_from_matrix(pyrot.check_matrix(matrix))
         elif orientation_type == 'quat' or orientation_type is None:
             result = pyrot.check_quaternion(
