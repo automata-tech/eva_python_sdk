@@ -2,8 +2,8 @@ import json
 import time
 import logging
 import requests
-from pytransform3d.rotations import quaternion_from_matrix, quaternion_from_axis_angle, check_quaternion, \
-    check_axis_angle, check_matrix, matrix_from_euler_zyx
+import pytransform3d.rotations as pyrot  # type: ignore
+
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
 from .version import __version__
@@ -442,17 +442,17 @@ class EvaHTTPClient:
 
         if orientation_type == 'dcm':
             dcm = target_orientation['dcm']
-            result = quaternion_from_matrix(check_matrix(dcm))
+            result = pyrot.quaternion_from_matrix(pyrot.check_matrix(dcm))
         elif orientation_type == 'axis_angle':
             axis_angle = [target_orientation['x'], target_orientation['y'], target_orientation['z'],
                           target_orientation['angle']]
-            result = quaternion_from_axis_angle(check_axis_angle(axis_angle))
+            result = pyrot.quaternion_from_axis_angle(pyrot.check_axis_angle(axis_angle))
         elif orientation_type == 'ypr':
             ypr = [target_orientation['yaw'], target_orientation['pitch'], target_orientation['roll']]
-            dcm = matrix_from_euler_zyx(ypr)
-            result = quaternion_from_matrix(check_matrix(dcm))
+            dcm = pyrot.matrix_from_euler_zyx(ypr)
+            result = pyrot.quaternion_from_matrix(pyrot.check_matrix(dcm))
         elif orientation_type == 'quat' or orientation_type is None:
-            result = check_quaternion(
+            result = pyrot.check_quaternion(
                 [target_orientation['w'], target_orientation['x'], target_orientation['y'], target_orientation['z']])
         else:
             eva_error('calc_inverse_kinematics invalid "{}" orientation_type '.format(orientation_type))
