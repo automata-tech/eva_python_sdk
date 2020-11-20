@@ -432,7 +432,7 @@ class EvaHTTPClient:
         """
         End-effector orientation (target_orientation) can be provided in several standard formats,
         by specifying the orinetation_type (default is None):
-        - 'matrix': rotation matrix -> {'col_x': 1x3 float array, 'col_y': 1x3 float array, 'col_z': 1x3 float array}
+        - 'matrix': rotation matrix -> 3x3 array
         - 'axis_angle': axis angle -> {'angle': float, 'x': float, 'y': float, 'z': float}
         - 'euler_zyx': {yaw, pitch, roll} Euler (Tait-Bryan) angles -> {'yaw': float, 'pitch': float, 'roll': float}
         - 'quat': quaternion -> {'w': float, 'x': float, 'y': float, 'z': float}
@@ -443,9 +443,7 @@ class EvaHTTPClient:
         quat_not_normed = None
 
         if orientation_type == 'matrix':
-            matrix = [target_orientation['col_x'], target_orientation['col_y'], target_orientation['col_z']]
-            matrix_trans = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
-            quat_not_normed = pyrot.quaternion_from_matrix(pyrot.check_matrix(matrix_trans))
+            quat_not_normed = pyrot.quaternion_from_matrix(pyrot.check_matrix(target_orientation))
         elif orientation_type == 'axis_angle':
             axis_angle = [target_orientation['x'], target_orientation['y'], target_orientation['z'],
                           target_orientation['angle']]
