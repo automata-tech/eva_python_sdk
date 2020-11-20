@@ -432,7 +432,7 @@ class EvaHTTPClient:
         """
         End-effector orientation (target_orientation) can be provided in several standard formats,
         by specifying the orinetation_type (default is None):
-        - 'matrix': rotation matrix -> 3x3 array
+        - 'matrix': rotation matrix -> 3x3 array, in row major order
         - 'axis_angle': axis angle -> {'angle': float, 'x': float, 'y': float, 'z': float}
         - 'euler_zyx': {yaw, pitch, roll} Euler (Tait-Bryan) angles -> {'yaw': float, 'pitch': float, 'roll': float}
         - 'quat': quaternion -> {'w': float, 'x': float, 'y': float, 'z': float}
