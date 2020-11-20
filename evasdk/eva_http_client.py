@@ -2,6 +2,7 @@ import json
 import time
 import logging
 import requests
+import pytransform3d.rotations as pyrot  # type: ignore
 
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
@@ -426,9 +427,41 @@ class EvaHTTPClient:
         else:
             eva_error('calc_forward_kinematics invalid fk_type {}'.format(fk_type), r)
 
+    def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None,
+                                orientation_type=None):
+        """
+        End-effector orientation (target_orientation) can be provided in several standard formats,
+        by specifying the orinetation_type (default is None):
+        - 'matrix': rotation matrix -> 3x3 array, in row major order
+        - 'axis_angle': axis angle -> {'angle': float, 'x': float, 'y': float, 'z': float}
+        - 'euler_zyx': {yaw, pitch, roll} Euler (Tait-Bryan) angles -> {'yaw': float, 'pitch': float, 'roll': float}
+        - 'quat': quaternion -> {'w': float, 'x': float, 'y': float, 'z': float}
+        - None: defaults to quaternion
+        Conversion relies on pytransform3d library
+        """
+        N_DIGITS = 8
+        quat_not_normed = None
 
-    def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None):
-        body = {'guess': guess, 'position': target_position, 'orientation': target_orientation}
+        if orientation_type == 'matrix':
+            quat_not_normed = pyrot.quaternion_from_matrix(pyrot.check_matrix(target_orientation))
+        elif orientation_type == 'axis_angle':
+            axis_angle = [target_orientation['x'], target_orientation['y'], target_orientation['z'],
+                          target_orientation['angle']]
+            quat_not_normed = pyrot.quaternion_from_axis_angle(pyrot.check_axis_angle(axis_angle))
+        elif orientation_type == 'euler_zyx':
+            euler_zyx = [target_orientation['yaw'], target_orientation['pitch'], target_orientation['roll']]
+            matrix = pyrot.matrix_from_euler_zyx(euler_zyx)
+            quat_not_normed = pyrot.quaternion_from_matrix(pyrot.check_matrix(matrix))
+        elif orientation_type == 'quat' or orientation_type is None:
+            quat_not_normed = [target_orientation['w'], target_orientation['x'], target_orientation['y'],
+                               target_orientation['z']]
+        else:
+            eva_error(f'calc_inverse_kinematics invalid "{orientation_type}" orientation_type')
+
+        quat_normed = [round(num, N_DIGITS) for num in pyrot.check_quaternion(quat_not_normed)]
+        quaternion = {'w': quat_normed[0], 'x': quat_normed[1], 'y': quat_normed[2], 'z': quat_normed[3]}
+
+        body = {'guess': guess, 'position': target_position, 'orientation': quaternion}
         if tcp_config is not None:
             body['tcp_config'] = tcp_config
 
