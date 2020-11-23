@@ -21,6 +21,7 @@ setuptools.setup(
         'websockets',
         'zeroconf',
         'dataclasses',
+        'pytransform3d',
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
