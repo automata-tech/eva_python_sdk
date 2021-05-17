@@ -4,7 +4,7 @@ The Eva Python SDK provides convenient access to the Automata Eva API from appli
 
 __* This SDK is currently in beta__
 
-- [Eva Python SDK ![PyPI version](https://badge.fury.io/py/evasdk) ![Build status](https://github.com/automata-tech/eva_python_sdk/workflows/Build%20and%20test/badge.svg) [![codecov](https://codecov.io/gh/automata-tech/eva_python_sdk/branch/development/graph/badge.svg)](https://codecov.io/gh/automata-tech/eva_python_sdk)](#eva-python-sdk---)
+- [Eva Python SDK ![PyPI version](#eva-python-sdk)
   - [Installation](#installation)
     - [Pip](#pip)
     - [Pipenv](#pipenv)
