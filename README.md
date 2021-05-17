@@ -4,14 +4,14 @@ The Eva Python SDK provides convenient access to the Automata Eva API from appli
 
 __* This SDK is currently in beta__
 
-- [Eva Python SDK](#eva-python-sdk)
+- [Eva Python SDK ![PyPI version](https://badge.fury.io/py/evasdk) ![Build status](https://github.com/automata-tech/eva_python_sdk/workflows/Build%20and%20test/badge.svg) [![codecov](https://codecov.io/gh/automata-tech/eva_python_sdk/branch/development/graph/badge.svg)](https://codecov.io/gh/automata-tech/eva_python_sdk)](#eva-python-sdk---)
   - [Installation](#installation)
     - [Pip](#pip)
     - [Pipenv](#pipenv)
     - [Detail Instructions](#detail-instructions)
   - [Examples](#examples)
     - [Eva](#eva)
-    - [evasdk.eva_http and evasdk.eva_ws](#evasdkevahttp-and-evasdkevaws)
+    - [evasdk.eva_http and evasdk.eva_ws](#evasdkeva_http-and-evasdkeva_ws)
   - [Versioning](#versioning)
   - [Logging](#logging)
   - [Bugs and feature requests](#bugs-and-feature-requests)
@@ -166,11 +166,11 @@ $ pipenv run test
 $ pipenv shell
 $ pipenv run testd tests/<test-name>_test.py
 
-# some test require supplying ip and token via the `--ip` and `--token` arguements:
-$ pipenv run test --ip 172.16.16.2 --token abc-123-def-456
+# some test require testing against a real robot. Therefore you will be required to supply a ip and token via the `--ip` and `--token` arguments as well as pass the --runrobot flag to notify pytest that you wish to run the robot tests:
+$ pipenv run test --runrobot --ip 172.16.16.2 --token abc-123-def-456
 
 # Tests requiring the robot or long amounts of time will not run by default,
-# these require flags to be enabled, a full list of flags is availble with the help flag:
+# these require flags to be enabled, a full list of flags is available with the help flag:
 $ pipenv run test -h
 ```
 
