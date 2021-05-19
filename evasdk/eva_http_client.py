@@ -3,6 +3,7 @@ import time
 import logging
 import requests
 import pytransform3d.rotations as pyrot  # type: ignore
+from typing import Union
 
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
@@ -96,11 +97,11 @@ class EvaHTTPClient:
         return r.json()
 
 
-    def _check_version_compatibility(self) -> str:
+    def _check_version_compatibility(self) -> Union[str, None]:
         """Checks the current version of the application against that of Eva's software version.
 
         Returns:
-            str: error message, empty str if version is compatible.
+            Union[str, None]: error message, None if versions are compatible.
         """
         version_r = self.api_call_no_auth('GET', 'versions', version=None)
         if version_r.status_code != 200:
@@ -109,7 +110,7 @@ class EvaHTTPClient:
         err = sdk_is_compatible_with_robot(__version__, robot_version)
         if err != '':
             return f'SDK compatibility error: {err}'
-        return ''
+        return None
 
 
     # AUTH
@@ -133,7 +134,7 @@ class EvaHTTPClient:
         self.__logger.debug('Creating session token')
 
         err = self._check_version_compatibility()
-        if err != '':
+        if err != None:
             eva_error(f'auth_create_session error: using wrong SDK version {err}')
 
         r = self.api_call_no_auth('POST', 'auth', payload=json.dumps({'token': self.api_token}))

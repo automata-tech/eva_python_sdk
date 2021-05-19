@@ -1,5 +1,5 @@
 from packaging import version as p_version
-from typing import Dict
+from typing import Dict, Union
 import re
 
 # This is replaced by .github/workflows/publish.yml when creating a release
@@ -64,7 +64,7 @@ def sdk_is_compatible_with_robot(
     eva = p_version.parse(eva_version)
     if isinstance(eva, p_version.LegacyVersion):
         version = extract_semver(eva_version)
-        if version == '':
+        if version == None:
             return f'unsupported version: Eva version "{eva_version}" is not in semver'
         eva = p_version.parse(eva_version)
 
@@ -80,7 +80,7 @@ def sdk_is_compatible_with_robot(
     return ''
 
 
-def extract_semver(version: str) -> str:
+def extract_semver(version: str) -> Union[str, None]:
     """Takes a version and extracts the semver from it.
     For example '3.1.1-dev-alpha1' would give '3.1.1'.
     If no results are found, returns empty string.
@@ -89,11 +89,12 @@ def extract_semver(version: str) -> str:
         version (str): the str to extract a semver from
 
     Returns:
-        str: semver version stripped of all additional information.
+        str: semver version stripped of all additional information,
+            or None if no results.
     """
     versionPattern = r'\d+(=?\.(\d+(=?\.(\d+)*)*)*)*'
     regexMatcher = re.compile(versionPattern)
     search_results = regexMatcher.search(version)
     if search_results is None:
-        return ''
+        return None
     return search_results.group(0)

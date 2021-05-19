@@ -91,9 +91,9 @@ def test_sdk_is_compatible_with_robot(sdk_version, eva_version, want_error):
     ('13.33.43a', '13.33.43'),
     ('13.33.43-development', '13.33.43'),
     ('13.33.43-testing-alpha123', '13.33.43'),
-    ('latest', ''),
-    ('new', ''),
-    ('', ''),
+    ('latest', None),
+    ('new', None),
+    ('', None),
 ])
 def test_extract_semver(input, expected):
     got = extract_semver(input)
