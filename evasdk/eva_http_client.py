@@ -7,8 +7,8 @@ from typing import Union
 
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
-from .version import __version__
-from .version import sdk_is_compatible_with_robot
+from .version import __version__, sdk_is_compatible_with_robot
+
 
 # TODO add more granular logs using __logger
 # TODO lots of sleeps in control_* de to the robot state being updated slowly after starting an action, can this be improved?
