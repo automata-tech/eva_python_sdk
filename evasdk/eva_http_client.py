@@ -7,6 +7,7 @@ import pytransform3d.rotations as pyrot  # type: ignore
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
 from .version import __version__
+from .version import sdk_is_compatible_with_robot
 
 # TODO add more granular logs using __logger
 # TODO lots of sleeps in control_* de to the robot state being updated slowly after starting an action, can this be improved?
@@ -94,6 +95,23 @@ class EvaHTTPClient:
             eva_error('api_versions request error', r)
         return r.json()
 
+
+    def _check_version_compatibility(self) -> str:
+        """Checks the current version of the application against that of Eva's software version.
+
+        Returns:
+            str: error message, empty str if version is compatible.
+        """
+        version_r = self.api_call_no_auth('GET', 'versions', version=None)
+        if version_r.status_code != 200:
+            return 'request error when fetching versions'
+        robot_version = version_r.json()['robot']
+        err = sdk_is_compatible_with_robot(__version__, robot_version)
+        if err != '':
+            return f'SDK compatibility error: {err}'
+        return ''
+
+
     # AUTH
     def auth_renew_session(self):
         self.__logger.debug('Renewing session token {}'.format(self.session_token))
@@ -113,6 +131,11 @@ class EvaHTTPClient:
 
     def auth_create_session(self):
         self.__logger.debug('Creating session token')
+
+        err = self._check_version_compatibility()
+        if err != '':
+            eva_error(f'auth_create_session error: using wrong SDK version {err}')
+
         r = self.api_call_no_auth('POST', 'auth', payload=json.dumps({'token': self.api_token}))
 
         if r.status_code != 200:
