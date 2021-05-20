@@ -14,8 +14,6 @@ Find the source code `here
 Below you will find up to date module documentation, examples of how to use the SDK, as well as a copy of the SDK's README.md which will outline installation details and much more.
 
 
-
-
 Contents
 ========
 
@@ -26,10 +24,10 @@ Contents
    Module reference <modules>
    README.md <readme>
 
+
+Indices and tables
+==================
+
 * :ref:`genindex`
+* :ref:`modindex`
 * :ref:`search`
-
-
-
-
-
