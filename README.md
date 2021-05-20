@@ -194,6 +194,14 @@ sphinx-apidoc -f  -o . ..
 ```
 We need to pass the force flag `-f` to overwrite the modules.rst file as otherwise Sphinx will skip over searching the `evasdk` directory.
 
+To generate a local version of the documentation:
+```bash
+cd docs
+make html
+```
+
+Then open the file `docs/_build/html/index.html` in your browser.
+
 ## License
 
 This code is free to use under the terms of the Apache 2 license. Please refer to LICENSE for more information.
