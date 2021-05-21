@@ -1,0 +1,24 @@
+name: "Documentation generation"
+
+on: [push, pull_request]
+
+jobs:
+build:
+  runs-on: ubuntu-latest
+   steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: pip install Sphinx ; pip install m2r2
+
+      - name: Update the docs
+        run: cd docs ; sphinx-apidoc -f  -o . ..
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: Tom Allpress
+          author_email: tom@autaomta.tech
+          message: 'updating documentation'
+          add: '*.rst'
