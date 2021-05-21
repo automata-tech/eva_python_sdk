@@ -1,4 +1,6 @@
-# Eva Python SDK [![PyPI version](https://badge.fury.io/py/evasdk.svg)](https://badge.fury.io/py/evasdk) ![Build status](https://github.com/automata-tech/eva_python_sdk/workflows/Build%20and%20test/badge.svg) [![codecov](https://codecov.io/gh/automata-tech/eva_python_sdk/branch/development/graph/badge.svg)](https://codecov.io/gh/automata-tech/eva_python_sdk)
+# Eva Python SDK
+
+[![PyPI version](https://badge.fury.io/py/evasdk.svg)](https://badge.fury.io/py/evasdk) ![Build status](https://github.com/automata-tech/eva_python_sdk/workflows/Build%20and%20test/badge.svg) [![codecov](https://codecov.io/gh/automata-tech/eva_python_sdk/branch/development/graph/badge.svg)](https://codecov.io/gh/automata-tech/eva_python_sdk)
 
 The Eva Python SDK provides convenient access to the Automata Eva API from applications written in Python 3.
 
@@ -11,11 +13,12 @@ __* This SDK is currently in beta__
     - [Detail Instructions](#detail-instructions)
   - [Examples](#examples)
     - [Eva](#eva)
-    - [evasdk.eva_http and evasdk.eva_ws](#evasdkevahttp-and-evasdkevaws)
+    - [evasdk.eva_http and evasdk.eva_ws](#evasdkeva_http-and-evasdkeva_ws)
   - [Versioning](#versioning)
   - [Logging](#logging)
   - [Bugs and feature requests](#bugs-and-feature-requests)
   - [Testing](#testing)
+  - [Documentation](#documentation)
   - [License](#license)
 
 ## Installation
@@ -173,6 +176,31 @@ $ pipenv run test --ip 172.16.16.2 --token abc-123-def-456
 # these require flags to be enabled, a full list of flags is availble with the help flag:
 $ pipenv run test -h
 ```
+
+## Documentation
+
+Find the documentation [here](https://eva-python-sdk.readthedocs.io/en/latest/).
+
+We are using [Sphinx](https://github.com/sphinx-doc/sphinx) to generate documentation, and the documentation is deployed with [Read The Docs](https://github.com/readthedocs/readthedocs.org).
+
+We have added a few extensions to Sphinx
+-   **sphinx.ext.autodoc** to automatically generate package documentation based off of Python docstrings.
+-   **m2r2** to convert rST to MD, this is so we can include `README.md` to the online docs.
+
+When adding new files in `evasdk/`, it's important to remember to update the documentation by running the following:
+```bash
+cd docs
+sphinx-apidoc -f  -o . ..
+```
+We need to pass the force flag `-f` to overwrite the modules.rst file as otherwise Sphinx will skip over searching the `evasdk` directory.
+
+To generate a local version of the documentation:
+```bash
+cd docs
+make html
+```
+
+Then open the file `docs/_build/html/index.html` in your browser.
 
 ## License
 
