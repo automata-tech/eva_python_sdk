@@ -194,6 +194,8 @@ sphinx-apidoc -f  -o . ..
 ```
 We need to pass the force flag `-f` to overwrite the modules.rst file as otherwise Sphinx will skip over searching the `evasdk` directory.
 
+We have a GitHub action in the `build.yaml` workflow that will do this automatically on push and creating a pull request.
+
 To generate a local version of the documentation:
 ```bash
 cd docs
