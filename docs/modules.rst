@@ -5,3 +5,4 @@ eva_python_sdk
    :maxdepth: 4
 
    evasdk
+   setup
