@@ -187,14 +187,18 @@ We have added a few extensions to Sphinx
 -   **sphinx.ext.autodoc** to automatically generate package documentation based off of Python docstrings.
 -   **m2r2** to convert rST to MD, this is so we can include `README.md` to the online docs.
 
+We have a *GitHub Action* in the `build.yaml` workflow that will do this automatically update the documentation and commit the documentation changes on pushing a branch to GitHub. For this we are using [EndBug/add-and-commit](https://github.com/EndBug/add-and-commit).
+
+*Read The Docs* has [automation rules](https://docs.readthedocs.io/en/stable/automation-rules.html).
+We have one set up that will automatically build documentation for any semver tagged version of the project.
+
 When adding new files in `evasdk/`, it's important to remember to update the documentation by running the following:
 ```bash
 cd docs
 sphinx-apidoc -f  -o . ..
 ```
-We need to pass the force flag `-f` to overwrite the modules.rst file as otherwise Sphinx will skip over searching the `evasdk` directory.
 
-We have a GitHub action in the `build.yaml` workflow that will do this automatically on push and creating a pull request.
+We need to pass the force flag `-f` to overwrite `modules.rst`, as otherwise Sphinx will skip over searching the `evasdk` directory.
 
 To generate a local version of the documentation:
 ```bash
