@@ -114,6 +114,9 @@ class Eva:
         self.__logger.debug('Eva.gpio_get called')
         return self.__http_client.gpio_get(pin, pin_type)
 
+    def globals_edit(self, keys, values):
+        self.__logger.debug('Eva.globals_edit called')
+        return self.__http_client.globals_edit(keys, values)
 
     # Toolpaths
     def toolpaths_list(self):

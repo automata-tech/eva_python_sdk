@@ -176,7 +176,7 @@ class EvaHTTPClient:
 
     # GPIO
     def gpio_set(self, pin, status):
-        r = self.__globals_editing(keys='outputs.' + pin, values=status)
+        r = self._globals_edit(keys='outputs.' + pin, values=status)
         if r.status_code != 200:
             eva_error('gpio_set error', r)
 
@@ -189,16 +189,21 @@ class EvaHTTPClient:
         return self.data_snapshot_property('global.{}s'.format(pin_type))[pin]
 
 
-    # GPIO helper function
-    def __globals_editing(self, keys, values):
+    def _globals_edit(self, keys, values):
         data = {'changes': []}
         if (isinstance(keys, list) and isinstance(values, list)):
             data['changes'] = [{'key': k, 'value': v} for k, v in zip(keys, values)]
         else:
             data['changes'].append({'key': keys, 'value': values})
         data = json.dumps(data)
-        r = self.api_call_with_auth('POST', 'data/globals', data)
-        return r
+        return self.api_call_with_auth('POST', 'data/globals', data)
+
+
+    def globals_edit(self, keys, values):
+        r = self._globals_edit(keys, values)
+        if r.status_code != 200:
+            eva_error('globals_edit error', r)
+        return r.json()
 
 
     # TOOLPATHS
