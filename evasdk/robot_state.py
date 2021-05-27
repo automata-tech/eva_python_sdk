@@ -8,5 +8,7 @@ class RobotState(enum.Enum):
     ERROR = 'error'
     RUNNING = 'running'
     STOPPING = 'stopping'
-    JOGGING = 'jogging'
     BACKDRIVING = 'backdriving'
+    UPDATING = 'updating'
+    DISABLED = 'disabled'
+    SHUTTING_DOWN = 'shutting_down'
