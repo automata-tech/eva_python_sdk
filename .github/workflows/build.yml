@@ -41,7 +41,7 @@ jobs:
       - name: Install dependencies
         run: pip install Sphinx ; pip install m2r2
       - name: Update the docs
-        run: cd docs ; sphinx-apidoc -f  -o . ..
+        run: cd docs ; make api_docs
       - name: Commit changes
         uses: EndBug/add-and-commit@v7
         with:

@@ -11,6 +11,7 @@ sphinx:
 
 
 # Optionally set the version of Python and requirements required to build your docs
+# RTD currently doesn't support pipenv (Pipfile) for listing the requirements.
 python:
    version: 3.6
    install:
