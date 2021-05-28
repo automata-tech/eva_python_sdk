@@ -9,12 +9,12 @@ version = '%VERSION%'
 __version__ = version if version.count('%') == 0 else '0.0.dev0'
 
 # Used for version compatibility.
-LATEST : str = 'LATEST'
+LATEST = 'LATEST'
 
 
 def sdk_is_compatible_with_robot(sdk_version: str, eva_version: str):
     config = _read_version_compatability()
-    if config == None:
+    if config is None:
         return 'unsupported version: could not read version config file'
     return compare_version_compatability(sdk_version, eva_version, config)
 
@@ -23,7 +23,7 @@ def _read_version_compatability() -> Union[Dict[str, Dict[str, str]], None]:
     with open("version_compatability.yaml", 'r') as stream:
         try:
             version_compatability = yaml.safe_load(stream)
-        except yaml.YAMLError as err:
+        except yaml.YAMLError:
             return None
     return version_compatability
 

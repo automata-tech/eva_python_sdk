@@ -134,7 +134,7 @@ class EvaHTTPClient:
         self.__logger.debug('Creating session token')
 
         err = self._check_version_compatibility()
-        if err != None:
+        if err is not None:
             eva_error(f'auth_create_session error: using wrong SDK version {err}')
 
         r = self.api_call_no_auth('POST', 'auth', payload=json.dumps({'token': self.api_token}))
