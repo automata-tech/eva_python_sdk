@@ -1,0 +1,15 @@
+"1.0.0":
+  first_eva: "2.0.0"
+  last_eva: "2.1.2"
+"2.0.0":
+  first_eva: "2.0.0"
+  last_eva: "2.1.2"
+"3.0.0":
+  first_eva: "3.1.0"
+  last_eva: "3.1.2"
+"4.0.0":
+  first_eva: "3.0.0"
+  last_eva: "LATEST"
+"4.1.0":
+  first_eva: "3.0.0"
+  last_eva: "LATEST"

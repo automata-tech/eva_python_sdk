@@ -1,4 +1,6 @@
-# Eva Python SDK [![PyPI version](https://badge.fury.io/py/evasdk.svg)](https://badge.fury.io/py/evasdk) ![Build status](https://github.com/automata-tech/eva_python_sdk/workflows/Build%20and%20test/badge.svg) [![codecov](https://codecov.io/gh/automata-tech/eva_python_sdk/branch/development/graph/badge.svg)](https://codecov.io/gh/automata-tech/eva_python_sdk)
+# Eva Python SDK
+
+[![PyPI version](https://badge.fury.io/py/evasdk.svg)](https://badge.fury.io/py/evasdk) ![Build status](https://github.com/automata-tech/eva_python_sdk/workflows/Build%20and%20test/badge.svg) [![codecov](https://codecov.io/gh/automata-tech/eva_python_sdk/branch/development/graph/badge.svg)](https://codecov.io/gh/automata-tech/eva_python_sdk)
 
 The Eva Python SDK provides convenient access to the Automata Eva API from applications written in Python 3.
 
@@ -11,7 +13,7 @@ __* This SDK is currently in beta__
     - [Detail Instructions](#detail-instructions)
   - [Examples](#examples)
     - [Eva](#eva)
-    - [evasdk.eva_http and evasdk.eva_ws](#evasdkevahttp-and-evasdkevaws)
+    - [evasdk.eva_http and evasdk.eva_ws](#evasdkeva_http-and-evasdkeva_ws)
   - [Versioning](#versioning)
   - [Logging](#logging)
   - [Bugs and feature requests](#bugs-and-feature-requests)
@@ -134,13 +136,7 @@ These can be used to interact directly with the HTTP and Websocket APIs. Useful 
 
 ## Versioning
 
-To determine which version of the SDK works with your Eva's software version number (found on the Choreograph config page), please use the following chart:
-
-| SDK Version   | Supported Eva Version |
-| ------------- | --------------------- |
-| 1.0.0         | 2.0.0 - 2.1.2         |
-| 2.0.0         | 3.0.0 - 3.0.1         |
-| 3.0.0+        | 3.1.0                 |
+To determine which version of the SDK works with your Eva's software version number (found on the Choreograph config page), please reference the following yaml configuration file `./version_compatibility.yaml` which maps the SDK version to the supported versions of Eva.
 
 For more information on how to install a particular version of the SDK, please refer to the [Installation](#Installation) section. We use the [Semver](https://semver.org/) version numbering stratergy.
 

@@ -1,6 +1,6 @@
-from packaging import version as p_version
-from typing import Dict, Union
-import re
+import yaml
+from semver import VersionInfo
+from typing import (Dict, Union)
 
 # This is replaced by .github/workflows/publish.yml when creating a release
 version = '%VERSION%'
@@ -9,48 +9,40 @@ version = '%VERSION%'
 __version__ = version if version.count('%') == 0 else '0.0.dev0'
 
 # Used for version compatibility.
-LATEST = 'latest'
-
-# Maps SDK version to first and last supported Eva versions.
-__EVA_VERSION_COMPATABILITY = {
-    '1.0.0': {
-        'first': '2.0.0',
-        'last': '2.1.2',
-    },
-    '2.0.0': {
-        'first': '3.0.0',
-        'last': '3.0.1',
-    },
-    '3.0.0': {
-        'first': '3.1.0',
-        'last': '3.1.0',
-    },
-    '4.0.0': {
-        'first': '3.0.0',
-        'last': LATEST
-    },
-    '4.1.0': {
-        'first': '3.0.0',
-        'last': LATEST
-    },
-}
+LATEST : str = 'LATEST'
 
 
-def sdk_is_compatible_with_robot(
+def sdk_is_compatible_with_robot(sdk_version: str, eva_version: str):
+    config = _read_version_compatability()
+    if config == None:
+        return 'unsupported version: could not read version config file'
+    return compare_version_compatability(sdk_version, eva_version, config)
+
+
+def _read_version_compatability() -> Union[Dict[str, Dict[str, str]], None]:
+    with open("version_compatability.yaml", 'r') as stream:
+        try:
+            version_compatability = yaml.safe_load(stream)
+        except yaml.YAMLError as err:
+            return None
+    return version_compatability
+
+
+def compare_version_compatability(
     sdk_version: str,
     eva_version: str,
-    version_compatability: Dict[str, Dict[str, str]] = __EVA_VERSION_COMPATABILITY
+    version_compatability: Dict[str, Dict[str, str]]
 ) -> str:
     """Checks to see if the given SDK version is compatible with the given software version of Eva,
     in order to decipher the compatibility, a config map is given. In the map, the key LATEST means
-    all and above. Versions are deemed to be legacy by `packaging` if they are not semver compliant.
+    all and above.
 
     Args:
-        sdk_version (str): semver formated version of the SDK
-        eva_version (str): semver formated version of Eva software
+        sdk_version (str): SemVer formated version of the SDK
+        eva_version (str): SemVer formated version of Eva software
         version_compatability (Dict[str, Dict[str, str]], optional):
             The version compatability map used to decipher whether versions are compatible,
-            see default for example. Defaults to __EVA_VERSION_COMPATABILITY.
+            see default for example.
 
     Returns:
         str: An error string if there is one, empty str implies given versions
@@ -61,40 +53,25 @@ def sdk_is_compatible_with_robot(
     except KeyError:
         return f'unsupported version: SDK version "{sdk_version}" does not exist'
 
-    eva = p_version.parse(eva_version)
-    if isinstance(eva, p_version.LegacyVersion):
-        version = extract_semver(eva_version)
-        if version == None:
-            return f'unsupported version: Eva version "{eva_version}" is not in semver'
-        eva = p_version.parse(eva_version)
+    min_eva_version = supported_eva['first_eva']
+    max_eva_version = supported_eva['last_eva']
 
-    min_eva_version = supported_eva['first']
-    max_requirement = supported_eva['last']
+    try:
+        eva_v = VersionInfo.parse(eva_version)
+        min_req_satisfied = eva_v.compare(min_eva_version) >= 0
+        if max_eva_version == LATEST:
+            max_req_satisfied = True
+        else:
+            max_req_satisfied = eva_v.compare(max_eva_version) <= 0
+    except ValueError as e:
+        return f'unsupported version: {e}'
 
-    if eva < p_version.parse(min_eva_version):
-        return f'unsupported version: SDK version "{sdk_version}" required minimum Eva version "{min_eva_version}"'
+    compatability_msg = f'SDK version "{sdk_version}" supports Eva versions "{min_eva_version}" to "{max_eva_version}" inclusive'
 
-    if max_requirement != LATEST and eva > p_version.parse(max_requirement):
-        return f'unsupported version: SDK version "{sdk_version}" exceeds the maximum supported Eva version "{max_requirement}"'
+    if not min_req_satisfied:
+        return f'unsupported version: minimum version requirement failure: {compatability_msg}'
+
+    if not max_req_satisfied:
+        return f'unsupported version: exceeded version requirement failure: {compatability_msg}'
 
     return ''
-
-
-def extract_semver(version: str) -> Union[str, None]:
-    """Takes a version and extracts the semver from it.
-    For example '3.1.1-dev-alpha1' would give '3.1.1'.
-    If no results are found, returns empty string.
-
-    Args:
-        version (str): the str to extract a semver from
-
-    Returns:
-        str: semver version stripped of all additional information,
-            or None if no results.
-    """
-    versionPattern = r'\d+(=?\.(\d+(=?\.(\d+)*)*)*)*'
-    regexMatcher = re.compile(versionPattern)
-    search_results = regexMatcher.search(version)
-    if search_results is None:
-        return None
-    return search_results.group(0)
