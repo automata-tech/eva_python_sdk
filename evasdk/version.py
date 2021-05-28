@@ -1,5 +1,5 @@
 import yaml
-from semver import VersionInfo # type: ignore
+from semver import VersionInfo  # type: ignore
 from typing import (Dict, Union)
 
 # This is replaced by .github/workflows/publish.yml when creating a release
