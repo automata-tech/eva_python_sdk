@@ -64,8 +64,7 @@ def compare_version_compatibility(
     except ValueError as e:
         return f'unsupported version: {e}'
 
-    compatibility_msg = f'SDK version "{sdk_version}" supports \
-        Eva versions "{eva_requirements.min}" to "{eva_requirements.max}" exclusive'
+    compatibility_msg = f'SDK version "{sdk_version}" supports Eva versions "{eva_requirements.min}" to "{eva_requirements.max}" exclusive'
 
     if not max_req_satisfied:
         return f'unsupported version: exceeded version requirement failure: {compatibility_msg}'
