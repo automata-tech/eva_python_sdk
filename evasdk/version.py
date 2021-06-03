@@ -1,4 +1,3 @@
-import yaml
 from semver import VersionInfo  # type: ignore
 from dataclasses import dataclass
 

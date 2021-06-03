@@ -10,7 +10,6 @@ zeroconf = "==0.27.1"
 dataclasses = "*"
 pytransform3d = "==1.2.1"
 semver = "*"
-pyyaml = "*"
 
 [dev-packages]
 flake8 = "*"
