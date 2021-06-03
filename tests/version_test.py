@@ -1,4 +1,4 @@
-from evasdk.version import (compare_version_compatability, EvaVersionRequirements)
+from evasdk.version import (compare_version_compatibility, EvaVersionRequirements)
 
 import pytest
 
@@ -59,7 +59,7 @@ import pytest
         'unsupported version: not-a-version is not valid SemVer string'
     ),
 ])
-def test_compare_version_compatability(sdk_version, eva_version, eva_version_support, want_error):
-    err = compare_version_compatability(eva_version, eva_version_support, sdk_version=sdk_version)
+def test_compare_version_compatibility(sdk_version, eva_version, eva_version_support, want_error):
+    err = compare_version_compatibility(eva_version, eva_version_support, sdk_version=sdk_version)
     assert err == want_error
 

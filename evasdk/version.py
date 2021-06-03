@@ -36,10 +36,10 @@ def sdk_is_compatible_with_robot(eva_version: str) -> str:
     """
     config = EvaVersionRequirements(min=_earliest_eva_supported, max=_latest_eva_supported)
 
-    return compare_version_compatability(eva_version, config)
+    return compare_version_compatibility(eva_version, config)
 
 
-def compare_version_compatability(
+def compare_version_compatibility(
     eva_version: str,
     eva_requirements: EvaVersionRequirements,
     sdk_version: str = __version__,
@@ -65,13 +65,13 @@ def compare_version_compatability(
     except ValueError as e:
         return f'unsupported version: {e}'
 
-    compatability_msg = f'SDK version "{sdk_version}" supports \
+    compatibility_msg = f'SDK version "{sdk_version}" supports \
         Eva versions "{eva_requirements.min}" to "{eva_requirements.max}" exclusive'
 
     if not max_req_satisfied:
-        return f'unsupported version: exceeded version requirement failure: {compatability_msg}'
+        return f'unsupported version: exceeded version requirement failure: {compatibility_msg}'
 
     if not min_req_satisfied:
-        return f'unsupported version: minimum version requirement failure: {compatability_msg}'
+        return f'unsupported version: minimum version requirement failure: {compatibility_msg}'
 
     return ''
