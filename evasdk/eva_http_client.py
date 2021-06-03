@@ -107,7 +107,7 @@ class EvaHTTPClient:
         if version_r.status_code != 200:
             return 'request error when fetching versions'
         robot_version = version_r.json()['robot']
-        err = sdk_is_compatible_with_robot(__version__, robot_version)
+        err = sdk_is_compatible_with_robot(robot_version)
         if err != '':
             return f'SDK compatibility error: {err}'
         return None
