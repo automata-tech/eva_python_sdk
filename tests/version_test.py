@@ -62,4 +62,3 @@ import pytest
 def test_compare_version_compatibility(sdk_version, eva_version, eva_version_support, want_error):
     err = compare_version_compatibility(eva_version, eva_version_support, sdk_version=sdk_version)
     assert err == want_error
-
