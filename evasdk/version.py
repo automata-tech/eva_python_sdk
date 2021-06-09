@@ -21,6 +21,9 @@ class EvaVersionRequirements:
     min: str = _earliest_eva_supported
     max: str = _latest_eva_supported
 
+    def message(self) -> str:
+        return f'supported Eva versions "{self.min}" to "{self.max}" exclusive'
+
 
 def sdk_is_compatible_with_robot(eva_version: str) -> str:
     """Checks to see if the current version is compatible with the given version of Eva.
@@ -32,7 +35,6 @@ def sdk_is_compatible_with_robot(eva_version: str) -> str:
         str: An error string if there is one, empty implies compatible.
     """
     eva_requirements = EvaVersionRequirements()
-
     return compare_version_compatibility(eva_version, eva_requirements)
 
 
@@ -63,6 +65,6 @@ def compare_version_compatibility(
         return str(e)
 
     if not max_req_satisfied or not min_req_satisfied:
-        return f'Eva is version "{eva_version}". Current SDK version is "{sdk_version}", which supports Eva versions "{eva_requirements.min}" to "{eva_requirements.max}" exclusive'
+        return f'Eva is version "{eva_version}". Current SDK version is "{sdk_version}", {eva_requirements.message()}'
 
     return ''

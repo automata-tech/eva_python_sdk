@@ -26,25 +26,25 @@ import pytest
         '1.0.0',
         '2.1.0',
         EvaVersionRequirements(min='2.0.0', max='2.1.0'),
-        'Eva is version "2.1.0". Current SDK version is "1.0.0", which supports Eva versions "2.0.0" to "2.1.0" exclusive'
+        'Eva is version "2.1.0". Current SDK version is "1.0.0", supported Eva versions "2.0.0" to "2.1.0" exclusive'
     ),
     (
         '1.0.0',
         '2.1.4',
         EvaVersionRequirements(min='2.0.0', max='2.1.0'),
-        'Eva is version "2.1.4". Current SDK version is "1.0.0", which supports Eva versions "2.0.0" to "2.1.0" exclusive'
+        'Eva is version "2.1.4". Current SDK version is "1.0.0", supported Eva versions "2.0.0" to "2.1.0" exclusive'
     ),
     (
         '3.0.0',
         '3.6.0',
         EvaVersionRequirements(min='3.1.0', max='3.1.0'),
-        'Eva is version "3.6.0". Current SDK version is "3.0.0", which supports Eva versions "3.1.0" to "3.1.0" exclusive'
+        'Eva is version "3.6.0". Current SDK version is "3.0.0", supported Eva versions "3.1.0" to "3.1.0" exclusive'
     ),
     (
         '3.0.0',
         '3.1.0-dev-tet',
         EvaVersionRequirements(min='3.1.0', max='3.1.0'),
-        'Eva is version "3.1.0-dev-tet". Current SDK version is "3.0.0", which supports Eva versions "3.1.0" to "3.1.0" exclusive'
+        'Eva is version "3.1.0-dev-tet". Current SDK version is "3.0.0", supported Eva versions "3.1.0" to "3.1.0" exclusive'
     ),
     (
         '1.0.0',
