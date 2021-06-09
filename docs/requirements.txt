@@ -4,4 +4,3 @@ requests
 websockets
 zeroconf
 dataclasses
-pytransform3d
