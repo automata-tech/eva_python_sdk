@@ -10,14 +10,15 @@ __version__ = version if version.count('%') == 0 else '0.0.dev0'
 
 @dataclass
 class EvaVersionRequirements:
-    _earliest_eva_supported = '3.0.0'
-    _latest_eva_supported = '5.0.0'
     """Supported software versions of the Eva.
 
     Args:
         min (str): minimum version of Eva's software.
         max (str): maximum version of Eva's software.
     """
+    _earliest_eva_supported = '3.0.0'
+    _latest_eva_supported = '5.0.0'
+
     min: str = _earliest_eva_supported
     max: str = _latest_eva_supported
 
