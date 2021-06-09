@@ -7,21 +7,19 @@ version = '%VERSION%'
 # Use the above version if it has been replaced, otherwise use a dev placeholder
 __version__ = version if version.count('%') == 0 else '0.0.dev0'
 
-# The supported versions of Eva's software.
-_earliest_eva_supported = '3.0.0'
-_latest_eva_supported = '5.0.0'
-
 
 @dataclass
 class EvaVersionRequirements:
+    _earliest_eva_supported = '3.0.0'
+    _latest_eva_supported = '5.0.0'
     """Supported software versions of the Eva.
 
     Args:
         min (str): minimum version of Eva's software.
         max (str): maximum version of Eva's software.
     """
-    min: str
-    max: str
+    min: str = _earliest_eva_supported
+    max: str = _latest_eva_supported
 
 
 def sdk_is_compatible_with_robot(eva_version: str) -> str:
@@ -33,9 +31,9 @@ def sdk_is_compatible_with_robot(eva_version: str) -> str:
     Returns:
         str: An error string if there is one, empty implies compatible.
     """
-    config = EvaVersionRequirements(min=_earliest_eva_supported, max=_latest_eva_supported)
+    eva_requirements = EvaVersionRequirements()
 
-    return compare_version_compatibility(eva_version, config)
+    return compare_version_compatibility(eva_version, eva_requirements)
 
 
 def compare_version_compatibility(
@@ -62,14 +60,9 @@ def compare_version_compatibility(
         min_req_satisfied = eva_v.compare(eva_requirements.min) >= 0
         max_req_satisfied = eva_v.compare(eva_requirements.max) < 0
     except ValueError as e:
-        return f'unsupported version: {e}'
+        return str(e)
 
-    compatibility_msg = f'SDK version "{sdk_version}" supports Eva versions "{eva_requirements.min}" to "{eva_requirements.max}" exclusive'
-
-    if not max_req_satisfied:
-        return f'unsupported version: exceeded version requirement failure: {compatibility_msg}'
-
-    if not min_req_satisfied:
-        return f'unsupported version: minimum version requirement failure: {compatibility_msg}'
+    if not max_req_satisfied or not min_req_satisfied:
+        return f'Eva is version "{eva_version}". Current SDK version is "{sdk_version}", which supports Eva versions "{eva_requirements.min}" to "{eva_requirements.max}" exclusive'
 
     return ''

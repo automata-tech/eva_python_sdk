@@ -109,7 +109,7 @@ class EvaHTTPClient:
         robot_version = version_r.json()['robot']
         err = sdk_is_compatible_with_robot(robot_version)
         if err != '':
-            return f'SDK compatibility error: {err}'
+            return err
         return None
 
 
@@ -135,7 +135,7 @@ class EvaHTTPClient:
 
         err = self._check_version_compatibility()
         if err is not None:
-            eva_error(f'auth_create_session error: using wrong SDK version {err}')
+            self.__logger.error(f'incompatible SDK: {err}')
 
         r = self.api_call_no_auth('POST', 'auth', payload=json.dumps({'token': self.api_token}))
 
