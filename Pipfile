@@ -13,6 +13,7 @@ semver = "*"
 types-requests = "*"
 types-dataclasses = "*"
 importlib-metadata = "*"
+typed-ast = "*"
 
 [dev-packages]
 flake8 = "*"
