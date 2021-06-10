@@ -14,6 +14,7 @@ types-requests = "*"
 types-dataclasses = "*"
 importlib-metadata = "*"
 typed-ast = "*"
+numpy = "*"
 
 [dev-packages]
 flake8 = "*"
