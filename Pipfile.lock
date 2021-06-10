@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c68780ddaacd218b6192c65b45433f685620aed3571bb12b4514ad8d34ed8850"
+            "sha256": "542013c85798b610fb2f4e6c85f9492710df11400fdf67481a605d013e1e172b"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -66,6 +66,14 @@
                 "sha256:d1f603952f0a71c9ab4e705754511e4e03b02565bc4cec7188ad6415ff534cd3"
             ],
             "version": "==0.1.7"
+        },
+        "importlib-metadata": {
+            "hashes": [
+                "sha256:833b26fb89d5de469b24a390e9df088d4e52e4ba33b01dc5e0e4f41b81a16c00",
+                "sha256:b142cc1dd1342f31ff04bb7d022492b09920cb64fed867cd3ea6f80fe3ebd139"
+            ],
+            "index": "pypi",
+            "version": "==4.5.0"
         },
         "kiwisolver": {
             "hashes": [
@@ -400,6 +408,14 @@
             ],
             "index": "pypi",
             "version": "==0.27.1"
+        },
+        "zipp": {
+            "hashes": [
+                "sha256:3607921face881ba3e026887d8150cca609d517579abe052ac81fc5aeffdbd76",
+                "sha256:51cb66cc54621609dd593d1787f286ee42a5c0adbb4b29abea5a63edc3e03098"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==3.4.1"
         }
     },
     "develop": {

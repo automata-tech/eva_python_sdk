@@ -12,6 +12,7 @@ pytransform3d = "==1.2.1"
 semver = "*"
 types-requests = "*"
 types-dataclasses = "*"
+importlib-metadata = "*"
 
 [dev-packages]
 flake8 = "*"
