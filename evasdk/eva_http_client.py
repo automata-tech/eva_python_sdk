@@ -108,7 +108,7 @@ class EvaHTTPClient:
             return 'request error when fetching versions'
         robot_version = version_r.json()['robot']
         err = sdk_is_compatible_with_robot(robot_version)
-        if err != None:
+        if err is not None:
             return err
         return None
 
@@ -130,12 +130,12 @@ class EvaHTTPClient:
             self.__last_renew = time.time()
 
 
-def auth_create_session(self):
-    self.__logger.debug('Creating session token')
+    def auth_create_session(self):
+        self.__logger.debug('Creating session token')
 
-    err = self._check_version_compatibility()
-    if err is not None:
-        self.__logger.error(f'incompatible SDK: {err}')
+        err = self._check_version_compatibility()
+        if err is not None:
+            self.__logger.error(f'incompatible SDK: {err}')
 
         r = self.api_call_no_auth('POST', 'auth', payload=json.dumps({'token': self.api_token}))
 
