@@ -1,5 +1,6 @@
 from semver import VersionInfo  # type: ignore
 from dataclasses import dataclass
+from typing import Union
 
 # This is replaced by .github/workflows/publish.yml when creating a release
 version = '%VERSION%'
@@ -26,7 +27,7 @@ class EvaVersionRequirements:
         return f'supported Eva versions "{self.min}" to "{self.max}" exclusive'
 
 
-def sdk_is_compatible_with_robot(eva_version: str) -> str:
+def sdk_is_compatible_with_robot(eva_version: str) -> Union[str, None]:
     """Checks to see if the current version is compatible with the given version of Eva.
 
     Args:
@@ -43,7 +44,7 @@ def compare_version_compatibility(
     eva_version: str,
     eva_requirements: EvaVersionRequirements,
     sdk_version: str = __version__,
-) -> str:
+) -> Union[str, None]:
     """Checks to see if the given SDK version is compatible with the given software version
     of Eva, in order to decipher the compatibility, we pass in a requirement configuration.
     Pass in sdk_version so that we aren't reliant upon __version__ and thus tests
@@ -68,4 +69,4 @@ def compare_version_compatibility(
     if not max_req_satisfied or not min_req_satisfied:
         return f'Eva is version "{eva_version}". Current SDK version is "{sdk_version}", {eva_requirements.message()}'
 
-    return ''
+    return None

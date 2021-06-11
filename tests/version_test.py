@@ -20,7 +20,7 @@ import pytest
         '1.0.0',
         '2.0.0',
         EvaVersionRequirements(min='2.0.0', max='2.1.0'),
-        ''
+        None
     ),
     (
         '1.0.0',
@@ -50,7 +50,7 @@ import pytest
         '1.0.0',
         '2.1.1-dev-test',
         EvaVersionRequirements(min='2.0.0', max='2.1.2'),
-        ''
+        None
     ),
     (
         '3.0.0',
