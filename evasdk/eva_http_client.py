@@ -427,7 +427,7 @@ class EvaHTTPClient:
         r = self.api_call_with_auth('POST', 'controls/collision_detection',
                                     json.dumps({'enabled': enabled, 'sensitivity': sensitivity}))
         if r.status_code != 200:
-            raise ValueError('control_collision_detection error')
+            eva_error('control_collision_detection error', r)
 
     def control_acknowledge_collision(self, wait_for_ready=True):
         """
@@ -435,7 +435,7 @@ class EvaHTTPClient:
         """
         r = self.api_call_with_auth('POST', 'controls/acknowledge_collision')
         if r.status_code != 204:
-            raise ValueError('control_acknowledge_collision error')
+            eva_error('control_acknowledge_collision error', r)
         elif wait_for_ready:
             time.sleep(0.1)
             self.control_wait_for(RobotState.READY)
