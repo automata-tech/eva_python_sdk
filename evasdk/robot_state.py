@@ -12,3 +12,4 @@ class RobotState(enum.Enum):
     UPDATING = 'updating'
     DISABLED = 'disabled'
     SHUTTING_DOWN = 'shutting_down'
+    COLLISION = 'collision'

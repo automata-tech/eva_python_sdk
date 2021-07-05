@@ -234,6 +234,14 @@ class Eva:
         self.__logger.debug('Eva.control_reset_errors called')
         return self.__http_client.control_reset_errors(wait_for_ready=wait_for_ready)
 
+    # Collision Detection
+    def collision_detection(self, on_off, setting):
+        self.__logger.debug('Eva.collision_detection called')
+        return self.__http_client.collision_detection(on_off=on_off, setting=setting)
+
+    def acknowledge_collision(self):
+        self.__logger.debug('Eva.acknowledge_collision called')
+        return self.__http_client.acknowledge_collision()
 
     # Calc
     def calc_forward_kinematics(self, joints, fk_type='both', tcp_config=None):

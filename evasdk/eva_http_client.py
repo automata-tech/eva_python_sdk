@@ -8,6 +8,7 @@ from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
 from .version import __version__
 
+
 # TODO add more granular logs using __logger
 # TODO lots of sleeps in control_* de to the robot state being updated slowly after starting an action, can this be improved?
 # TODO technically, the default request timeout of the API is 60s, should we update `request_timeout`?
@@ -23,6 +24,7 @@ class EvaHTTPClient:
      - request_timeout (float):         An *optional* time in seconds to wait for a request to resolve, defaults to 5
      - renew_period (int):              An *optional* time in seconds between renew session requests, defaults to 20 minutes
     """
+
     def __init__(self, host_ip, api_token, custom_logger=None, request_timeout=5, renew_period=60 * 20):
         self.host_ip = host_ip
         self.api_token = api_token
@@ -39,7 +41,6 @@ class EvaHTTPClient:
 
         if not 0 < renew_period < 30 * 60:
             raise ValueError('Session must be renewed before expiring (30 minutes)')
-
 
     def api_call_with_auth(self, *args, **kwargs):
 
@@ -110,7 +111,6 @@ class EvaHTTPClient:
         else:
             self.__last_renew = time.time()
 
-
     def auth_create_session(self):
         self.__logger.debug('Creating session token')
         r = self.api_call_no_auth('POST', 'auth', payload=json.dumps({'token': self.api_token}))
@@ -123,7 +123,6 @@ class EvaHTTPClient:
         self.__logger.debug('Created session token {}'.format(self.session_token))
         return self.session_token
 
-
     def auth_invalidate_session(self):
         self.__logger.debug('Invalidating session token {}'.format(self.session_token))
         # Bypass api_call_with_auth to avoid getting in a 401 loop
@@ -134,14 +133,12 @@ class EvaHTTPClient:
 
         self.session_token = None
 
-
     # DATA
     def data_snapshot(self):
         r = self.api_call_with_auth('GET', 'data/snapshot')
         if r.status_code != 200:
             eva_error('data_snapshot request error', r)
         return r.json()['snapshot']
-
 
     def data_snapshot_property(self, prop):
         snapshot = self.data_snapshot()
@@ -150,10 +147,8 @@ class EvaHTTPClient:
         else:
             eva_error('data_snapshot_property request error, property {} not found'.format(prop))
 
-
     def data_servo_positions(self):
         return self.data_snapshot_property('servos.telemetry.position')
-
 
     # USERS
     def users_get(self):
@@ -161,7 +156,6 @@ class EvaHTTPClient:
         if r.status_code != 200:
             eva_error('users_get request error', r)
         return r.json()
-
 
     # CONFIG
     def config_update(self, update):
@@ -173,13 +167,11 @@ class EvaHTTPClient:
             eva_error('config_update error', r)
         return r.json()
 
-
     # GPIO
     def gpio_set(self, pin, status):
         r = self._globals_edit(keys='outputs.' + pin, values=status)
         if r.status_code != 200:
             eva_error('gpio_set error', r)
-
 
     def gpio_get(self, pin, pin_type):
         if (pin not in ['a0', 'a1', 'd0', 'd1', 'd2', 'd3', 'ee_d0', 'ee_d1', 'ee_a0', 'ee_a1']):
@@ -187,7 +179,6 @@ class EvaHTTPClient:
         if (pin_type not in ['input', 'output']):
             eva_error('gpio_get error, pin_type must be "input" or "output"')
         return self.data_snapshot_property('global.{}s'.format(pin_type))[pin]
-
 
     def _globals_edit(self, keys, values):
         data = {'changes': []}
@@ -198,13 +189,11 @@ class EvaHTTPClient:
         data = json.dumps(data)
         return self.api_call_with_auth('POST', 'data/globals', data)
 
-
     def globals_edit(self, keys, values):
         r = self._globals_edit(keys, values)
         if r.status_code != 200:
             eva_error('globals_edit error', r)
         return r.json()
-
 
     # TOOLPATHS
     def toolpaths_list(self):
@@ -213,13 +202,11 @@ class EvaHTTPClient:
             eva_error('toolpaths_list error', r)
         return r.json()['toolpaths']
 
-
     def toolpaths_retrieve(self, ID):
         r = self.api_call_with_auth('GET', 'toolpaths/{}'.format(ID))
         if r.status_code != 200:
             eva_error('toolpaths_retrieve error for ID {}'.format(ID), r)
         return r.json()['toolpath']
-
 
     def toolpaths_save(self, name, toolpathRepr):
         toolpaths = self.toolpaths_list()
@@ -245,18 +232,15 @@ class EvaHTTPClient:
                 toolpathId = r.json()['toolpath']['id']
             return toolpathId
 
-
     def toolpaths_use_saved(self, toolpathId):
         r = self.api_call_with_auth('POST', 'toolpaths/{}/use'.format(toolpathId), timeout=300)
         if r.status_code != 200:
             eva_error('toolpaths_use_saved error', r)
 
-
     def toolpaths_use(self, toolpathRepr):
         r = self.api_call_with_auth('POST', 'toolpath/use', json.dumps({'toolpath': toolpathRepr}), timeout=300)
         if r.status_code != 200:
             eva_error('toolpaths_use error', r)
-
 
     def toolpaths_delete(self, toolpathId):
         r = self.api_call_with_auth('DELETE', 'toolpaths/{}'.format(toolpathId))
@@ -270,24 +254,20 @@ class EvaHTTPClient:
             eva_error('lock_status error', r)
         return r.json()
 
-
     def lock_lock(self):
         r = self.api_call_with_auth('POST', 'controls/lock')
         if r.status_code != 200:
             eva_error('lock_lock error', r)
-
 
     def lock_renew(self):
         r = self.api_call_with_auth('PUT', 'controls/lock')
         if r.status_code != 200:
             eva_error('lock_renew error', r)
 
-
     def lock_unlock(self):
         r = self.api_call_with_auth('DELETE', 'controls/lock')
         if r.status_code != 200:
             eva_error('lock_unlock error', r)
-
 
     def lock_wait_for(self, interval_sec=2, timeout=None):
         if self.lock_status()['owner'] == 'you':
@@ -310,7 +290,6 @@ class EvaHTTPClient:
 
             time.sleep(interval_sec)
 
-
     # CONTROLS/STATE
     def control_wait_for(self, goal, interval_sec=1):
         """
@@ -323,11 +302,12 @@ class EvaHTTPClient:
 
             if robot_state == RobotState.ERROR:
                 eva_error('Eva is in error control state')
+            if robot_state == RobotState.COLLISION:
+                eva_error('Eva has encountered a collision. Please acknowledge collision.')
             elif robot_state == parsed_goal:
                 return
 
             time.sleep(interval_sec)
-
 
     def control_wait_for_ready(self):
         """
@@ -335,24 +315,21 @@ class EvaHTTPClient:
         """
         self.control_wait_for(RobotState.READY)
 
-
     def control_home(self, wait_for_ready=True):
         r = self.api_call_with_auth('POST', 'controls/home')
         if r.status_code != 200:
             eva_error('control_home error', r)
         elif wait_for_ready:
-            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
+            time.sleep(0.1)  # sleep for small period to avoid race condition between updating cache and reading state
             self.control_wait_for(RobotState.READY)
-
 
     def control_run(self, loop=1, wait_for_ready=True, mode='teach'):
         r = self.api_call_with_auth('POST', 'controls/run', json.dumps({'mode': mode, 'loop': loop}))
         if r.status_code != 200:
             eva_error('control_run error', r)
         elif wait_for_ready:
-            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
+            time.sleep(0.1)  # sleep for small period to avoid race condition between updating cache and reading state
             self.control_wait_for(RobotState.READY)
-
 
     def control_go_to(self, joints, wait_for_ready=True, max_speed=None, time_sec=None, mode='teach'):
         body = {'joints': joints, 'mode': mode}
@@ -365,54 +342,70 @@ class EvaHTTPClient:
         if r.status_code != 200:
             eva_error('control_go_to error', r)
         elif wait_for_ready:
-            time.sleep(0.1)     # sleep for small period to avoid race condition between cache updating and reading state
+            time.sleep(0.1)  # sleep for small period to avoid race condition between cache updating and reading state
             self.control_wait_for(RobotState.READY)
-
 
     def control_pause(self, wait_for_paused=True):
         r = self.api_call_with_auth('POST', 'controls/pause')
         if r.status_code != 200:
             eva_error('control_pause error', r)
         elif wait_for_paused:
-            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
+            time.sleep(0.1)  # sleep for small period to avoid race condition between updating cache and reading state
             self.control_wait_for(RobotState.PAUSED)
-
 
     def control_resume(self, wait_for_ready=True):
         r = self.api_call_with_auth('POST', 'controls/resume')
         if r.status_code != 200:
             eva_error('control_resume error', r)
         elif wait_for_ready:
-            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
+            time.sleep(0.1)  # sleep for small period to avoid race condition between updating cache and reading state
             self.control_wait_for(RobotState.READY)
-
 
     def control_cancel(self, wait_for_ready=True):
         r = self.api_call_with_auth('POST', 'controls/cancel')
         if r.status_code != 200:
             eva_error('control_cancel error', r)
         elif wait_for_ready:
-            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
+            time.sleep(0.1)  # sleep for small period to avoid race condition between updating cache and reading state
             self.control_wait_for(RobotState.READY)
-
 
     def control_stop_loop(self, wait_for_ready=True):
         r = self.api_call_with_auth('POST', 'controls/stop_loop')
         if r.status_code != 200:
             eva_error('control_stop_loop error', r)
         elif wait_for_ready:
-            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
+            time.sleep(0.1)  # sleep for small period to avoid race condition between updating cache and reading state
             self.control_wait_for(RobotState.READY)
-
 
     def control_reset_errors(self, wait_for_ready=True):
         r = self.api_call_with_auth('POST', 'controls/reset_errors')
         if r.status_code != 204:
             eva_error('control_reset_errors error', r)
         elif wait_for_ready:
-            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
+            time.sleep(0.1)  # sleep for small period to avoid race condition between updating cache and reading state
             self.control_wait_for(RobotState.READY)
 
+    # COLLISION DETECTION
+    def collision_detection(self, on_off, setting):
+        """
+        Allows toggling on/off and setting the sensitivity of collision detection
+        """
+        if setting not in ['low', 'medium', 'high']:
+            eva_error('collision_detection error, no such sensitivity ' + setting)
+        if on_off not in [True, False]:
+            eva_error('collision_detection error, must be True/False')
+        r = self.api_call_with_auth('POST', 'controls/collision_detection',
+                                    json.dumps({'enabled': on_off, 'sensitivity': setting}))
+        if r.status_code != 200:
+            eva_error('collision_detection error', r)
+
+    def acknowledge_collision(self):
+        """
+        When a collision is encountered, it must be acknowledged before the robot can be reset
+        """
+        r = self.api_call_with_auth('POST', 'controls/acknowledge_collision')
+        if r.status_code != 204:
+            eva_error('acknowledge_collision error', r)
 
     # CALCULATIONS
     def calc_forward_kinematics(self, joints, fk_type='both', tcp_config=None):
@@ -476,7 +469,6 @@ class EvaHTTPClient:
             eva_error('inverse_kinematics error', r)
         return r.json()
 
-
     def calc_nudge(self, joints, direction, offset, tcp_config=None):
         body = {'joints': joints, 'direction': direction, 'offset': offset}
         if tcp_config is not None:
@@ -488,7 +480,6 @@ class EvaHTTPClient:
             eva_error('calc_nudge error', r)
         return r.json()['nudge']['joints']
 
-
     def calc_pose_valid(self, joints, tcp_config=None):
         body = {'joints': joints}
         if tcp_config is not None:
@@ -499,7 +490,6 @@ class EvaHTTPClient:
         if r.status_code != 200:
             eva_error('calc_pose_valid error', r)
         return r.json()['pose']['valid']
-
 
     def calc_rotate(self, joints, axis, offset, tcp_config=None):
         body = {'joints': joints, 'axis': axis, 'offset': offset}
