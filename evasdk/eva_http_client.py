@@ -426,7 +426,7 @@ class EvaHTTPClient:
             raise ValueError('collision_detection error, must be True/False')
         r = self.api_call_with_auth('POST', 'controls/collision_detection',
                                     json.dumps({'enabled': enabled, 'sensitivity': sensitivity}))
-        if r.status_code != 200:
+        if r.status_code != 204:
             eva_error('control_collision_detection error', r)
 
     def control_acknowledge_collision(self, wait_for_ready=True):
