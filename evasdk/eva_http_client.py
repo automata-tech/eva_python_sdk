@@ -437,7 +437,7 @@ class EvaHTTPClient:
         if r.status_code != 204:
             eva_error('control_acknowledge_collision error', r)
         elif wait_for_ready:
-            time.sleep(0.1)
+            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
             self.control_wait_for(RobotState.READY)
 
     # CALCULATIONS
