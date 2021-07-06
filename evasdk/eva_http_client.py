@@ -8,7 +8,6 @@ from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
 from .version import __version__
 
-
 # TODO add more granular logs using __logger
 # TODO lots of sleeps in control_* de to the robot state being updated slowly after starting an action, can this be improved?
 # TODO technically, the default request timeout of the API is 60s, should we update `request_timeout`?
@@ -310,6 +309,7 @@ class EvaHTTPClient:
                     eva_error('lock_wait_for timeout triggered')
 
             time.sleep(interval_sec)
+
 
     # CONTROLS/STATE
     def control_wait_for(self, goal, interval_sec=1):
