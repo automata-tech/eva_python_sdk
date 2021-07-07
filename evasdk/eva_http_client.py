@@ -323,6 +323,8 @@ class EvaHTTPClient:
 
             if robot_state == RobotState.ERROR:
                 eva_error('Eva is in error control state')
+            if robot_state == RobotState.COLLISION:
+                eva_error('Eva has encountered a collision. Please acknowledge collision.')
             elif robot_state == parsed_goal:
                 return
 
@@ -413,6 +415,30 @@ class EvaHTTPClient:
             time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
             self.control_wait_for(RobotState.READY)
 
+    # COLLISION DETECTION
+    def control_configure_collision_detection(self, enabled, sensitivity):
+        """
+        Allows toggling on/off and setting the sensitivity of collision detection
+        """
+        if sensitivity not in ['low', 'medium', 'high']:
+            raise ValueError('collision_detection error, no such sensitivity ' + sensitivity)
+        if enabled not in [True, False]:
+            raise ValueError('collision_detection error, must be True/False')
+        r = self.api_call_with_auth('POST', 'controls/collision_detection',
+                                    json.dumps({'enabled': enabled, 'sensitivity': sensitivity}))
+        if r.status_code != 204:
+            eva_error('control_collision_detection error', r)
+
+    def control_acknowledge_collision(self, wait_for_ready=True):
+        """
+        When a collision is encountered, it must be acknowledged before the robot can be reset
+        """
+        r = self.api_call_with_auth('POST', 'controls/acknowledge_collision')
+        if r.status_code != 204:
+            eva_error('control_acknowledge_collision error', r)
+        elif wait_for_ready:
+            time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
+            self.control_wait_for(RobotState.READY)
 
     # CALCULATIONS
     def calc_forward_kinematics(self, joints, fk_type='both', tcp_config=None):
