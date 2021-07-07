@@ -4,9 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+types-requests = "*"
 requests = "*"
 websockets = "*"
-zeroconf = "==0.27.1"
+zeroconf = "*"
+types-dataclasses = "*"
 dataclasses = "*"
 pytransform3d = "==1.2.1"
 
