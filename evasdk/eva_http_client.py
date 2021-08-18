@@ -447,7 +447,16 @@ class EvaHTTPClient:
             self.control_wait_for(RobotState.READY)
 
     # CALCULATIONS
-    def calc_forward_kinematics(self, joints, fk_type='both', tcp_config=None):
+    def __check_calculation(self, r, name, kind):
+        res = r.json()
+        if res[kind]['result'] != 'success':
+            eva_error(f'{name} error: {res[kind]["error"]}')
+        return res[kind]
+
+    def calc_forward_kinematics(self, joints, fk_type=None, tcp_config=None):
+        if fk_type is not None:
+            self.__logger.warn('deprecated fk_type keyword, now all FK data is being returned')
+
         body = {'joints': joints}
         if tcp_config is not None:
             body['tcp_config'] = tcp_config
@@ -456,13 +465,7 @@ class EvaHTTPClient:
 
         if r.status_code != 200:
             eva_error('calc_forward_kinematics error', r)
-
-        if (fk_type == 'position') or (fk_type == 'orientation'):
-            return r.json()['fk'][fk_type]
-        elif (fk_type == 'both'):
-            return r.json()['fk']
-        else:
-            eva_error('calc_forward_kinematics invalid fk_type {}'.format(fk_type), r)
+        return self.__check_calculation(r, 'calc_forward_kinematics', 'fk')
 
     def __ensure_pyt3d(self):
         if not has_pyt3d:
@@ -523,8 +526,7 @@ If you require this feature, just install it yourself (e.g. `pip3 install pytran
 
         if r.status_code != 200:
             eva_error('inverse_kinematics error', r)
-        return r.json()
-
+        return self.__check_calculation(r, 'calc_inverse_kinematics', 'ik')['joints']
 
     def calc_nudge(self, joints, direction, offset, tcp_config=None):
         body = {'joints': joints, 'direction': direction, 'offset': offset}
@@ -535,8 +537,7 @@ If you require this feature, just install it yourself (e.g. `pip3 install pytran
 
         if r.status_code != 200:
             eva_error('calc_nudge error', r)
-        return r.json()['nudge']['joints']
-
+        return self.__check_calculation(r, 'calc_nudge', 'nudge')['joints']
 
     def calc_pose_valid(self, joints, tcp_config=None):
         body = {'joints': joints}
@@ -559,4 +560,4 @@ If you require this feature, just install it yourself (e.g. `pip3 install pytran
 
         if r.status_code != 200:
             eva_error('calc_rotate error', r)
-        return r.json()
+        return self.__check_calculation(r, 'calc_rotate', 'rotate')['joints']
