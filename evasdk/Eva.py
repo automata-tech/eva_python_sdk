@@ -63,53 +63,165 @@ class Eva:
 
     # Global
     def versions(self):
+        """Gets the version of the API server and the Choreograph version installed on the robot.
+
+        Returns:
+            dict: API server version, robot choreograph version
+
+        Example:
+            >>> print(eva.versions())
+            {'APIs': ['v1'], 'robot': '4.10.0'}
+        """
         self.__logger.debug('Eva.versions called')
         return self.__http_client.api_versions()
 
     def name(self):
+        """Gets the name of the robot.
+
+        Returns:
+            dict: robot name
+
+        Example:
+            >>> print(eva.name())
+            {'name': 'Cunning Moscow Baker'}
+        """
         self.__logger.debug('Eva.name called')
         return self.__http_client.name()
 
     # Auth
     def auth_renew_session(self):
+        """Renews the authenticated session token.
+
+        Note:
+            Should not need to be called as it is handled automatically whenever an api_call_with_auth() is used.
+
+        Returns:
+            None
+
+        Raises:
+            EvaError: If status code on API request is not 204
+        """
         self.__logger.debug('Eva.auth_renew_session called')
         return self.__http_client.auth_renew_session()
 
 
     def auth_create_session(self):
+        """Creates a session token token.
+
+        Note:
+            Should not need to be called as it is handled
+
+        Returns:
+            str: session_token
+
+        Raises:
+            EvaError: If status code on API request is not 200
+
+        Example:
+            >>> print(eva.auth_create_session())
+            c8c3a36b-4fce-4df2-b795-6bf5629ff48d
+        """
         self.__logger.debug('Eva.auth_create_session called')
         return self.__http_client.auth_create_session()
 
 
     def auth_invalidate_session(self):
+        """Deletes/invalidates the API session token.
+
+        Raises:
+            EvaError: If status code on API request is not 204
+
+        Returns:
+            None
+        """
         self.__logger.debug('Eva.auth_invalidate_session called')
         return self.__http_client.auth_invalidate_session()
 
 
     # Data
     def data_snapshot(self):
+        """Returns a nested dictionary of the status of the robot.
+
+        Returns:
+            dict: Multiple nested dictionary
+
+        Raises:
+            EvaError: If status code on API request is not 200
+        """
         self.__logger.debug('Eva.data_snapshot called')
         return self.__http_client.data_snapshot()
 
 
     def data_snapshot_property(self, prop):
+        """Returns a property from the data_snapshot dict.
+
+        Args:
+            prop: property within the data_snapshot() nested dictionary
+
+        Returns:
+            dict: dictionary object specified
+
+        Raises:
+            EvaError: If the property is not found within the data_snapshot() dict
+
+        Example:
+            >>> print(eva.data_snapshot_property('control'))
+            {'loop_count': 0, 'loop_target': 0, 'run_mode': 'not_running', 'state': 'error'}
+        """
         self.__logger.debug('Eva.data_snapshot_property called')
         return self.__http_client.data_snapshot_property(prop)
 
 
     def data_servo_positions(self):
+        """Returns the servo positions of each joint.
+
+        Note:
+            This function uses the data_snapshot_property() to return the servo positions
+            from the data_snapshot() function.
+
+        Returns:
+            list: 6 position list containing joint angles in RADIANS
+
+        Raises:
+            EvaError: If the property is not found within the data_snapshot() dict
+
+        Example:
+            >>> print(eva.data_servo_positions())
+            [-0.004506206139, 0.20661434531, -0.441608190, -0.00038350690, -1.9729512929, 2.1852223873]
+        """
         self.__logger.debug('Eva.data_servo_positions called')
         return self.__http_client.data_servo_positions()
 
 
     # Users
     def users_get(self):
+        """Returns the list within a dictionary of users.
+
+        Returns:
+            dict: a list of dictionaries containing user id, email, and role.
+
+        Raises:
+            EvaError: If status code on API request is not 200
+
+        Example:
+            >>> print(eva.users_get())
+            {'users': [{'id': 1, 'email': 'test@automata.tech', 'role': 'admin'},
+             {'id': 2, 'email': 'euan@automata.tech', 'role': 'user'}]}
+        """
         self.__logger.debug('Eva.users_get called')
         return self.__http_client.users_get()
 
 
     # Config
     def config_update(self, update):
+        """Applies choreograph update to robot.
+
+        Args:
+            update: AUT / update file
+
+        Raises:
+            EvaError: If status code on API request is not 200
+        """
         self.__logger.debug('Eva.config_update called')
         return self.__http_client.config_update(update)
 
