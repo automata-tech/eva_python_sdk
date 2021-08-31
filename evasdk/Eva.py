@@ -219,6 +219,9 @@ class Eva:
         Args:
             update: AUT / update file
 
+        Returns:
+            None
+
         Raises:
             EvaError: If status code on API request is not 200
         """
@@ -228,44 +231,173 @@ class Eva:
 
     # GPIO
     def gpio_set(self, pin, status):
+        """Changes the state of the output pin
+
+        Args:
+            pin: output pin name that is being changed
+            status: state requested.
+
+        Returns:
+            None
+
+        Raises:
+            EvaError: If status code on API request is not 200
+
+        Example:
+            >>> robot.gpio_get('d0', 'output')
+            False
+            >>> robot.gpio_set('d0', True)
+            >>> robot.gpio_get('d0', 'output')
+            True
+        """
         self.__logger.debug('Eva.gpio_set called')
         return self.__http_client.gpio_set(pin, status)
 
 
     def gpio_get(self, pin, pin_type):
+        """Gets the state of output/input pin
+
+        Args:
+            pin: name of the pin
+            pin_type: input or output ping type
+
+        Returns:
+            string: pin status
+
+        Raises:
+            EvaError: gpio_get error, no such pin
+            EvaError: gpio_get error, pin_type must be "input" or "output"
+
+        Example:
+            >>> robot.gpio_get('d0', 'output')
+            True
+            >>> robot.gpio_get('a0', 'input')
+            0.018
+        """
         self.__logger.debug('Eva.gpio_get called')
         return self.__http_client.gpio_get(pin, pin_type)
 
     def globals_edit(self, keys, values):
+        """Allows editing of exposed global values
+
+        Note:
+            This is not used directly within the SDK.
+
+        Args:
+            keys: key name of the value to change
+            values: value to change global to
+
+        Returns:
+            dict: JSON dictionary of the HTTP request
+
+        Raises:
+            EvaError: If status code on API request is not 200
+        """
         self.__logger.debug('Eva.globals_edit called')
         return self.__http_client.globals_edit(keys, values)
 
     # Toolpaths
     def toolpaths_list(self):
+        """Gets a list of saved toolpaths on the robot
+
+        Returns:
+            list: a list of dictionaries containing toolpath id, name, and hash.
+
+        Raises:
+            EvaError: If status code on API request is not 200
+
+        Example:
+            >>> print(eva.toolpaths_list())
+            [{'id': 1, 'name': 'test_1', 'hash': 'cacc3c5ca8ada838ee86f703487151edcbae4b9177cf138c8908d12b614b6313'},
+            {'id': 2, 'name': 'test_2', 'hash': '9bedb2a17cfc965d8a208c2697fee1a5455c558ec8e5aadb2ce4b20dfa016363'}]
+        """
         self.__logger.debug('Eva.toolpaths_list called')
         return self.__http_client.toolpaths_list()
 
 
     def toolpaths_retrieve(self, ID):
+        """Retrieves the toolpath specified in JSON format
+
+        Args:
+            ID: id integer of the toolpath called upon
+
+        Returns:
+            dict: JSON formatted dictionary containing all toolpath data
+
+        Raises:
+            EvaError: If status code on API request is not 200
+
+        Example:
+            >>> print(eva.toolpath_retrieve(1))
+            {'id': 1, 'name': 'test_1', 'hash': 'cacc3c5ca8ada838ee86f703487151edcbae4b9177cf138c8908d12b614b6313',
+            'toolpath': {'metadata': {'version': 2, 'default_max_speed': 0.25, 'next_label_id': 2,
+            'analog_modes': {'i0': 'voltage', 'i1': 'voltage', 'o0': 'voltage', 'o1': 'voltage'}, 'payload': 0},
+            'waypoints': [{'joints': [0, 0.5235988, -1.7453293, 0, -1.9198622, 0], 'label_id': 1}],
+            'timeline': [{'type': 'home', 'waypoint_id': 0}]}}
+        """
         self.__logger.debug('Eva.toolpaths_retrieve called')
         return self.__http_client.toolpaths_retrieve(ID)
 
 
     def toolpaths_save(self, name, toolpath):
+        """Saves a toolpath file to the robot
+
+        Args:
+            name: string to assign to the toolpath name
+            toolpath: JSON dict formatted toolpath
+
+        Returns:
+            toolpathId: toolpath ID number on the toolpaths_list() if successful
+
+        Raises:
+            EvaError: If status code on API request is not 200
+        """
         self.__logger.debug('Eva.toolpaths_save called')
         return self.__http_client.toolpaths_save(name, toolpath)
 
 
     def toolpaths_use_saved(self, toolpathId):
+        """Sets the active toolpath from the toolpaths_list
+
+        Args:
+            toolpathId: id integer of the toolpath called upon
+
+        Returns:
+            None
+
+        Raises:
+            EvaError: If status code on API request is not 200
+        """
         self.__logger.debug('Eva.toolpaths_use_saved called')
         return self.__http_client.toolpaths_use_saved(toolpathId)
 
 
     def toolpaths_use(self, toolpathRepr):
+        """Sets the toolpath passed to it as the active toolpath
+
+        Args:
+            toolpathRepr: JSON formatted dictionary containing all toolpath data
+
+        Returns:
+            None
+
+        Raises:
+            EvaError: If status code on API request is not 200
+
+        Note:
+            This does not save the toolpath to the toolpaths_list
+        """
         self.__logger.debug('Eva.toolpaths_use called')
         return self.__http_client.toolpaths_use(toolpathRepr)
 
     def toolpaths_delete(self, toolpathId):
+        """Deletes a toolpath specified from the toolpaths stored on the robot
+            Args:
+                ID: id integer of the toolpath from the toolpaths list
+
+            Returns:
+                dict: JSON formatted dictionary containing all toolpath data
+        """
         self.__logger.debug('Eva.toolpaths_delete called')
         return self.__http_client.toolpaths_delete(toolpathId)
 
