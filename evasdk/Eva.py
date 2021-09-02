@@ -62,13 +62,14 @@ class Eva:
         """Makes a direct API call to EVA to endpoints that require authentication
 
         Note:
-            This is used within the SDK and will unlikely be used externally
+            This is used within the SDK and will unlikely be used externally.
+            You should not need to use this at all.
 
         Args:
             method: GET, POST, DELETE, etc
             path: URL path of API endpoint
             payload: dict payload
-            headers: set automatically within EvaHTTPClient
+            headers: option to add additional headers
             timeout: time to wait in seconds before raising an exception
             version: API server version
 
@@ -90,13 +91,14 @@ class Eva:
         """Makes a direct API call to EVA to endpoints that do not require authentication
 
         Note:
-            This is used within the SDK and will unlikely be used externally
+            This is used within the SDK and will unlikely be used externally.
+            You should not need to use this at all.
 
         Args:
             method: GET, POST, DELETE, etc
             path: URL path of API endpoint
             payload: dict payload
-            headers: set automatically within EvaHTTPClient
+            headers: option to add additional headers
             timeout: time to wait in seconds before raising an exception
             version: API server version
 
@@ -117,7 +119,7 @@ class Eva:
 
     # Global
     def versions(self):
-        """Gets the version of the API server and the Choreograph version installed on the robot.
+        """Gets the API versions supported by the server and the Choreograph version installed on the robot.
 
         Returns:
             dict: API server version, robot choreograph version
@@ -163,7 +165,7 @@ class Eva:
         """Creates a session token token.
 
         Note:
-            Should not need to be called as it is handled
+            Should not need to be called as it is handled internally
 
         Returns:
             str: session_token
@@ -227,14 +229,14 @@ class Eva:
 
 
     def data_servo_positions(self):
-        """Returns the servo positions of each joint.
+        """Returns the radian value of each joint angle.
 
         Note:
             This function uses the data_snapshot_property() to return the servo positions
             from the data_snapshot() function.
 
         Returns:
-            list: 6 position list containing joint angles in RADIANS
+            list: list of 6 joint angles in radians
 
         Raises:
             EvaError: If the property is not found within the data_snapshot() dict
@@ -268,7 +270,7 @@ class Eva:
 
     # Config
     def config_update(self, update):
-        """Applies choreograph update to robot.
+        """Applies choreograph update file to robot.
 
         Args:
             update: AUT / update file
@@ -313,10 +315,10 @@ class Eva:
 
         Args:
             pin: name of the pin
-            pin_type: input or output ping type
+            pin_type: input or output pin type
 
         Returns:
-            string: pin status
+            bool or float: depending on pin_type
 
         Raises:
             EvaError: gpio_get error, no such pin
@@ -342,7 +344,7 @@ class Eva:
             values: value to change global to
 
         Returns:
-            dict: JSON dictionary of the HTTP request
+            dict: of the data requested
 
         Raises:
             EvaError: If status code on API request is not 200
@@ -370,13 +372,13 @@ class Eva:
 
 
     def toolpaths_retrieve(self, ID):
-        """Retrieves the toolpath specified in JSON format
+        """Retrieves the toolpath using toolpath ID on the robot
 
         Args:
             ID: id integer of the toolpath called upon
 
         Returns:
-            dict: JSON formatted dictionary containing all toolpath data
+            dict: of the toolpath requested
 
         Raises:
             EvaError: If status code on API request is not 200
@@ -398,7 +400,7 @@ class Eva:
 
         Args:
             name: string to assign to the toolpath name
-            toolpath: JSON dict formatted toolpath
+            toolpath: dictionary formatted toolpath data
 
         Returns:
             toolpathId: toolpath ID number on the toolpaths_list() if successful
@@ -427,10 +429,10 @@ class Eva:
 
 
     def toolpaths_use(self, toolpathRepr):
-        """Sets the toolpath passed to it as the active toolpath
+        """Sets the toolpath passed to it as the active toolpath which can be homed, run, paused, and stopped.
 
         Args:
-            toolpathRepr: JSON formatted dictionary containing all toolpath data
+            toolpathRepr: dictionary containing all toolpath data
 
         Returns:
             None
@@ -446,11 +448,12 @@ class Eva:
 
     def toolpaths_delete(self, toolpathId):
         """Deletes a toolpath specified from the toolpaths stored on the robot
+
         Args:
             ID: id integer of the toolpath from the toolpaths list
 
         Returns:
-            dict: JSON formatted dictionary containing all toolpath data
+            None
         """
         self.__logger.debug('Eva.toolpaths_delete called')
         return self.__http_client.toolpaths_delete(toolpathId)
@@ -464,7 +467,7 @@ class Eva:
             EvaError: If status code on API request is not 200
 
         Returns:
-            dict: containing owner & status of the lock
+            dict: containing lock user/owner & status of the lock
 
         Example:
             >>> eva.lock_status()
@@ -591,7 +594,7 @@ class Eva:
             Teach mode is active by default, automatic mode must be specified for normal operation
 
         Args:
-            loop: integer, number of loops to run toolpath for
+            loop: integer, number of loops to run toolpath for. 0 loops for continuous operation.
             wait_for_ready: boolean value to wait for the robot state to enter READY before proceeding
             mode: 'teach' or 'automatic', set to automatic for normal operation
 
