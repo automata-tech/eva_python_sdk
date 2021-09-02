@@ -1,0 +1,26 @@
+name: Build documentation
+on: [push, pull_request]
+  # push:
+  #   tags:
+  #     - 'v*.*.*'
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Get incoming tags
+        run: export GIT_TAG=`echo $(git describe --tags --abbrev=0)`
+      - name: Create docs branch
+        run: git checkout -b docs-${GIT_TAG}
+      - name: Install dependencies
+        run: pip install Sphinx ; pip install m2r2
+      - name: Update the docs
+        run: cd docs ; make api_docs
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: Tom Allpress
+          author_email: tom@autaomta.tech
+          message: 'updating documentation'
+          add: '*.rst'
