@@ -11,8 +11,6 @@ jobs:
         uses: actions/checkout@v2
       # - name: Get incoming tags
       #   run: echo "{GIT_TAG}={`echo $(git describe --tags --abbrev=0)`}" >> $GITHUB_ENV
-      - name: Create docs branch
-        run: git checkout -b docs-v1.1.1
       - name: Install dependencies
         run: pip install Sphinx ; pip install m2r2
       - name: Update the docs
@@ -24,6 +22,5 @@ jobs:
           author_email: tom@autaomta.tech
           message: 'updating documentation'
           add: '*.rst'
-          push: false
-      - name: Push
-        run: git push origin docs-v1.1.1
+          tag: 'docs-v1.0.0 --force'
+          push: true
