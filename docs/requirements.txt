@@ -1,0 +1,6 @@
+m2r2
+pytransform3d
+requests
+websockets
+zeroconf
+dataclasses
