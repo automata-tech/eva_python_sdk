@@ -52,6 +52,14 @@ evasdk.eva\_ws module
    :undoc-members:
    :show-inheritance:
 
+evasdk.example module
+---------------------
+
+.. automodule:: evasdk.example
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 evasdk.helpers module
 ---------------------
 
