@@ -3,8 +3,7 @@ name: Build documentation
 on:
   push:
     tags:
-      - 'test-*'
-      # - 'v*.*.*'
+      - 'v*.*.*'
 
 jobs:
   docs:
@@ -16,20 +15,16 @@ jobs:
         uses: actions/checkout@v2
       - name: Get incoming tags
         run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
-      - name: Test
+      - name: Create a new branch for docs
+        run: git checkout --orphan docs/$GIT_TAG
+      - name: Update the docs
         run: |
-          echo $GIT_TAG
-          echo ${{ env.GIT_TAG }}
-      # - name: Create a new branch for docs
-      #   run: git checkout --orphan docs/v1.0.2
-      # - name: Update the docs
-      #   run: |
-      #     cd docs
-      #     make api_docs
-      # - name: Setup git agent and commit changes
-      #   run: |
-      #     git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/automata-tech/eva_python_sdk
-      #     git config --global user.email "docs@automata.tech"
-      #     git config --global user.name "docs-bot"
-      #     git commit -am 'docs'
-      #     git push origin docs/v1.0.2 -f
+          cd docs
+          make api_docs
+      - name: Setup git agent and commit changes
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/automata-tech/eva_python_sdk
+          git config --global user.email "docs@automata.tech"
+          git config --global user.name "docs-bot"
+          git commit -am 'docs'
+          git push origin docs/$GIT_TAG -f
