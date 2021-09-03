@@ -1,9 +1,9 @@
 name: Build documentation
 
-on: [push, pull_request]
-  # push:
-  #   tags:
-  #     - 'v*.*.*'
+on:
+  push:
+    tags:
+      - 'v*.*.*'
 
 jobs:
   docs:
@@ -13,18 +13,22 @@ jobs:
         run: pip install Sphinx ; pip install m2r2
       - name: Checkout repo
         uses: actions/checkout@v2
-      # - name: Get incoming tags
-      #   run: echo "{GIT_TAG}={`echo $(git describe --tags --abbrev=0)`}" >> $GITHUB_ENV
-      - name: Create a new branch for docs
-        run: git checkout --orphan docs/v1.0.2
-      - name: Update the docs
+      - name: Get incoming tags
+        run: echo "GIT_TAG={`echo $(git describe --tags --abbrev=0)`}" >> $GITHUB_ENV
+      - name: Test
         run: |
-          cd docs
-          make api_docs
-      - name: Setup git agent and commit changes
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/automata-tech/eva_python_sdk
-          git config --global user.email "docs@automata.tech"
-          git config --global user.name "docs-bot"
-          git commit -am 'docs'
-          git push origin docs/v1.0.2 -f
+          echo $GIT_TAG
+          echo ${{ env.GIT_TAG }}
+      # - name: Create a new branch for docs
+      #   run: git checkout --orphan docs/v1.0.2
+      # - name: Update the docs
+      #   run: |
+      #     cd docs
+      #     make api_docs
+      # - name: Setup git agent and commit changes
+      #   run: |
+      #     git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/automata-tech/eva_python_sdk
+      #     git config --global user.email "docs@automata.tech"
+      #     git config --global user.name "docs-bot"
+      #     git commit -am 'docs'
+      #     git push origin docs/v1.0.2 -f
