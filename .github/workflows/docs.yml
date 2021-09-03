@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
       - name: Get incoming tags
-        run: echo "GIT_TAG={`echo $(git describe --tags --abbrev=0)`}" >> $GITHUB_ENV
+        run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
       - name: Test
         run: |
           echo $GIT_TAG
