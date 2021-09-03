@@ -77,7 +77,7 @@ class Eva:
             dict: containing results of API call
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> eva.api_call_with_auth('GET', 'controls/lock')
@@ -106,7 +106,7 @@ class Eva:
             dict: containing results of API call
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> eva.api_call_no_auth('GET', 'name')
@@ -122,7 +122,10 @@ class Eva:
         """Gets the API versions supported by the server and the Choreograph version installed on the robot.
 
         Returns:
-            dict: API server version, robot choreograph version
+            dict: API version supported, robot choreograph version
+
+        Raises:
+            EvaError: If it is not successful
 
         Example:
             >>> eva.versions()
@@ -155,7 +158,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 204
+            EvaError: If it is not successful
         """
         self.__logger.debug('Eva.auth_renew_session called')
         return self.__http_client.auth_renew_session()
@@ -171,7 +174,7 @@ class Eva:
             str: session_token
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> eva.auth_create_session()
@@ -185,7 +188,7 @@ class Eva:
         """Deletes/invalidates the API session token.
 
         Raises:
-            EvaError: If status code on API request is not 204
+            EvaError: If it is not successful
 
         Returns:
             None
@@ -202,7 +205,7 @@ class Eva:
             dict: Multiple nested dictionary
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
         """
         self.__logger.debug('Eva.data_snapshot called')
         return self.__http_client.data_snapshot()
@@ -229,7 +232,7 @@ class Eva:
 
 
     def data_servo_positions(self):
-        """Returns the radian value of each joint angle.
+        """Returns a list of current joint angles in radians
 
         Note:
             This function uses the data_snapshot_property() to return the servo positions
@@ -257,7 +260,7 @@ class Eva:
             dict: a list of dictionaries containing user id, email, and role.
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> eva.users_get()
@@ -272,6 +275,9 @@ class Eva:
     def config_update(self, update):
         """Applies choreograph update file to robot.
 
+        Note:
+            Requires the lock. See example.
+
         Args:
             update: AUT / update file
 
@@ -279,7 +285,12 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
+
+        Example:
+            >>> with open("rel-4.10.0.aup", 'rb') as update:
+            >>>     with eva.lock():
+            >>>         eva.config_update(update)
         """
         self.__logger.debug('Eva.config_update called')
         return self.__http_client.config_update(update)
@@ -297,7 +308,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> robot.gpio_get('d0', 'output')
@@ -321,7 +332,7 @@ class Eva:
             bool or float: depending on pin_type
 
         Raises:
-            EvaError: gpio_get error, no such pin
+            EvaError: gpio_get error, no such pin (if the pin does not exist)
             EvaError: gpio_get error, pin_type must be "input" or "output"
 
         Example:
@@ -340,14 +351,14 @@ class Eva:
             This is not used directly within the SDK.
 
         Args:
-            keys: key name of the value to change
-            values: value to change global to
+            keys: a list of keys to change
+            values: a list of the associated valuea to change global to
 
         Returns:
             dict: of the data requested
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
         """
         self.__logger.debug('Eva.globals_edit called')
         return self.__http_client.globals_edit(keys, values)
@@ -360,7 +371,7 @@ class Eva:
             list: a list of dictionaries containing toolpath id, name, and hash.
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> eva.toolpaths_list()
@@ -381,7 +392,7 @@ class Eva:
             dict: of the toolpath requested
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> eva.toolpath_retrieve(1)
@@ -406,7 +417,7 @@ class Eva:
             toolpathId: toolpath ID number on the toolpaths_list() if successful
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
         """
         self.__logger.debug('Eva.toolpaths_save called')
         return self.__http_client.toolpaths_save(name, toolpath)
@@ -422,7 +433,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
         """
         self.__logger.debug('Eva.toolpaths_use_saved called')
         return self.__http_client.toolpaths_use_saved(toolpathId)
@@ -438,7 +449,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Note:
             This does not save the toolpath to the toolpaths_list
@@ -464,7 +475,7 @@ class Eva:
         """Indicates status and owner of the lock
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Returns:
             dict: containing lock user/owner & status of the lock
@@ -491,7 +502,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> with eva.lock():
@@ -515,7 +526,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
         """
         self.__logger.debug('Eva.lock_renew called')
         return self.__http_client.lock_renew()
@@ -531,7 +542,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
         """
         self.__logger.debug('Eva.unlock called')
         return self.__http_client.lock_unlock()
@@ -580,7 +591,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
         """
         self.__logger.debug('Eva.control_home called')
         with self.__eva_locker.set_renew_period(Eva.__TEACH_RENEW_PERIOD):
@@ -602,7 +613,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> with eva.lock():
@@ -630,7 +641,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> with eva.lock():
@@ -659,7 +670,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> with eva.lock():
@@ -679,7 +690,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> with eva.lock():
@@ -702,7 +713,7 @@ class Eva:
             wait_for_ready: boolean value to wait for the robot state to enter READY before proceeding
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> with eva.lock():
@@ -722,7 +733,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> with eva.lock():
@@ -745,7 +756,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 204
+            EvaError: If it is not successful
 
         Example:
             >>> with eva.lock():
@@ -766,7 +777,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 204
+            EvaError: If it is not successful
             ValueError: If sensitivity or enabled arguments are not valid
 
         Example:
@@ -786,7 +797,7 @@ class Eva:
             None
 
         Raises:
-            EvaError: If status code on API request is not 204
+            EvaError: If it is not successful
 
         Example:
             >>> with eva.lock():
@@ -808,7 +819,7 @@ class Eva:
             dict: containing 'result', 'success', and 'orientation'
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> eva.calc_forward_kinematics([0,0,0,0,0,0])
@@ -834,7 +845,7 @@ class Eva:
             dict: containing 'ik' dict with joint angles (if successful) and 'result' of function call
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> eva_position = {'x': -0.065000005, 'y': -8.960835e-09, 'z': 0.87839997}
@@ -852,7 +863,7 @@ class Eva:
         """Calculates joint angles required to move robot a certain distance in XYZ space
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Args:
             joints: a list of joint angles in RADIANS
@@ -882,7 +893,7 @@ class Eva:
             bool: True or False condition
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> eva.calc_pose_valid([0,0,0,1.7,0.5,-1])
@@ -905,7 +916,7 @@ class Eva:
             dict: containing rotate dict with joint angles and result dict of success/failure
 
         Raises:
-            EvaError: If status code on API request is not 200
+            EvaError: If it is not successful
 
         Example:
             >>> robot.calc_rotate(eva_guess, axis='y', offset=0.1)
