@@ -13,16 +13,22 @@ jobs:
         run: echo "{GIT_TAG}={`echo $(git describe --tags --abbrev=0)`}" >> $GITHUB_ENV
       - name: test tag
         run: echo "${{ env.action_state }}"
-      - name: Create docs branch
-        run: git checkout -b docs-"${{ env.action_state }}"
-      - name: Install dependencies
-        run: pip install Sphinx ; pip install m2r2
-      - name: Update the docs
-        run: cd docs ; make api_docs
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v7
-        with:
-          author_name: Tom Allpress
-          author_email: tom@autaomta.tech
-          message: 'updating documentation'
-          add: '*.rst'
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Test
+        run: |
+          echo $RELEASE_VERSION
+          echo ${{ env.RELEASE_VERSION }}
+      # - name: Create docs branch
+      #   run: git checkout -b docs-"${{ env.action_state }}"
+      # - name: Install dependencies
+      #   run: pip install Sphinx ; pip install m2r2
+      # - name: Update the docs
+      #   run: cd docs ; make api_docs
+      # - name: Commit changes
+      #   uses: EndBug/add-and-commit@v7
+      #   with:
+      #     author_name: Tom Allpress
+      #     author_email: tom@autaomta.tech
+      #     message: 'updating documentation'
+      #     add: '*.rst'
