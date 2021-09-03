@@ -192,12 +192,6 @@ We have a *GitHub Action* in the `build.yaml` workflow that will do this automat
 *Read The Docs* has [automation rules](https://docs.readthedocs.io/en/stable/automation-rules.html).
 We have one set up that will automatically build documentation for any semver tagged version of the project.
 
-When adding new files in `evasdk/`, it's important to remember to update the documentation by running the following:
-```bash
-cd docs
-make api_docs
-```
-
 We need to pass the force flag `-f` to overwrite `modules.rst`, as otherwise Sphinx will skip over searching the `evasdk` directory.
 
 To generate a local version of the documentation:

@@ -1,8 +1,10 @@
 name: Build documentation
+
 on: [push, pull_request]
   # push:
   #   tags:
   #     - 'v*.*.*'
+
 jobs:
   docs:
     runs-on: ubuntu-latest
