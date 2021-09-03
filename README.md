@@ -202,7 +202,6 @@ make html
 
 Then open the file `docs/_build/html/index.html` in your browser.
 
-
 ## License
 
 This code is free to use under the terms of the Apache 2 license. Please refer to LICENSE for more information.
