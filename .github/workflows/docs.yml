@@ -19,7 +19,7 @@ jobs:
         uses: EndBug/add-and-commit@v7
         with:
           author_name: Tom Allpress
-          author_email: tom@autaomta.tech
+          author_email: tom@automata.tech
           message: 'updating documentation'
           add: '*.rst'
           tag: 'docs-v1.0.0 --force'
