@@ -25,6 +25,4 @@ jobs:
           git config --global user.email "docs@automata.tech"
           git config --global user.name "docs-bot"
           git commit -am 'docs'
-          git push origin docs/v1.0.0
-      # - name: Commit and push changes
-      #   run: |
+          git push origin docs/v1.0.0 -f
