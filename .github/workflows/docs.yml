@@ -3,7 +3,8 @@ name: Build documentation
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - 'test-*'
+      # - 'v*.*.*'
 
 jobs:
   docs:
