@@ -16,23 +16,15 @@ jobs:
       - name: Create a new branch for docs
         run: git checkout --orphan docs/v1.0.0
       - name: Update the docs
-        run: cd docs ; make api_docs
-      - name: Setup git agent
+        run: |
+          cd docs
+          make api_docs
+      - name: Setup git agent and commit changes
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/automata-tech/eva_python_sdk
           git config --global user.email "docs@automata.tech"
           git config --global user.name "docs-bot"
-      - name: Add everything
-        run: git commit -am 'docs'
-      - name: Push new branch up
-        run: git push origin docs/v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Commit changes
-      #   uses: EndBug/add-and-commit@v7
-      #   with:
-      #     author_name: Tom Allpress
-      #     author_email: tom@automata.tech
-      #     message: 'documentation'
-      #     add: '*.rst'
-      #     push: true
+          git commit -am 'docs'
+          git push origin docs/v1.0.0
+      # - name: Commit and push changes
+      #   run: |
