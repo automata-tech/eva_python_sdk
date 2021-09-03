@@ -25,6 +25,8 @@ jobs:
         run: git commit -am 'docs'
       - name: Push new branch up
         run: git push origin docs/v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # - name: Commit changes
       #   uses: EndBug/add-and-commit@v7
       #   with:
