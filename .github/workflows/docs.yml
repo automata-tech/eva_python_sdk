@@ -16,7 +16,7 @@ jobs:
       # - name: Get incoming tags
       #   run: echo "{GIT_TAG}={`echo $(git describe --tags --abbrev=0)`}" >> $GITHUB_ENV
       - name: Create a new branch for docs
-        run: git checkout --orphan docs/v1.0.0
+        run: git checkout --orphan docs/v1.0.1
       - name: Update the docs
         run: |
           cd docs
@@ -27,4 +27,4 @@ jobs:
           git config --global user.email "docs@automata.tech"
           git config --global user.name "docs-bot"
           git commit -am 'docs'
-          git push origin docs/v1.0.0 -f
+          git push origin docs/v1.0.1 -f
