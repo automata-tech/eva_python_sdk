@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
-        run: pip install Sphinx ; pip install m2r2
+        run: pip install Sphinx m2r2
       - name: Checkout repo
         uses: actions/checkout@v2
       - name: Get incoming tags
@@ -19,8 +19,7 @@ jobs:
         run: git checkout --orphan docs/$GIT_TAG
       - name: Update the docs
         run: |
-          cd docs
-          make api_docs
+          make -C docs api_docs
       - name: Setup git agent and commit changes
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/automata-tech/eva_python_sdk
