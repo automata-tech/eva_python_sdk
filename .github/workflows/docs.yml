@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
       - name: Get incoming tags
-        run: echo '::set-output name=git-tag::$(git describe --tags --abbrev=0)'
+        run: echo "::set-output name=git-tag::$(git describe --tags --abbrev=0)"
         id: get-git-tag
       - name: Create a new branch for docs
         run: git checkout --orphan docs/${{ steps.get-git-tag.outputs.git-tag }}
