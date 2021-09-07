@@ -15,8 +15,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Get incoming tags
         run: echo '::set-output name=git-tag::$(git describe --tags --abbrev=0)'
+        id: get-git-tag
       - name: Create a new branch for docs
-        run: git checkout --orphan docs/$(outputs.git-tag)
+        run: git checkout --orphan docs/${{ steps.get-git-tag.outputs.git-tag }}
       - name: Update the docs
         run: |
           make -C docs api_docs
@@ -26,4 +27,4 @@ jobs:
           git config --global user.email "docs@automata.tech"
           git config --global user.name "docs-bot"
           git commit -am 'docs'
-          git push origin docs/$(outputs.git-tag) -f
+          git push origin docs/${{ steps.get-git-tag.outputs.git-tag }} -f
