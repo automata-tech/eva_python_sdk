@@ -14,9 +14,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
       - name: Get incoming tags
-        run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
+        run: echo '::set-output name=git-tag::$(git describe --tags --abbrev=0)'
       - name: Create a new branch for docs
-        run: git checkout --orphan docs/$GIT_TAG
+        run: git checkout --orphan docs/$(outputs.git-tag)
       - name: Update the docs
         run: |
           make -C docs api_docs
@@ -26,4 +26,4 @@ jobs:
           git config --global user.email "docs@automata.tech"
           git config --global user.name "docs-bot"
           git commit -am 'docs'
-          git push origin docs/$GIT_TAG -f
+          git push origin docs/$(outputs.git-tag) -f
