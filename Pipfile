@@ -10,7 +10,6 @@ websockets = "*"
 zeroconf = "*"
 types-dataclasses = "*"
 dataclasses = "*"
-pytransform3d = "==1.2.1"
 
 [dev-packages]
 flake8 = "*"
@@ -22,6 +21,7 @@ pytest = "*"
 mypy = "*"
 Sphinx = "*"
 m2r2 = "*"
+sphinxcontrib-apidoc = "*"
 
 [requires]
 
