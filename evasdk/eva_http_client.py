@@ -6,7 +6,6 @@ import importlib.util
 from typing import Union
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
-from .version import __version__
 from .version import __version__, sdk_is_compatible_with_robot
 
 # TODO: too big, install it manually if you want it
