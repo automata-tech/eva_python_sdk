@@ -3,9 +3,11 @@ import time
 import logging
 import requests
 import importlib.util
+from typing import Union
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
 from .version import __version__
+from .version import __version__, sdk_is_compatible_with_robot
 
 # TODO: too big, install it manually if you want it
 has_pyt3d = importlib.util.find_spec('pytransform3d')
@@ -119,6 +121,11 @@ class EvaHTTPClient:
 
     def auth_create_session(self):
         self.__logger.debug('Creating session token')
+
+        err = self._check_version_compatibility()
+        if err is not None:
+            self.__logger.error(f'incompatible SDK: {err}')
+
         r = self.api_call_no_auth('POST', 'auth', payload=json.dumps({'token': self.api_token}))
 
         if r.status_code != 200:
@@ -561,3 +568,18 @@ If you require this feature, just install it yourself (e.g. `pip3 install pytran
         if r.status_code != 200:
             eva_error('calc_rotate error', r)
         return self.__check_calculation(r, 'calc_rotate', 'rotate')['joints']
+
+
+    def _check_version_compatibility(self) -> Union[str, None]:
+        """Checks the current version of the application against that of Eva's software version.
+        Returns:
+            Union[str, None]: error message, None if versions are compatible.
+        """
+        version_r = self.api_call_no_auth('GET', 'versions', version=None)
+        if version_r.status_code != 200:
+            return 'request error when fetching versions'
+        robot_version = version_r.json()['robot']
+        err = sdk_is_compatible_with_robot(robot_version)
+        if err is not None:
+            return err
+        return None

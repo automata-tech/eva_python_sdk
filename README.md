@@ -137,13 +137,13 @@ These can be used to interact directly with the HTTP and Websocket APIs. Useful 
 
 ## Versioning
 
-To determine which version of the SDK works with your Eva's software version number (found on the Choreograph config page), please use the following chart:
+To determine which version of the SDK works with your Eva's software version number (found on the Choreograph config page), please reference the following table:
 
-| SDK Version   | Supported Eva Version |
-| ------------- | --------------------- |
-| 1.0.0         | 2.0.0 - 2.1.2         |
-| 2.0.0         | 3.0.0 - 3.0.1         |
-| 3.0.0+        | 3.1.0                 |
+| SDK Version     | Supported Eva Version |
+| --------------- | --------------------- |
+| 1.0.0           | 2.0.0 - 2.1.2         |
+| 2.0.0           | 3.0.0 - 3.0.1         |
+| 3.0.0 and later | 3.1.0 and later       |
 
 For more information on how to install a particular version of the SDK, please refer to the [Installation](#Installation) section. We use the [Semver](https://semver.org/) version numbering stratergy.
 
