@@ -23,5 +23,6 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/automata-tech/eva_python_sdk
           git config --global user.email "docs@automata.tech"
           git config --global user.name "docs-bot"
-          git commit -am 'docs'
+          git add .
+          git commit -m 'docs'
           git push origin docs/development -f
