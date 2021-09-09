@@ -28,6 +28,7 @@ m2r2 = "*"
 "importlib-metadata" = "*"
 # FIXME: whyyyyyyyyyy
 "typed-ast" = "*"
+typing_extensions = "*"
 
 [requires]
 
