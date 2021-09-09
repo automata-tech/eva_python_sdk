@@ -48,7 +48,7 @@ class Eva:
 
         Returns:
             class: WebSocket class
-        
+
         Example:
             >>> with eva.websocket() as ws:
             >>>     ws.register('state_change', print)
@@ -872,7 +872,7 @@ class Eva:
                 Position is the XYZ of the end-effector in METERS from the middle-bottom-center of the robot.
                 Orientation is the quaternion WXYZ values of the angle of the end-effector.
             tcp_config (dict, optional): dict containing TCP configuration.
-            
+
         Returns:
             dict: containing 'result', 'success', and the FK type requested.
 
