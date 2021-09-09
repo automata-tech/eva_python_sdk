@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 types-requests = "*"
 requests = "*"
-websockets = "*"
+"websocket-client" = "*"
 zeroconf = "*"
 types-dataclasses = "*"
 dataclasses = "*"

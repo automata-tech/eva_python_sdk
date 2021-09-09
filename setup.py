@@ -18,7 +18,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     install_requires=[
         'requests',
-        'websockets',
+        'websocket-client',
         'zeroconf',
         'dataclasses',
         # TODO: too big, install it manually if you want it
