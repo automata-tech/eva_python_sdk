@@ -23,7 +23,7 @@ class Eva:
 
 
     def set_request_timeout(self, request_timeout):
-        """Sets default request timeout for API commands
+        """Sets default request timeout for API commands.
 
         Args:
             request_timeout (int): time in seconds
@@ -40,8 +40,20 @@ class Eva:
 
     # --------------------------------------------- Websocket -----------------------------------------------
     def websocket(self):
-        # Ensure we have a session token
-        # might use the result in the future to give the initial state to consumers
+        """Creates a websocket class to monitor Eva in the background.
+
+        Note:
+            Notifications will be sent from a different thread so you will need to use a mutex
+            or other synchronization mechanisms.
+
+        Returns:
+            class: WebSocket class
+        
+        Example:
+            >>> with eva.websocket() as ws:
+            >>>     ws.register('state_change', print)
+            >>>     input('press return when you want to stop\n')
+        """
         self.__http_client.data_snapshot()
         host_uri = f'ws://{self.__http_client.host_ip}/api/v1/data/stream'
         subprotocols = [f'SessionToken_{self.__http_client.session_token}', "object"]
@@ -59,7 +71,7 @@ class Eva:
 
     # --------------------------------------------- HTTP HANDLERS ---------------------------------------------
     def api_call_with_auth(self, method, path, payload=None, headers={}, timeout=None, version='v1'):
-        """Makes a direct API call to EVA to endpoints that require authentication
+        """Makes a direct API call to EVA to endpoints that require authentication.
 
         Note:
             This is used within the SDK and will unlikely be used externally.
@@ -88,7 +100,7 @@ class Eva:
                                                      version=version)
 
     def api_call_no_auth(self, method, path, payload=None, headers={}, timeout=None, version='v1'):
-        """Makes a direct API call to EVA to endpoints that do not require authentication
+        """Makes a direct API call to EVA to endpoints that do not require authentication.
 
         Note:
             This is used within the SDK and will unlikely be used externally.
@@ -169,7 +181,7 @@ class Eva:
         """Creates a session token token.
 
         Note:
-            Should not need to be called as it is handled internally
+            Should not need to be called as it is handled internally.
 
         Returns:
             str: session_token
@@ -233,7 +245,7 @@ class Eva:
 
 
     def data_servo_positions(self):
-        """Returns a list of current joint angles in radians
+        """Returns a list of current joint angles in radians.
 
         Note:
             This function uses the data_snapshot_property() to return the servo positions
@@ -299,7 +311,7 @@ class Eva:
 
     # GPIO
     def gpio_set(self, pin, status):
-        """Changes the state of the output pin
+        """Changes the state of the output pin.
 
         Note:
             Requires the lock. See example.
@@ -324,7 +336,7 @@ class Eva:
 
 
     def gpio_get(self, pin, pin_type):
-        """Gets the state of output/input pin
+        """Gets the state of output/input pin.
 
         Args:
             pin (str): name of the pin
@@ -347,7 +359,7 @@ class Eva:
         return self.__http_client.gpio_get(pin, pin_type)
 
     def globals_edit(self, keys, values):
-        """Allows editing of exposed global values
+        """Allows editing of exposed global values.
 
         Note:
             This is not used directly within the SDK.
@@ -367,10 +379,10 @@ class Eva:
 
     # Toolpaths
     def toolpaths_list(self):
-        """Gets a list of saved toolpaths on the robot
+        """Gets a list of saved toolpaths on the robot.
 
         Returns:
-            list: a list of dictionaries containing toolpath id, name, and hash.
+            list: a list of dictionaries containing toolpath id, name, and hash
 
         Raises:
             EvaError: If it is not successful
@@ -385,7 +397,7 @@ class Eva:
 
 
     def toolpaths_retrieve(self, ID):
-        """Retrieves the toolpath using toolpath ID on the robot
+        """Retrieves the toolpath using toolpath ID on the robot.
 
         Args:
             ID (int): id integer of the toolpath called upon
@@ -409,7 +421,7 @@ class Eva:
 
 
     def toolpaths_save(self, name, toolpath):
-        """Create a new toolpath or update an existing one (if the name is already used)
+        """Create a new toolpath or update an existing one (if the name is already used).
 
         Args:
             name (str): string to assign to the toolpath name
@@ -426,7 +438,7 @@ class Eva:
 
 
     def toolpaths_use_saved(self, toolpathId):
-        """Sets the active toolpath from the toolpaths_list which can be homed, run, paused, and stopped
+        """Sets the active toolpath from the toolpaths_list which can be homed, run, paused, and stopped.
 
         Args:
             toolpathId (int): id integer of the toolpath to be used
@@ -460,7 +472,7 @@ class Eva:
         return self.__http_client.toolpaths_use(toolpathRepr)
 
     def toolpaths_delete(self, toolpathId):
-        """Deletes a toolpath specified from the toolpaths stored on the robot
+        """Deletes a toolpath specified from the toolpaths stored on the robot.
 
         Args:
             toolpathId (int): toolpathId integer of the toolpath from the toolpaths list
@@ -474,7 +486,7 @@ class Eva:
 
     # Lock
     def lock_status(self):
-        """Indicates status and owner of the lock
+        """Indicates status and owner of the lock.
 
         Raises:
             EvaError: If it is not successful
@@ -491,10 +503,10 @@ class Eva:
 
 
     def lock(self, wait=True, timeout=None):
-        """Owns the lock/control of the robot
+        """Owns the lock/control of the robot.
 
         Note:
-            This is best called using the "with eva.lock():" method
+            This is best called using the "with eva.lock():" method.
 
         Args:
             wait (bool): True/False to wait for lock availability
@@ -519,7 +531,7 @@ class Eva:
 
 
     def lock_renew(self):
-        """Renews the lock session
+        """Renews the lock session.
 
         Note:
             This will need to be called if you do not use the "with eva.lock():" method.
@@ -537,7 +549,7 @@ class Eva:
 
 
     def unlock(self):
-        """Closes the lock session cleanly
+        """Closes the lock session cleanly.
 
         Note:
             This will need to be called if you do not use the "with eva.lock():" method.
@@ -556,7 +568,7 @@ class Eva:
 
     # Control
     def control_wait_for_ready(self):
-        """Waits for the robot to enter the "ready" (RobotState.READY) state
+        """Waits for the robot to enter the "ready" (RobotState.READY) state.
 
         Returns:
             None
@@ -569,10 +581,10 @@ class Eva:
 
 
     def control_wait_for(self, goal):
-        """Waits for the robot to enter a state specified in RobotState
+        """Waits for the robot to enter a state specified in RobotState.
 
         Note:
-            Check RobotState enum (robot_state.py) for list of states
+            Check RobotState enum (robot_state.py) for list of states.
 
         Args:
             goal (str or enumerate): State to wait for before returning
@@ -592,10 +604,10 @@ class Eva:
 
 
     def control_home(self, wait_for_ready=True):
-        """Sends robot to home position of the active toolpath
+        """Sends robot to home position of the active toolpath.
 
         Note:
-            Requires lock
+            Requires lock.
 
         Args:
             wait_for_ready (bool): boolean value to wait for the robot to entry READY state before proceeding
@@ -616,7 +628,7 @@ class Eva:
 
 
     def control_run(self, loop=1, wait_for_ready=True, mode='teach'):
-        """Runs active toolpath for specified amount of loops
+        """Runs active toolpath for specified amount of loops.
 
         Note:
             Requires lock.
@@ -646,10 +658,10 @@ class Eva:
 
 
     def control_go_to(self, joints, wait_for_ready=True, max_speed=None, time_sec=None, mode='teach'):
-        """Move robot to specified joint angles
+        """Move robot to specified joint angles.
 
         Note:
-            Requires lock
+            Requires lock.
 
         Args:
             joints (list): list of angles in RADIANS
@@ -680,7 +692,7 @@ class Eva:
 
 
     def control_pause(self, wait_for_paused=True):
-        """Pauses robot while in operation
+        """Pauses robot while in operation.
 
         Note:
             Requires lock.
@@ -705,10 +717,10 @@ class Eva:
 
 
     def control_resume(self, wait_for_running=True):
-        """Continues robot operation from PAUSED state
+        """Continues robot operation from PAUSED state.
 
         Note:
-            Requires lock
+            Requires lock.
 
         Args:
             wait_for_running (bool): boolean value to wait for the robot state to enter RUNNING before proceeding
@@ -729,7 +741,7 @@ class Eva:
 
 
     def control_cancel(self, wait_for_ready=True):
-        """Cancels PAUSED state, robot will enter READY state after function call
+        """Cancels PAUSED state, robot will enter READY state after function call.
 
         Note:
             Requires lock.
@@ -754,10 +766,10 @@ class Eva:
 
 
     def control_stop_loop(self, wait_for_ready=True):
-        """Stops robot once it has reached the end of the current running loop
+        """Stops robot once it has reached the end of the current running loop.
 
         Note:
-            Requires lock
+            Requires lock.
 
         Args:
             wait_for_ready (bool): boolean value to wait for the robot state to enter READY before proceeding
@@ -778,7 +790,7 @@ class Eva:
 
 
     def control_reset_errors(self, wait_for_ready=True):
-        """Resets state of the robot to READY
+        """Resets state of the robot to READY.
 
         Note:
             Requires lock.
@@ -803,10 +815,10 @@ class Eva:
 
     # Collision Detection
     def control_configure_collision_detection(self, enabled, sensitivity):
-        """Sets the sensitivity of the collision detection feature
+        """Sets the sensitivity of the collision detection feature.
 
         Note:
-            Requires lock
+            Requires lock.
 
         Args:
             enabled (bool): True or False
@@ -828,10 +840,10 @@ class Eva:
         return self.__http_client.control_configure_collision_detection(enabled=enabled, sensitivity=sensitivity)
 
     def control_acknowledge_collision(self, wait_for_ready=True):
-        """Acknowledges collision incident and sets the robot to READY state
+        """Acknowledges collision incident and sets the robot to READY state.
 
         Note:
-            Requires lock
+            Requires lock.
 
         Args:
             wait_for_ready (bool): boolean value to wait for the robot state to enter READY before proceeding
@@ -852,15 +864,15 @@ class Eva:
 
     # Calc
     def calc_forward_kinematics(self, joints, fk_type='both', tcp_config=None):
-        """Gives the position of the robot and orientation of end-effector in 3D space
+        """Gives the position of the robot and orientation of end-effector in 3D space.
 
         Args:
             joints (list): a list of joint angles in RADIANS
             fk_type (str): 'position', 'orientation', 'both' are available FK types.
                 Position is the XYZ of the end-effector in METERS from the middle-bottom-center of the robot.
                 Orientation is the quaternion WXYZ values of the angle of the end-effector.
-            tcp_config (dict, optional): dict containing TCP configuration. TCP is considered to be the end-effector of the Robot.
-
+            tcp_config (dict, optional): dict containing TCP configuration.
+            
         Returns:
             dict: containing 'result', 'success', and the FK type requested.
 
@@ -882,16 +894,14 @@ class Eva:
 
     def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None,
                                 orientation_type=None):
-        """Gives a list of joint angles calculated from XYZ and end-effector orientation coordinates
+        """Gives a list of joint angles calculated from XYZ and end-effector orientation coordinates.
 
         Args:
             guess (list): a list of joing angles in RADIANS near the area of operation
             target_position (dict): dict containing XYZ coordinates
             target_orientation (dict): dict containing WYZ (yaw, pitch, roll) of the end effector orientation
             tcp_config (dict: optional): dict containing TCP configuration.
-                TCP is considered to be the end-effector of the Robot.
-            orientation_type (str: optional): 'matrix', 'axis_angle', 'euler_zyx', or 'quat' orientation types.
-                'quaternion' orientation type is set by default.
+            orientation_type (str: optional): 'matrix', 'axis_angle', 'euler_zyx', or 'quat'(default) orientation types
 
         Returns:
             dict: containing 'ik' dict with joint angles (if successful) and 'result' of function call
@@ -912,7 +922,7 @@ class Eva:
 
 
     def calc_nudge(self, joints, direction, offset, tcp_config=None):
-        """Calculates joint angles required to move robot a certain distance in XYZ space
+        """Calculates joint angles required to move robot a certain distance in XYZ space.
 
         Raises:
             EvaError: If it is not successful
@@ -922,7 +932,6 @@ class Eva:
             direction (str): 'x', 'y' or 'z' axis to move on
             offset (float): distance in METERS to move
             tcp_config (dict: optional): dict containing TCP configuration
-                TCP is considered to be the end-effector of the Robot.
 
         Returns:
             list: calculated joint angles to fulfill direction + offset
@@ -939,12 +948,11 @@ class Eva:
 
 
     def calc_pose_valid(self, joints, tcp_config=None):
-        """Checks whether requested joint angles are able to be reached successfully
+        """Checks whether requested joint angles are able to be reached successfully.
 
         Args:
             joints (list): a list of joint angles in RADIANS
             tcp_config (dict: optional): dict containing TCP configuration
-                TCP is considered to be the end-effector of the Robot.
 
         Returns:
             bool: True or False condition
@@ -964,7 +972,7 @@ class Eva:
 
 
     def calc_rotate(self, joints, axis, offset, tcp_config=None):
-        """Calculates joint angles required to rotate end-effector in a given direction
+        """Calculates joint angles required to rotate end-effector in a given direction.
 
         Args:
             joints (list): a list of joint angles in RADIANS
