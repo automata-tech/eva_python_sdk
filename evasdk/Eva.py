@@ -3,6 +3,7 @@ import logging
 from .helpers import (strip_ip)
 from .eva_http_client import EvaHTTPClient
 from .eva_locker import EvaWithLocker
+from .eva_ws import Websocket
 
 
 class Eva:
@@ -28,6 +29,15 @@ class Eva:
     # ---------------------------------------------- Constants ----------------------------------------------
     __TEACH_RENEW_PERIOD = 3
 
+
+    # --------------------------------------------- Websocket -----------------------------------------------
+    def websocket(self):
+        # Ensure we have a session token
+        # might use the result in the future to give the initial state to consumers
+        self.__http_client.data_snapshot()
+        host_uri = f'ws://{self.__http_client.host_ip}/api/v1/data/stream'
+        subprotocols = [f'SessionToken_{self.__http_client.session_token}', "object"]
+        return Websocket(host_uri, subprotocols, timeout=self.__http_client.request_timeout)
 
     # --------------------------------------------- Lock Holder ---------------------------------------------
     def __enter__(self):

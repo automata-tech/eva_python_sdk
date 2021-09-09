@@ -2,11 +2,15 @@ import json
 import time
 import logging
 import requests
-import pytransform3d.rotations as pyrot  # type: ignore
-
+import importlib.util
 from .robot_state import RobotState
 from .eva_errors import eva_error, EvaError, EvaAutoRenewError
 from .version import __version__
+
+# TODO: too big, install it manually if you want it
+has_pyt3d = importlib.util.find_spec('pytransform3d')
+if has_pyt3d:
+    import pytransform3d.rotations as pyrot  # type: ignore
 
 # TODO add more granular logs using __logger
 # TODO lots of sleeps in control_* de to the robot state being updated slowly after starting an action, can this be improved?
@@ -14,6 +18,8 @@ from .version import __version__
 
 
 class EvaHTTPClient:
+    N_DIGITS = 8
+
     """
     Eva HTTP client
 
@@ -441,7 +447,16 @@ class EvaHTTPClient:
             self.control_wait_for(RobotState.READY)
 
     # CALCULATIONS
-    def calc_forward_kinematics(self, joints, fk_type='both', tcp_config=None):
+    def __check_calculation(self, r, name, kind):
+        res = r.json()
+        if res[kind]['result'] != 'success':
+            eva_error(f'{name} error: {res[kind]["error"]}')
+        return res[kind]
+
+    def calc_forward_kinematics(self, joints, fk_type=None, tcp_config=None):
+        if fk_type is not None:
+            self.__logger.warn('deprecated fk_type keyword, now all FK data is being returned')
+
         body = {'joints': joints}
         if tcp_config is not None:
             body['tcp_config'] = tcp_config
@@ -450,13 +465,22 @@ class EvaHTTPClient:
 
         if r.status_code != 200:
             eva_error('calc_forward_kinematics error', r)
+        return self.__check_calculation(r, 'calc_forward_kinematics', 'fk')
 
-        if (fk_type == 'position') or (fk_type == 'orientation'):
-            return r.json()['fk'][fk_type]
-        elif (fk_type == 'both'):
-            return r.json()['fk']
-        else:
-            eva_error('calc_forward_kinematics invalid fk_type {}'.format(fk_type), r)
+    def __ensure_pyt3d(self):
+        if not has_pyt3d:
+            raise ImportError('''this feature is provided by `pytransform3d`, which we do not ship by default anymore due to its dependencies
+
+If you require this feature, just install it yourself (e.g. `pip3 install pytransform3d`, add it to your `Pipfile`, etc)
+''')
+
+    def __normalize(self, vec):
+        if has_pyt3d:
+            return [round(num, self.__N_DIGITS) for num in pyrot.check_quaternion(vec)]
+        norm = sum(vec)
+        if norm == 0:
+            norm = 1
+        return [round(n / norm, self.__N_DIGITS) for n in vec]
 
     def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None,
                                 orientation_type=None):
@@ -470,16 +494,18 @@ class EvaHTTPClient:
         - None: defaults to quaternion
         Conversion relies on pytransform3d library
         """
-        N_DIGITS = 8
         quat_not_normed = None
 
         if orientation_type == 'matrix':
+            self.__ensure_pyt3d()
             quat_not_normed = pyrot.quaternion_from_matrix(pyrot.check_matrix(target_orientation))
         elif orientation_type == 'axis_angle':
+            self.__ensure_pyt3d()
             axis_angle = [target_orientation['x'], target_orientation['y'], target_orientation['z'],
                           target_orientation['angle']]
             quat_not_normed = pyrot.quaternion_from_axis_angle(pyrot.check_axis_angle(axis_angle))
         elif orientation_type == 'euler_zyx':
+            self.__ensure_pyt3d()
             euler_zyx = [target_orientation['yaw'], target_orientation['pitch'], target_orientation['roll']]
             matrix = pyrot.matrix_from_euler_zyx(euler_zyx)
             quat_not_normed = pyrot.quaternion_from_matrix(pyrot.check_matrix(matrix))
@@ -489,7 +515,7 @@ class EvaHTTPClient:
         else:
             eva_error(f'calc_inverse_kinematics invalid "{orientation_type}" orientation_type')
 
-        quat_normed = [round(num, N_DIGITS) for num in pyrot.check_quaternion(quat_not_normed)]
+        quat_normed = self.__normalize(quat_not_normed)
         quaternion = {'w': quat_normed[0], 'x': quat_normed[1], 'y': quat_normed[2], 'z': quat_normed[3]}
 
         body = {'guess': guess, 'position': target_position, 'orientation': quaternion}
@@ -500,8 +526,7 @@ class EvaHTTPClient:
 
         if r.status_code != 200:
             eva_error('inverse_kinematics error', r)
-        return r.json()
-
+        return self.__check_calculation(r, 'calc_inverse_kinematics', 'ik')['joints']
 
     def calc_nudge(self, joints, direction, offset, tcp_config=None):
         body = {'joints': joints, 'direction': direction, 'offset': offset}
@@ -512,8 +537,7 @@ class EvaHTTPClient:
 
         if r.status_code != 200:
             eva_error('calc_nudge error', r)
-        return r.json()['nudge']['joints']
-
+        return self.__check_calculation(r, 'calc_nudge', 'nudge')['joints']
 
     def calc_pose_valid(self, joints, tcp_config=None):
         body = {'joints': joints}
@@ -536,4 +560,4 @@ class EvaHTTPClient:
 
         if r.status_code != 200:
             eva_error('calc_rotate error', r)
-        return r.json()
+        return self.__check_calculation(r, 'calc_rotate', 'rotate')['joints']

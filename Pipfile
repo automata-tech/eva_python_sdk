@@ -6,11 +6,12 @@ name = "pypi"
 [packages]
 types-requests = "*"
 requests = "*"
-websockets = "*"
+"websocket-client" = "*"
 zeroconf = "*"
 types-dataclasses = "*"
 dataclasses = "*"
-pytransform3d = "==1.2.1"
+# TODO: too big, install it manually if you want it
+#pytransform3d = "==1.2.1"
 
 [dev-packages]
 flake8 = "*"
@@ -22,6 +23,10 @@ pytest = "*"
 mypy = "*"
 Sphinx = "*"
 m2r2 = "*"
+# FIXME: why the hell is flake8 not including this correctly?
+"importlib-metadata" = "*"
+# FIXME: whyyyyyyyyyy
+"typed-ast" = "*"
 
 [requires]
 

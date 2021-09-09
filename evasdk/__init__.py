@@ -69,13 +69,12 @@ Useful when you don't want the managed websocket connection provided by the evas
 
 from .Eva import Eva
 from .eva_http_client import EvaHTTPClient
-from .eva_ws import ws_connect
 from .robot_state import RobotState
 from .helpers import strip_ip
 from .eva_errors import (
     EvaError,
     EvaValidationError, EvaAuthError, EvaAutoRenewError,
-    EvaAdminError, EvaServerError)
+    EvaAdminError, EvaServerError, EvaWebsocketError)
 from .version import __version__
 from .EvaDiscoverer import (
     DiscoverCallback, DiscoveredEva,

@@ -30,6 +30,10 @@ class EvaAutoRenewError(EvaError, Exception):
     """Error thrown when automatic session renewal fails but not the original request"""
 
 
+class EvaWebsocketError(EvaError, Exception):
+    """Error thrown when an issue related to the websocket stream happens"""
+
+
 def eva_error(label, r=None):
     if r is not None:
         __handle_http_error(label, r)
