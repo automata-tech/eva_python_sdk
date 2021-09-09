@@ -12,6 +12,7 @@ types-dataclasses = "*"
 dataclasses = "*"
 # TODO: too big, install it manually if you want it
 #pytransform3d = "==1.2.1"
+semver = "*"
 
 [dev-packages]
 flake8 = "*"
@@ -27,6 +28,7 @@ m2r2 = "*"
 "importlib-metadata" = "*"
 # FIXME: whyyyyyyyyyy
 "typed-ast" = "*"
+typing_extensions = "*"
 
 [requires]
 
