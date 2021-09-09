@@ -1,4 +1,4 @@
-import setuptools
+import setuptools  # type: ignore
 
 version = '%VERSION%'  # Replaced by the publish.yml workflow
 
@@ -21,7 +21,8 @@ setuptools.setup(
         'websockets',
         'zeroconf',
         'dataclasses',
-        'pytransform3d',
+        # TODO: too big, install it manually if you want it
+        # 'pytransform3d',
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
