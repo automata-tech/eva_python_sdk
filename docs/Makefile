@@ -9,7 +9,7 @@ SOURCEDIR     = .
 BUILDDIR      = _build
 
 api_docs:
-	sphinx-apidoc -f  -o . ..
+	sphinx-apidoc -f  -o . .. ../setup.py
 
 # Put it first so that "make" without argument is like "make help".
 help:
