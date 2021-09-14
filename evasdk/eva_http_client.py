@@ -392,13 +392,13 @@ class EvaHTTPClient:
             self.control_wait_for(RobotState.PAUSED)
 
 
-    def control_resume(self, wait_for_ready=True):
+    def control_resume(self, wait_for_running=True):
         r = self.api_call_with_auth('POST', 'controls/resume')
         if r.status_code != 200:
             eva_error('control_resume error', r)
-        elif wait_for_ready:
+        elif wait_for_running:
             time.sleep(0.1)     # sleep for small period to avoid race condition between updating cache and reading state
-            self.control_wait_for(RobotState.READY)
+            self.control_wait_for(RobotState.RUNNING)
 
 
     def control_cancel(self, wait_for_ready=True):
