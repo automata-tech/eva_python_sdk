@@ -3,4 +3,4 @@ requests
 zeroconf
 dataclasses
 semver
-websocket
+websocket-client
