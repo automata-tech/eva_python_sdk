@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/evasdk.svg)](https://badge.fury.io/py/evasdk) ![Build status](https://github.com/automata-tech/eva_python_sdk/workflows/Build%20and%20test/badge.svg) [![codecov](https://codecov.io/gh/automata-tech/eva_python_sdk/branch/development/graph/badge.svg)](https://codecov.io/gh/automata-tech/eva_python_sdk)
 
-The Eva Python SDK provides convenient access to the Automata Eva API from applications written in Python 3.
+The Eva Python SDK provides convenient access to the Automata Eva API from applications written in Python 3. Documentation is available [here](https://eva-python-sdk.readthedocs.io/en/docs-development/).
 
 __* This SDK is currently in beta__
 
@@ -179,7 +179,7 @@ $ pipenv run test -h
 
 ## Documentation
 
-Find the documentation [here](https://eva-python-sdk.readthedocs.io/en/latest/).
+Find the documentation [here](https://eva-python-sdk.readthedocs.io/en/docs-development/).
 
 We are using [Sphinx](https://github.com/sphinx-doc/sphinx) to generate documentation, and the documentation is deployed with [Read The Docs](https://github.com/readthedocs/readthedocs.org).
 
