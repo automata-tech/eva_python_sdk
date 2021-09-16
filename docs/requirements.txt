@@ -1,6 +1,6 @@
 m2r2
 requests
-websockets
 zeroconf
 dataclasses
 semver
+websocket-client
