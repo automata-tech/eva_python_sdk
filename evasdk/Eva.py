@@ -863,11 +863,12 @@ class Eva:
         return self.__http_client.control_acknowledge_collision(wait_for_ready=wait_for_ready)
 
     # Calc
-    def calc_forward_kinematics(self, joints, tcp_config=None):
+    def calc_forward_kinematics(self, joints, fk_type=None, tcp_config=None):
         """Gives the position of the robot and orientation of end-effector in 3D space.
 
         Args:
             joints (list): a list of joint angles in RADIANS
+            fk_type (str): deprecated for 4.3.0
             tcp_config (dict, optional): dict containing TCP configuration
 
         Returns:
