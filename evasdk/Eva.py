@@ -1,4 +1,8 @@
+import io
 import logging
+
+from typing import Union
+from requests import Response
 
 from .helpers import (strip_ip)
 from .eva_http_client import EvaHTTPClient
@@ -22,7 +26,7 @@ class Eva:
         self.__eva_locker = EvaWithLocker(self)
 
 
-    def set_request_timeout(self, request_timeout):
+    def set_request_timeout(self, request_timeout: int) -> None:
         """Sets default request timeout for API commands.
 
         Args:
@@ -39,7 +43,7 @@ class Eva:
 
 
     # --------------------------------------------- Websocket -----------------------------------------------
-    def websocket(self):
+    def websocket(self) -> Websocket:
         """Creates a websocket class to monitor Eva in the background.
 
         Note:
@@ -70,7 +74,8 @@ class Eva:
 
 
     # --------------------------------------------- HTTP HANDLERS ---------------------------------------------
-    def api_call_with_auth(self, method, path, payload=None, headers={}, timeout=None, version='v1'):
+    def api_call_with_auth(self, method: str, path: str, payload: dict = None, headers: dict = {}, timeout: int = None,
+                           version: str = 'v1') -> Response:
         """Makes a direct API call to EVA to endpoints that require authentication.
 
         Note:
@@ -99,7 +104,8 @@ class Eva:
         return self.__http_client.api_call_with_auth(method, path, payload=payload, headers=headers, timeout=timeout,
                                                      version=version)
 
-    def api_call_no_auth(self, method, path, payload=None, headers={}, timeout=None, version='v1'):
+    def api_call_no_auth(self, method: str, path: str, payload: dict = None, headers: dict = {}, timeout: int = None,
+                         version: str = 'v1') -> Response:
         """Makes a direct API call to EVA to endpoints that do not require authentication.
 
         Note:
@@ -131,7 +137,7 @@ class Eva:
 
 
     # Global
-    def versions(self):
+    def versions(self) -> dict:
         """Gets the API versions supported by the server and the Choreograph version installed on the robot.
 
         Returns:
@@ -147,7 +153,7 @@ class Eva:
         self.__logger.debug('Eva.versions called')
         return self.__http_client.api_versions()
 
-    def name(self):
+    def name(self) -> dict:
         """Gets the name of the robot.
 
         Returns:
@@ -161,7 +167,7 @@ class Eva:
         return self.__http_client.name()
 
     # Auth
-    def auth_renew_session(self):
+    def auth_renew_session(self) -> None:
         """Renews the authenticated session token.
 
         Note:
@@ -177,7 +183,7 @@ class Eva:
         return self.__http_client.auth_renew_session()
 
 
-    def auth_create_session(self):
+    def auth_create_session(self) -> str:
         """Creates a session token token.
 
         Note:
@@ -197,7 +203,7 @@ class Eva:
         return self.__http_client.auth_create_session()
 
 
-    def auth_invalidate_session(self):
+    def auth_invalidate_session(self) -> None:
         """Deletes/invalidates the API session token.
 
         Raises:
@@ -211,7 +217,7 @@ class Eva:
 
 
     # Data
-    def data_snapshot(self):
+    def data_snapshot(self) -> dict:
         """Returns a nested dictionary of the status of the robot.
 
         Returns:
@@ -224,7 +230,7 @@ class Eva:
         return self.__http_client.data_snapshot()
 
 
-    def data_snapshot_property(self, prop):
+    def data_snapshot_property(self, prop: str) -> dict:
         """Returns a property from the data_snapshot dict.
 
         Args:
@@ -244,7 +250,7 @@ class Eva:
         return self.__http_client.data_snapshot_property(prop)
 
 
-    def data_servo_positions(self):
+    def data_servo_positions(self) -> list:
         """Returns a list of current joint angles in radians.
 
         Note:
@@ -266,7 +272,7 @@ class Eva:
 
 
     # Users
-    def users_get(self):
+    def users_get(self) -> dict:
         """Returns the list within a dictionary of users.
 
         Returns:
@@ -285,7 +291,7 @@ class Eva:
 
 
     # Config
-    def config_update(self, update):
+    def config_update(self, update: io.BytesIO) -> None:
         """Applies choreograph update file to robot.
 
         Note:
@@ -310,7 +316,7 @@ class Eva:
 
 
     # GPIO
-    def gpio_set(self, pin, status):
+    def gpio_set(self, pin: str, status: Union[bool, str]) -> None:
         """Changes the state of the output pin.
 
         Note:
@@ -335,7 +341,7 @@ class Eva:
         return self.__http_client.gpio_set(pin, status)
 
 
-    def gpio_get(self, pin, pin_type):
+    def gpio_get(self, pin: str, pin_type: str) -> Union[bool, float]:
         """Gets the state of output/input pin.
 
         Args:
@@ -358,7 +364,7 @@ class Eva:
         self.__logger.debug('Eva.gpio_get called')
         return self.__http_client.gpio_get(pin, pin_type)
 
-    def globals_edit(self, keys, values):
+    def globals_edit(self, keys: str, values: Union[bool, float, str]) -> dict:
         """Allows editing of exposed global values.
 
         Note:
@@ -378,7 +384,7 @@ class Eva:
         return self.__http_client.globals_edit(keys, values)
 
     # Toolpaths
-    def toolpaths_list(self):
+    def toolpaths_list(self) -> list:
         """Gets a list of saved toolpaths on the robot.
 
         Returns:
@@ -396,7 +402,7 @@ class Eva:
         return self.__http_client.toolpaths_list()
 
 
-    def toolpaths_retrieve(self, ID):
+    def toolpaths_retrieve(self, ID: int) -> dict:
         """Retrieves the toolpath using toolpath ID on the robot.
 
         Args:
@@ -420,7 +426,7 @@ class Eva:
         return self.__http_client.toolpaths_retrieve(ID)
 
 
-    def toolpaths_save(self, name, toolpath):
+    def toolpaths_save(self, name: str, toolpath: dict) -> int:
         """Create a new toolpath or update an existing one (if the name is already used).
 
         Args:
@@ -437,7 +443,7 @@ class Eva:
         return self.__http_client.toolpaths_save(name, toolpath)
 
 
-    def toolpaths_use_saved(self, toolpathId):
+    def toolpaths_use_saved(self, toolpathId: int) -> None:
         """Sets the active toolpath from the toolpaths_list which can be homed, run, paused, and stopped.
 
         Args:
@@ -453,7 +459,7 @@ class Eva:
         return self.__http_client.toolpaths_use_saved(toolpathId)
 
 
-    def toolpaths_use(self, toolpathRepr):
+    def toolpaths_use(self, toolpathRepr: dict) -> None:
         """Sets the toolpath passed to it as the active toolpath which can be homed, run, paused, and stopped.
 
         Args:
@@ -471,7 +477,7 @@ class Eva:
         self.__logger.debug('Eva.toolpaths_use called')
         return self.__http_client.toolpaths_use(toolpathRepr)
 
-    def toolpaths_delete(self, toolpathId):
+    def toolpaths_delete(self, toolpathId: int) -> None:
         """Deletes a toolpath specified from the toolpaths stored on the robot.
 
         Args:
@@ -485,7 +491,7 @@ class Eva:
 
 
     # Lock
-    def lock_status(self):
+    def lock_status(self) -> dict:
         """Indicates status and owner of the lock.
 
         Raises:
@@ -502,7 +508,7 @@ class Eva:
         return self.__http_client.lock_status()
 
 
-    def lock(self, wait=True, timeout=None):
+    def lock(self, wait: bool = True, timeout: int = None) -> None:
         """Owns the lock/control of the robot.
 
         Note:
@@ -530,7 +536,7 @@ class Eva:
         return self
 
 
-    def lock_renew(self):
+    def lock_renew(self) -> None:
         """Renews the lock session.
 
         Note:
@@ -548,7 +554,7 @@ class Eva:
         return self.__http_client.lock_renew()
 
 
-    def unlock(self):
+    def unlock(self) -> None:
         """Closes the lock session cleanly.
 
         Note:
@@ -567,7 +573,7 @@ class Eva:
 
 
     # Control
-    def control_wait_for_ready(self):
+    def control_wait_for_ready(self) -> None:
         """Waits for the robot to enter the "ready" (RobotState.READY) state.
 
         Returns:
@@ -580,7 +586,7 @@ class Eva:
         return self.__http_client.control_wait_for_ready()
 
 
-    def control_wait_for(self, goal):
+    def control_wait_for(self, goal: Union[str, enumerate]) -> None:
         """Waits for the robot to enter a state specified in RobotState.
 
         Note:
@@ -603,7 +609,7 @@ class Eva:
         return self.__http_client.control_wait_for(goal)
 
 
-    def control_home(self, wait_for_ready=True):
+    def control_home(self, wait_for_ready: bool = True) -> None:
         """Sends robot to home position of the active toolpath.
 
         Note:
@@ -627,7 +633,7 @@ class Eva:
             return self.__http_client.control_home(wait_for_ready=wait_for_ready)
 
 
-    def control_run(self, loop=1, wait_for_ready=True, mode='teach'):
+    def control_run(self, loop: int = 1, wait_for_ready: bool = True, mode: str = 'teach') -> None:
         """Runs active toolpath for specified amount of loops.
 
         Note:
@@ -657,7 +663,8 @@ class Eva:
             return self.__http_client.control_run(loop=loop, wait_for_ready=wait_for_ready, mode=mode)
 
 
-    def control_go_to(self, joints, wait_for_ready=True, max_speed=None, time_sec=None, mode='teach'):
+    def control_go_to(self, joints: list, wait_for_ready: bool = True, max_speed: int = None, time_sec: int = None,
+                      mode: str = 'teach') -> None:
         """Move robot to specified joint angles.
 
         Note:
@@ -691,7 +698,7 @@ class Eva:
                                                     time_sec=time_sec, mode=mode)
 
 
-    def control_pause(self, wait_for_paused=True):
+    def control_pause(self, wait_for_paused: bool = True) -> None:
         """Pauses robot while in operation.
 
         Note:
@@ -716,7 +723,7 @@ class Eva:
         return self.__http_client.control_pause(wait_for_paused=wait_for_paused)
 
 
-    def control_resume(self, wait_for_running=True):
+    def control_resume(self, wait_for_running: bool = True) -> None:
         """Continues robot operation from PAUSED state.
 
         Note:
@@ -740,7 +747,7 @@ class Eva:
         return self.__http_client.control_resume(wait_for_running=wait_for_running)
 
 
-    def control_cancel(self, wait_for_ready=True):
+    def control_cancel(self, wait_for_ready: bool = True) -> None:
         """Cancels PAUSED state, robot will enter READY state after function call.
 
         Note:
@@ -765,7 +772,7 @@ class Eva:
         return self.__http_client.control_cancel(wait_for_ready=wait_for_ready)
 
 
-    def control_stop_loop(self, wait_for_ready=True):
+    def control_stop_loop(self, wait_for_ready: bool = True) -> None:
         """Stops robot once it has reached the end of the current running loop.
 
         Note:
@@ -789,7 +796,7 @@ class Eva:
         return self.__http_client.control_stop_loop(wait_for_ready=wait_for_ready)
 
 
-    def control_reset_errors(self, wait_for_ready=True):
+    def control_reset_errors(self, wait_for_ready: bool = True) -> None:
         """Resets state of the robot to READY.
 
         Note:
@@ -814,7 +821,7 @@ class Eva:
         return self.__http_client.control_reset_errors(wait_for_ready=wait_for_ready)
 
     # Collision Detection
-    def control_configure_collision_detection(self, enabled, sensitivity):
+    def control_configure_collision_detection(self, enabled: bool, sensitivity: str) -> None:
         """Sets the sensitivity of the collision detection feature.
 
         Note:
@@ -839,7 +846,7 @@ class Eva:
         self.__logger.debug('Eva.collision_detection called')
         return self.__http_client.control_configure_collision_detection(enabled=enabled, sensitivity=sensitivity)
 
-    def control_acknowledge_collision(self, wait_for_ready=True):
+    def control_acknowledge_collision(self, wait_for_ready: bool = True) -> None:
         """Acknowledges collision incident and sets the robot to READY state.
 
         Note:
