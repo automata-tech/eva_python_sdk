@@ -868,7 +868,7 @@ class Eva:
 
         Args:
             joints (list): a list of joint angles in RADIANS
-            fk_type (str): deprecated for 4.3.0
+            fk_type (str): deprecated for 5.0.0
             tcp_config (dict, optional): dict containing TCP configuration
 
         Returns:
