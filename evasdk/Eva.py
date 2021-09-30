@@ -663,7 +663,7 @@ class Eva:
             return self.__http_client.control_run(loop=loop, wait_for_ready=wait_for_ready, mode=mode)
 
 
-    def control_go_to(self, joints: list, wait_for_ready: bool = True, max_speed: int = None, time_sec: int = None,
+    def control_go_to(self, joints: list, wait_for_ready: bool = True, max_speed: float = None, time_sec: int = None,
                       mode: str = 'teach') -> None:
         """Move robot to specified joint angles.
 
@@ -870,7 +870,7 @@ class Eva:
         return self.__http_client.control_acknowledge_collision(wait_for_ready=wait_for_ready)
 
     # Calc
-    def calc_forward_kinematics(self, joints, fk_type=None, tcp_config=None):
+    def calc_forward_kinematics(self, joints: list, fk_type: str = None, tcp_config: dict = None) -> dict:
         """Gives the position of the robot and orientation of end-effector in 3D space.
 
         Args:
@@ -893,8 +893,8 @@ class Eva:
         return self.__http_client.calc_forward_kinematics(joints, fk_type=fk_type, tcp_config=tcp_config)
 
 
-    def calc_inverse_kinematics(self, guess, target_position, target_orientation, tcp_config=None,
-                                orientation_type=None):
+    def calc_inverse_kinematics(self, guess: list, target_position: dict, target_orientation: dict,
+                                tcp_config: dict = None, orientation_type: str = None) -> list:
         """Gives a list of joint angles calculated from XYZ and end-effector orientation coordinates.
 
         Args:
@@ -922,7 +922,7 @@ class Eva:
                                                           tcp_config=tcp_config, orientation_type=orientation_type)
 
 
-    def calc_nudge(self, joints, direction, offset, tcp_config=None):
+    def calc_nudge(self, joints: list, direction: str, offset: float, tcp_config: dict = None) -> list:
         """Calculates joint angles required to move robot a certain distance in XYZ space.
 
         Raises:
@@ -948,7 +948,7 @@ class Eva:
         return self.__http_client.calc_nudge(joints, direction, offset, tcp_config=tcp_config)
 
 
-    def calc_pose_valid(self, joints, tcp_config=None):
+    def calc_pose_valid(self, joints: list, tcp_config: dict = None) -> bool:
         """Checks whether requested joint angles are able to be reached successfully.
 
         Args:
@@ -972,7 +972,7 @@ class Eva:
         return self.__http_client.calc_pose_valid(joints, tcp_config=tcp_config)
 
 
-    def calc_rotate(self, joints, axis, offset, tcp_config=None):
+    def calc_rotate(self, joints: list, axis: str, offset: float, tcp_config: dict = None) -> list:
         """Calculates joint angles required to rotate end-effector in a given direction.
 
         Args:
