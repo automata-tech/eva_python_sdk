@@ -666,7 +666,7 @@ class Eva:
         Args:
             joints (list): list of angles in RADIANS
             wait_for_ready (bool): boolean value to wait for the robot state to enter READY before proceeding
-            max_speed (int): maximum speed in mm/s when moving to the joint angles. Cannot be used with time_sec
+            max_speed (float): maximum speed in m/s when moving to the joint angles. Cannot be used with time_sec
             time_sec (int): time in seconds of duration to travel to joint angles specified. Cannot be used with max_speed
             mode (str): 'teach' by default, 'automatic' must be set for max_speed & time_sec to work
 
@@ -679,7 +679,7 @@ class Eva:
 
         Example:
             >>> with eva.lock():
-            >>>     control_go_to([0, 0, 0, 0, 0, 0], wait_for_ready=False, max_speed=250, mode='automatic')
+            >>>     control_go_to([0, 0, 0, 0, 0, 0], wait_for_ready=False, max_speed=0.25, mode='automatic')
         """
         self.__logger.info('Eva.control_go_to called')
         if mode == 'teach':
