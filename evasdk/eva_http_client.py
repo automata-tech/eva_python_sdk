@@ -19,7 +19,7 @@ if has_pyt3d:
 
 
 class EvaHTTPClient:
-    N_DIGITS = 8
+    __N_DIGITS = 8
 
     """
     Eva HTTP client
