@@ -863,18 +863,16 @@ class Eva:
         return self.__http_client.control_acknowledge_collision(wait_for_ready=wait_for_ready)
 
     # Calc
-    def calc_forward_kinematics(self, joints, fk_type='both', tcp_config=None):
+    def calc_forward_kinematics(self, joints, fk_type=None, tcp_config=None):
         """Gives the position of the robot and orientation of end-effector in 3D space.
 
         Args:
             joints (list): a list of joint angles in RADIANS
-            fk_type (str): 'position', 'orientation', 'both' are available FK types.
-                Position is the XYZ of the end-effector in METERS from the middle-bottom-center of the robot.
-                Orientation is the quaternion WXYZ values of the angle of the end-effector.
-            tcp_config (dict, optional): dict containing TCP configuration.
+            fk_type (str): deprecated for 5.0.0
+            tcp_config (dict, optional): dict containing TCP configuration
 
         Returns:
-            dict: containing 'result', 'success', and the FK type requested.
+            dict: containing 'result' value, 'position' dict, and 'orientation' dict
 
         Raises:
             EvaError: If it is not successful
@@ -883,10 +881,6 @@ class Eva:
             >>> eva.calc_forward_kinematics([0,0,0,0,0,0])
             {'result': 'success', 'position': {'x': -0.065000005, 'y': -8.960835e-09, 'z': 0.87839997},
             'orientation': {'w': 1, 'x': 0, 'y': 0, 'z': 0}}
-            >>> eva.calc_forward_kinematics([0,0,0,0,0,0], fk_type='position')
-            {'x': -0.065000005, 'y': -8.960835e-09, 'z': 0.87839997}
-            >>> eva.calc_forward_kinematics([0,0,0,0,0,0], fk_type='orientation')
-            {'w': 1, 'x': 0, 'y': 0, 'z': 0}
         """
         self.__logger.debug('Eva.calc_forward_kinematics called')
         return self.__http_client.calc_forward_kinematics(joints, fk_type=fk_type, tcp_config=tcp_config)
@@ -904,7 +898,7 @@ class Eva:
             orientation_type (str: optional): 'matrix', 'axis_angle', 'euler_zyx', or 'quat'(default) orientation types
 
         Returns:
-            dict: containing 'ik' dict with joint angles (if successful) and 'result' of function call
+            list: containing joint angles if successful
 
         Raises:
             EvaError: If it is not successful
@@ -914,7 +908,7 @@ class Eva:
             >>> eva_orientation = {'w': 1, 'x': 0, 'y': 0, 'z': 0}
             >>> eva_guess = [0, 0, 0, 0, 0, 0]
             >>> robot.calc_inverse_kinematics(eva_guess, eva_position, eva_orientation)
-            {'ik': {'joints': [0, 0, 0, 0, 0, 0], 'result': 'success'}}
+            [0, 0, 0, 0, 0, 0]
         """
         self.__logger.debug('Eva.calc_inverse_kinematics called')
         return self.__http_client.calc_inverse_kinematics(guess, target_position, target_orientation,
@@ -982,7 +976,7 @@ class Eva:
                 TCP is considered to be the end-effector of the Robot.
 
         Returns:
-            dict: containing rotate dict with joint angles and result dict of success/failure
+            list: containing joint angles
 
         Raises:
             EvaError: If it is not successful
@@ -992,8 +986,7 @@ class Eva:
             >>>            "radius": 0.07,
             >>>            "rotations": {"x": 0, "y": 0, "z": 0}}
             >>> robot.calc_rotate([0, 0, 0, 0, 0, 0], axis='y', offset=0.1, tcp_config=eva_tcp)
-            {'rotate': {'joints': [-2.1625242e-09, -0.012081009, 0.09259305, 3.102962e-09, -0.1803575, -5.4273075e-09],
-             'result': 'success'}}
+            [-2.1625242e-09, -0.012081009, 0.09259305, 3.102962e-09, -0.1803575, -5.4273075e-09]
         """
         self.__logger.debug('Eva.calc_rotate called')
         return self.__http_client.calc_rotate(joints, axis, offset, tcp_config=tcp_config)
