@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import io
 import logging
 
@@ -510,7 +508,7 @@ class Eva:
         return self.__http_client.lock_status()
 
 
-    def lock(self, wait: bool = True, timeout: int = None) -> Eva:
+    def lock(self, wait: bool = True, timeout: int = None) -> 'Eva':
         """Owns the lock/control of the robot.
 
         Note:
