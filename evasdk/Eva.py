@@ -56,7 +56,7 @@ class Eva:
         Example:
             >>> with eva.websocket() as ws:
             >>>     ws.register('state_change', print)
-            >>>     input('press return when you want to stop\n')
+            >>>     input('press return when you want to stop')
         """
         self.__http_client.data_snapshot()
         host_uri = f'ws://{self.__http_client.host_ip}/api/v1/data/stream'
@@ -508,7 +508,7 @@ class Eva:
         return self.__http_client.lock_status()
 
 
-    def lock(self, wait: bool = True, timeout: int = None) -> None:
+    def lock(self, wait: bool = True, timeout: int = None) -> object:
         """Owns the lock/control of the robot.
 
         Note:
@@ -519,7 +519,7 @@ class Eva:
             timeout (int): time in seconds to wait for lock availability
 
         Returns:
-            None
+            object: evasdk.Eva object
 
         Raises:
             EvaError: If it is not successful or if another user owns the lock
