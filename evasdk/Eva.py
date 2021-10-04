@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import io
 import logging
 
@@ -508,7 +510,7 @@ class Eva:
         return self.__http_client.lock_status()
 
 
-    def lock(self, wait: bool = True, timeout: int = None) -> object:
+    def lock(self, wait: bool = True, timeout: int = None) -> Eva:
         """Owns the lock/control of the robot.
 
         Note:
@@ -519,7 +521,7 @@ class Eva:
             timeout (int): time in seconds to wait for lock availability
 
         Returns:
-            object: evasdk.Eva object
+            Eva: evasdk.Eva object
 
         Raises:
             EvaError: If it is not successful or if another user owns the lock
