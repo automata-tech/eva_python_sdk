@@ -1,7 +1,7 @@
 import io
 import logging
 
-from typing import Union
+from typing import Union, Dict, List, Any
 from requests import Response
 
 from .helpers import (strip_ip)
@@ -137,7 +137,7 @@ class Eva:
 
 
     # Global
-    def versions(self) -> dict:
+    def versions(self) -> Dict[str, str]:
         """Gets the API versions supported by the server and the Choreograph version installed on the robot.
 
         Returns:
@@ -153,7 +153,7 @@ class Eva:
         self.__logger.debug('Eva.versions called')
         return self.__http_client.api_versions()
 
-    def name(self) -> dict:
+    def name(self) -> Dict[str, str]:
         """Gets the name of the robot.
 
         Returns:
@@ -217,7 +217,7 @@ class Eva:
 
 
     # Data
-    def data_snapshot(self) -> dict:
+    def data_snapshot(self) -> Dict[str, Any]:
         """Returns a nested dictionary of the status of the robot.
 
         Returns:
@@ -230,7 +230,7 @@ class Eva:
         return self.__http_client.data_snapshot()
 
 
-    def data_snapshot_property(self, prop: str) -> dict:
+    def data_snapshot_property(self, prop: str) -> Dict[str, Any]:
         """Returns a property from the data_snapshot dict.
 
         Args:
@@ -250,7 +250,7 @@ class Eva:
         return self.__http_client.data_snapshot_property(prop)
 
 
-    def data_servo_positions(self) -> list:
+    def data_servo_positions(self) -> List[float]:
         """Returns a list of current joint angles in radians.
 
         Note:
@@ -272,7 +272,7 @@ class Eva:
 
 
     # Users
-    def users_get(self) -> dict:
+    def users_get(self) -> Dict[str, list]:
         """Returns the list within a dictionary of users.
 
         Returns:
@@ -384,7 +384,7 @@ class Eva:
         return self.__http_client.globals_edit(keys, values)
 
     # Toolpaths
-    def toolpaths_list(self) -> list:
+    def toolpaths_list(self) -> List[dict]:
         """Gets a list of saved toolpaths on the robot.
 
         Returns:
@@ -402,7 +402,7 @@ class Eva:
         return self.__http_client.toolpaths_list()
 
 
-    def toolpaths_retrieve(self, ID: int) -> dict:
+    def toolpaths_retrieve(self, ID: int) -> Dict[str, Any]:
         """Retrieves the toolpath using toolpath ID on the robot.
 
         Args:
@@ -491,7 +491,7 @@ class Eva:
 
 
     # Lock
-    def lock_status(self) -> dict:
+    def lock_status(self) -> Dict[str, str]:
         """Indicates status and owner of the lock.
 
         Raises:
@@ -507,7 +507,7 @@ class Eva:
         self.__logger.debug('Eva.lock_status called')
         return self.__http_client.lock_status()
 
-
+    # Todo - Change annotation once support has been deprecated for 3.6
     def lock(self, wait: bool = True, timeout: int = None) -> 'Eva':
         """Owns the lock/control of the robot.
 
@@ -870,7 +870,7 @@ class Eva:
         return self.__http_client.control_acknowledge_collision(wait_for_ready=wait_for_ready)
 
     # Calc
-    def calc_forward_kinematics(self, joints: list, fk_type: str = None, tcp_config: dict = None) -> dict:
+    def calc_forward_kinematics(self, joints: list, fk_type: str = None, tcp_config: dict = None) -> Dict[str, Any]:
         """Gives the position of the robot and orientation of end-effector in 3D space.
 
         Args:
@@ -894,7 +894,7 @@ class Eva:
 
 
     def calc_inverse_kinematics(self, guess: list, target_position: dict, target_orientation: dict,
-                                tcp_config: dict = None, orientation_type: str = None) -> list:
+                                tcp_config: dict = None, orientation_type: str = None) -> List[float]:
         """Gives a list of joint angles calculated from XYZ and end-effector orientation coordinates.
 
         Args:
@@ -922,7 +922,7 @@ class Eva:
                                                           tcp_config=tcp_config, orientation_type=orientation_type)
 
 
-    def calc_nudge(self, joints: list, direction: str, offset: float, tcp_config: dict = None) -> list:
+    def calc_nudge(self, joints: list, direction: str, offset: float, tcp_config: dict = None) -> List[float]:
         """Calculates joint angles required to move robot a certain distance in XYZ space.
 
         Raises:
@@ -972,7 +972,7 @@ class Eva:
         return self.__http_client.calc_pose_valid(joints, tcp_config=tcp_config)
 
 
-    def calc_rotate(self, joints: list, axis: str, offset: float, tcp_config: dict = None) -> list:
+    def calc_rotate(self, joints: list, axis: str, offset: float, tcp_config: dict = None) -> List[float]:
         """Calculates joint angles required to rotate end-effector in a given direction.
 
         Args:
