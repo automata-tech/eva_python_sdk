@@ -71,7 +71,7 @@ class Eva:
 
     # --------------------------------------------- HTTP HANDLERS ---------------------------------------------
     def api_call_with_auth(self, method, path, payload=None, headers={}, timeout=None, version='v1'):
-        """Makes a direct API call to EVA to endpoints that require authentication.
+        """Makes a direct API call to EVA to endpoints that requires authentication.
 
         Note:
             This is used within the SDK and will unlikely be used externally.
