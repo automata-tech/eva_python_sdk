@@ -1,0 +1,6 @@
+m2r2
+requests
+zeroconf
+dataclasses
+semver
+websocket-client
