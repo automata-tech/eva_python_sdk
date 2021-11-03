@@ -10,9 +10,9 @@ requests = "*"
 zeroconf = "*"
 types-dataclasses = "*"
 dataclasses = "*"
+semver = "*"
 # TODO: too big, install it manually if you want it
 #pytransform3d = "==1.2.1"
-semver = "*"
 
 [dev-packages]
 flake8 = "*"

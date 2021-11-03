@@ -11,7 +11,7 @@ setuptools.setup(
     description='SDK for the Automata Eva robotic arm',
     author='Automata',
     license='Apache License 2.0',
-    author_email='charlie@automata.tech',
+    author_email='louis@automata.tech',
     url="https://github.com/automata-tech/eva_python_sdk",
     packages=setuptools.find_packages(),
     long_description=long_description,
@@ -21,6 +21,7 @@ setuptools.setup(
         'websocket-client',
         'zeroconf',
         'dataclasses',
+        'semver',
         # TODO: too big, install it manually if you want it
         # 'pytransform3d',
     ],
@@ -30,5 +31,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
         "License :: OSI Approved :: Apache Software License",
     ],
-    python_requires='>=3.0',
+    python_requires='>=3.6',
 )
