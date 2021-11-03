@@ -1,0 +1,11 @@
+__pycache__
+.vscode/
+*.egg-info/
+build/
+dist/
+.pytest_cache
+*coverage*
+.mypy_cache
+docs/_build
+docs/_static
+docs/_templates

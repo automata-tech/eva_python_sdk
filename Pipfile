@@ -1,0 +1,39 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+types-requests = "*"
+requests = "*"
+"websocket-client" = "*"
+zeroconf = "*"
+types-dataclasses = "*"
+dataclasses = "*"
+semver = "*"
+# TODO: too big, install it manually if you want it
+#pytransform3d = "==1.2.1"
+
+[dev-packages]
+flake8 = "*"
+requests-mock = "*"
+pytest = "*"
+"pytest-cov" = "*"
+"pytest-flake8" = "*"
+"pytest-mypy" = "*"
+mypy = "*"
+Sphinx = "*"
+m2r2 = "*"
+# FIXME: why the hell is flake8 not including this correctly?
+"importlib-metadata" = "*"
+# FIXME: whyyyyyyyyyy
+"typed-ast" = "*"
+typing_extensions = "*"
+
+[requires]
+
+[scripts]
+test = "pipenv run testd tests/"
+testd = "python -m pytest --mypy --flake8"
+lint = "flake8"
+type = "mypy evasdk examples tests"
