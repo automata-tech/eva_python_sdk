@@ -1,0 +1,32 @@
+name: Build development documentation
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: pip install Sphinx m2r2
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Create a new branch for docs
+        run: git checkout --orphan docs/development
+      - name: Update the docs
+        run: |
+          make -C docs api_docs
+      - name: Setup git agent and commit changes
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/automata-tech/eva_python_sdk
+          git config --global user.email "docs@automata.tech"
+          git config --global user.name "docs-bot"
+          git add .
+          git commit -m 'docs'
+          git push origin docs/development -f
+      - name: Trigger rebuild of development documentation
+        run: |
+          curl -X POST -H "Authorization: Token ${{ secrets.RTD_TOKEN }}" https://readthedocs.org/api/v3/projects/eva-python-sdk/versions/docs-development/builds/
+
