@@ -29,3 +29,14 @@ jobs:
           git add .
           git commit -m 'docs'
           git push origin docs/${{ steps.get-git-tag.outputs.git-tag }} -f
+      - name: Trigger build of documentation
+        run: |
+          curl -X POST -H "Authorization: Token ${{ secrets.RTD_TOKEN }}" https://readthedocs.org/api/v3/projects/eva-python-sdk/versions/docs-${{ steps.get-git-tag.outputs.git-tag }}/builds/
+      - name: Make new documentation the default version
+        run: |
+          curl \
+            -X PATCH \
+            -H "Authorization: Token ${{ secrets.RTD_TOKEN }}" https://readthedocs.org/api/v3/projects/eva-python-sdk/ \
+            -H "Content-Type: application/json" \
+            -d '{"default_version": "docs-${{ steps.get-git-tag.outputs.git-tag }}"}'
+
